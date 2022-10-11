@@ -1,6 +1,7 @@
 # fanana
 
 A new Flutter project.
+FANANA
 
 ## Getting Started
 
