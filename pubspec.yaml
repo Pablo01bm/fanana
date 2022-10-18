@@ -30,6 +30,8 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   flutter_secure_storage: ^6.0.0
+  google_fonts: ^3.0.1
+  email_validator: ^2.1.17
   flutter:
     sdk: flutter
 
@@ -54,6 +56,8 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  assets:
+    - assets/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
