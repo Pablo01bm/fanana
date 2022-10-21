@@ -4,22 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:email_validator/email_validator.dart';
 
-class landingPageAdmin extends StatefulWidget {
-  const landingPageAdmin({super.key});
+class landingPageDefault extends StatefulWidget {
+  const landingPageDefault({super.key});
 
   @override
-  State<landingPageAdmin> createState() => _landingPageAdminState();
+  State<landingPageDefault> createState() => _landingPageDefaultState();
 }
 
-class _landingPageAdminState extends State<landingPageAdmin> {
+class _landingPageDefaultState extends State<landingPageDefault> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: mainMenuAdmin()
+      body: mainMenuDefault()
     );
   }
 
-  Widget mainMenuAdmin (){
+  Widget mainMenuDefault (){
     return Text("Wenas noxe");
   }
 

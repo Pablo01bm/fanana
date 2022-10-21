@@ -162,12 +162,7 @@ class _LoginState extends State<Login> {
                 width: queryData.size.width * 0.4,
                 image: const AssetImage("nino.png")
                 ),
-              onPressed: () {
-                 Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const landingPageDefault()),
-                );
-              },
+              onPressed: () {},
             ),
           ),
         )
