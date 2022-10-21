@@ -1,4 +1,5 @@
 import 'package:fanana/Pages/landingPageDefault.dart';
+import 'package:fanana/Pages/landingPagePicto.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
@@ -165,7 +166,7 @@ class _LoginState extends State<Login> {
               onPressed: () {
                  Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const landingPageDefault()),
+                  MaterialPageRoute(builder: (context) => const landingPagePicto()),
                 );
               },
             ),

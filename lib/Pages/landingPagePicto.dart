@@ -1,186 +1,178 @@
-import 'package:fanana/Pages/landingPageDefault.dart';
+// ignore_for_file: camel_case_types
+
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:email_validator/email_validator.dart';
+import 'dart:math' as math;
 
-class Login  extends StatefulWidget {
-
-  //final String nombre ;
-
-  const Login({
-    super.key,
-    //required this.nombre,
+class Usuario{
+  String foto;
+  String nombre;
   
-  });
-
-  @override
-  State<Login> createState() => _LoginState();
+  Usuario({required this.foto, required this.nombre});
 }
 
-class _LoginState extends State<Login> {
+class landingPagePicto extends StatefulWidget {
+  const landingPagePicto({super.key});
+
+  @override
+  State<landingPagePicto> createState() => _landingPagePictoState();
+}
+
+class _landingPagePictoState extends State<landingPagePicto> {
   late MediaQueryData queryData;
-  final emailController = TextEditingController();
-
-
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is removed from the
-    // widget tree.
-    emailController.dispose();
-    super.dispose();
-  }
-
-
-  @override
-  void initState() {
-    
-    super.initState();
-
-    emailController.addListener(() {
-      setState(() {
-        
-      });
-    });
-  }
+  late List<Usuario> usuarios;
+  int posicion = 0;
 
   @override
   Widget build(BuildContext context) {
     queryData = MediaQuery.of(context);
 
+    usuarios = [
+      Usuario(foto: "https://play-lh.googleusercontent.com/5B6Z4GWPuAlrnZDtqI8tdlnngu4dg-QG3lD2OTIvyvzSGCRJibEDaAbvQr6TMCPjqUc", nombre: "amogus"),
+      Usuario(foto: "https://pbs.twimg.com/profile_images/1558401344653893632/i5SAyTMC_400x400.jpg", nombre: "vine boom"),
+      Usuario(foto: "https://pbs.twimg.com/profile_images/1508837414621650955/dijKwcEc_400x400.jpg", nombre: "hard"),
+      Usuario(foto: "https://play-lh.googleusercontent.com/5B6Z4GWPuAlrnZDtqI8tdlnngu4dg-QG3lD2OTIvyvzSGCRJibEDaAbvQr6TMCPjqUc", nombre: "amogus"),
+      Usuario(foto: "https://pbs.twimg.com/profile_images/1558401344653893632/i5SAyTMC_400x400.jpg", nombre: "vine boom"),
+      Usuario(foto: "https://pbs.twimg.com/profile_images/1508837414621650955/dijKwcEc_400x400.jpg", nombre: "hard"),    
+      Usuario(foto: "https://pbs.twimg.com/profile_images/1558401344653893632/i5SAyTMC_400x400.jpg", nombre: "vine boom"),
+      Usuario(foto: "https://pbs.twimg.com/profile_images/1508837414621650955/dijKwcEc_400x400.jpg", nombre: "hard"),  
+      Usuario(foto: "https://pbs.twimg.com/profile_images/1508837414621650955/dijKwcEc_400x400.jpg", nombre: "hard"),    
+      Usuario(foto: "https://pbs.twimg.com/profile_images/1558401344653893632/i5SAyTMC_400x400.jpg", nombre: "vine boom"),
+      Usuario(foto: "https://pbs.twimg.com/profile_images/1508837414621650955/dijKwcEc_400x400.jpg", nombre: "hard"),              
+    ];
 
     return Scaffold(
-      body: mainLogin()
+      body: mainMenuPicto()
     );
   }
 
-
-  Widget mainLogin (){
-
+  Widget mainMenuPicto (){
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       
       children: <Widget>[
-        loginDefault(),
-        const VerticalDivider(
-           
-            thickness: 6,
-            indent: 100,
-            endIndent: 100,
-            color: Color.fromARGB(157, 132, 74, 74),
-          ),
-        loginPicto(),
+        arrow(true),
+        users(),
+        arrow(false),
       ],
     );
   }
 
-  Widget loginDefault(){
-    return Form(
-      child:Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          FittedBox(
-            fit: BoxFit.fill,
-            child: Text("Login", style: GoogleFonts.fredokaOne(
-              textStyle: TextStyle(fontSize: queryData.size.width*0.04)
-            )),      
-          ),
-          SizedBox(        
-            width: queryData.size.width * 0.4,
-            child: TextFormField(
-              decoration: InputDecoration(
-                labelText: "Introduzca email:",
-                labelStyle: GoogleFonts.fredokaOne(textStyle: TextStyle(fontSize: queryData.size.width*0.03)), 
-              ),
-              autovalidateMode: AutovalidateMode.always,
-              validator: (value) => EmailValidator.validate(value!) ? null:"Introduzca email válido"
-            ), 
-          ),
-
-          SizedBox(
-            width: queryData.size.width * 0.4,
-            child: TextField(
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: "Introduzca contraseña:",
-                labelStyle: GoogleFonts.fredokaOne(textStyle: TextStyle(fontSize: queryData.size.width*0.03)), 
-              ),
-            ), 
-          ),
-          FittedBox(
-          fit: BoxFit.fill,
-          child: InkWell(   
-            onTap: () {
-              
-            },
-            child: TextButton(
-              child: Image(
-                fit: BoxFit.fill,
-                //height: queryData.size.height * 0.7,
-                width: queryData.size.width * 0.15,
-                image: const AssetImage("botonfumon.png")
-                ),
-              onPressed: () {
-                 Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const landingPageDefault()),
-                );
-              },
-            ),
-          ),
-        )
-          
-
-        ],
-      ),
-
-    );
-  }
-
-   Widget loginPicto(){
+  Widget arrow(bool left){
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        FittedBox(
-          
-          fit: BoxFit.fill,
-          child: Text("Login pictograma", style: GoogleFonts.fredokaOne(
-            textStyle:  TextStyle(fontSize: queryData.size.width*0.04)
-          )),      
-        ),
-        FittedBox(
-          fit: BoxFit.fill,
-          child: InkWell(   
-            onTap: () {
-              
-            },
-            child: TextButton(
-              child: Image(
-                fit: BoxFit.fill,
-                //height: queryData.size.height * 0.7,
-                width: queryData.size.width * 0.4,
-                image: const AssetImage("nino.png")
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+          children: <Widget>[
+            if(posicion != 0 && left)
+              TextButton(
+                child: Image(
+                  fit: BoxFit.fill,
+                  width: queryData.size.width * 0.12,
+                  image: AssetImage("selectablearrow.png")
+                  ),
+                onPressed: () {setState(() {
+                                posicion = posicion-4;
+                              });
+                              },
+              ),
+            if(posicion == 0 && left)
+                TextButton(
+                child: Image(
+                  fit: BoxFit.fill,
+                  width: queryData.size.width * 0.12,
+                  image: AssetImage("unselectablearrow.png")
+                  ),
+                onPressed: () {},
+              ),
+            if(posicion+4 >= usuarios.length-1 && !left) 
+              TextButton(
+                child: Transform(
+                  alignment: Alignment.center,
+                  transform: Matrix4.rotationY(math.pi),
+                  child: Image(
+                    fit: BoxFit.fill,
+                    width: queryData.size.width * 0.12,
+                    image: AssetImage("unselectablearrow.png")
+                  ),
                 ),
-              onPressed: () {},
-            ),
-          ),
-        )
-
-      ],
-    );
+                
+                onPressed: () {},
+              ),
+              if(posicion+4 < usuarios.length-1 && !left) 
+              TextButton(
+                child: Transform(
+                  alignment: Alignment.center,
+                  transform: Matrix4.rotationY(math.pi),
+                  child: Image(
+                    fit: BoxFit.fill,
+                    width: queryData.size.width * 0.12,
+                    image: AssetImage("selectablearrow.png")
+                  ),
+                ),
+                
+                onPressed: () {setState(() {
+                                posicion = posicion+4;
+                              });},
+              ),
+            
+          ]
+        );
   }
-  
 
-String? validateEmail(String? value) {
-    String pattern =
-        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+.[a-zA-Z]+";
-    RegExp regex = RegExp(pattern);
-    if (value == null || value.isEmpty || !regex.hasMatch(value))
-      return 'Introduce un email válido';
-    else
-      return null;
+  Widget users(){
+    return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                casilla(posicion),
+                casilla(posicion+1),
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                casilla(posicion+2),
+                casilla(posicion+3),
+              ],
+            ),
+          ]
+        );
+  }
+
+  Widget casilla(int alumno){
+    if(alumno < usuarios.length){
+    return TextButton(
+      child: Stack(alignment: Alignment.center,
+        children: <Widget>[
+          Image(
+            fit: BoxFit.fill,
+            width: queryData.size.width * 0.28,
+            image: AssetImage("marco.png")
+          ),
+          Column(
+            children: <Widget> [
+              Image(
+                fit: BoxFit.fill,
+                width: queryData.size.width * 0.2,
+                image: NetworkImage(usuarios[alumno].foto)
+              ),
+              Text(usuarios[alumno].nombre, style: GoogleFonts.fredokaOne(
+                textStyle: TextStyle(fontSize: queryData.size.width*0.04, color: Colors.black, height: 1.5))
+              ),
+            ],)
+          
+        ]
+      ),
+      onPressed: () {},
+    );
+    }else{
+      return SizedBox( width: queryData.size.width * 0.28);
+    }
   }
 
 
 }
+
