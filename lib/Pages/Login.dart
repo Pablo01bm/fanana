@@ -1,4 +1,4 @@
-import 'package:fanana/Pages/admin/landingPageAdmins.dart';
+import 'package:fanana/Pages/landingPageDefault.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
