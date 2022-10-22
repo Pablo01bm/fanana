@@ -4,6 +4,10 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class Login  extends StatefulWidget {
 
@@ -22,6 +26,13 @@ class Login  extends StatefulWidget {
 class _LoginState extends State<Login> {
   late MediaQueryData queryData;
   final emailController = TextEditingController();
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  String? uid;
+  String? password;
+  String? userEmail;
+
 
 
   @override
@@ -89,6 +100,9 @@ class _LoginState extends State<Login> {
           SizedBox(        
             width: queryData.size.width * 0.4,
             child: TextFormField(
+              onFieldSubmitted: (value) {
+                userEmail = value;
+              },
               decoration: InputDecoration(
                 labelText: "Introduzca email:",
                 labelStyle: GoogleFonts.fredokaOne(textStyle: TextStyle(fontSize: queryData.size.width*0.03)), 
@@ -101,6 +115,9 @@ class _LoginState extends State<Login> {
           SizedBox(
             width: queryData.size.width * 0.4,
             child: TextField(
+              onSubmitted: (value) {
+                password = value;
+              },
               obscureText: true,
               decoration: InputDecoration(
                 labelText: "Introduzca contraseña:",
@@ -121,11 +138,19 @@ class _LoginState extends State<Login> {
                 width: queryData.size.width * 0.15,
                 image: const AssetImage("botonfumon.png")
                 ),
-              onPressed: () {
-                 Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const landingPageDefault()),
-                );
+              onPressed: () async {
+                User? user;
+                user = await signInWithEmailPassword(userEmail!, password!);
+                if (user != null) {
+                  print("Login correcto");
+                  print("Usuario"+ user!.toString());
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const landingPageDefault()),
+                    );
+                }
+                
               },
             ),
           ),
@@ -186,6 +211,55 @@ String? validateEmail(String? value) {
     else
       return null;
   }
+
+
+  // Firebase auth method
+  Future<User?> signInWithEmailPassword(String email, String password) async {
+  await Firebase.initializeApp();
+  User? user;
+
+  print("EMAIL: "+ email);
+  print("Password: "+ password);
+
+  try {
+    UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    user = userCredential.user;
+
+    if (user != null) {
+      uid = user.uid;
+      userEmail = user.email;
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('auth', true);
+    }
+  } on FirebaseAuthException catch (e) {
+    if (e.code == 'user-not-found') {
+      print('No user found for that email.');
+    } else if (e.code == 'wrong-password') {
+      print('Wrong password provided.');
+    }
+  }
+
+  return user;
+}
+
+
+//Sign out firebase
+Future<String> signOut() async {
+  await _auth.signOut();
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setBool('auth', false);
+
+  uid = null;
+  userEmail = null;
+
+  return 'User signed out';
+}
+
 
 
 }
