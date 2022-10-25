@@ -26,6 +26,7 @@ class Login  extends StatefulWidget {
 class _LoginState extends State<Login> {
   late MediaQueryData queryData;
   final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -39,6 +40,7 @@ class _LoginState extends State<Login> {
   void dispose() {
     // Clean up the controller when the widget is removed from the
     // widget tree.
+    passwordController.dispose();
     emailController.dispose();
     super.dispose();
   }
@@ -51,7 +53,13 @@ class _LoginState extends State<Login> {
 
     emailController.addListener(() {
       setState(() {
-        
+        userEmail = emailController.text;
+      });
+    });
+
+    passwordController.addListener(() {
+      setState(() {
+        password = passwordController.text;
       });
     });
   }
@@ -100,9 +108,7 @@ class _LoginState extends State<Login> {
           SizedBox(        
             width: queryData.size.width * 0.4,
             child: TextFormField(
-              onFieldSubmitted: (value) {
-                userEmail = value;
-              },
+              controller: emailController,
               decoration: InputDecoration(
                 labelText: "Introduzca email:",
                 labelStyle: GoogleFonts.fredokaOne(textStyle: TextStyle(fontSize: queryData.size.width*0.03)), 
@@ -115,9 +121,7 @@ class _LoginState extends State<Login> {
           SizedBox(
             width: queryData.size.width * 0.4,
             child: TextField(
-              onSubmitted: (value) {
-                password = value;
-              },
+              controller: passwordController,
               obscureText: true,
               decoration: InputDecoration(
                 labelText: "Introduzca contraseña:",
@@ -136,7 +140,7 @@ class _LoginState extends State<Login> {
                 fit: BoxFit.fill,
                 //height: queryData.size.height * 0.7,
                 width: queryData.size.width * 0.15,
-                image: const AssetImage("botonfumon.png")
+                image: const AssetImage("images/botonfumon.png")
                 ),
               onPressed: () async {
                 User? user;
@@ -185,7 +189,7 @@ class _LoginState extends State<Login> {
                 fit: BoxFit.fill,
                 //height: queryData.size.height * 0.7,
                 width: queryData.size.width * 0.4,
-                image: const AssetImage("nino.png")
+                image: const AssetImage("images/nino.png")
                 ),
               onPressed: () {
                  Navigator.push(
