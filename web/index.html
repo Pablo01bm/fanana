@@ -14,6 +14,7 @@
     This is a placeholder for base href that will be replaced by the value of
     the `--base-href` argument provided to `flutter build`.
   -->
+  
   <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
@@ -40,6 +41,30 @@
   <script src="flutter.js" defer></script>
 </head>
 <body>
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyBsu8hNAdSKju74B5gnVHlEWyLLaP1KRDk",
+      authDomain: "fanana-dev.firebaseapp.com",
+      databaseURL: "https://fanana-dev-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "fanana-dev",
+      storageBucket: "fanana-dev.appspot.com",
+      messagingSenderId: "508441591692",
+      appId: "1:508441591692:web:3b6f72d1e9a65925a0a0a9",
+      measurementId: "G-CHE2MXVB5Q"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+  </script>
   <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
