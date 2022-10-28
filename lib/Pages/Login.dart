@@ -27,6 +27,7 @@ class _LoginState extends State<Login> {
   late MediaQueryData queryData;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  bool visiblePass = true;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -121,9 +122,22 @@ class _LoginState extends State<Login> {
           SizedBox(
             width: queryData.size.width * 0.4,
             child: TextField(
+              
               controller: passwordController,
-              obscureText: true,
+              obscureText: visiblePass,
               decoration: InputDecoration(
+                suffixIcon: IconButton(
+                    icon: Icon(
+                      visiblePass
+                      ? Icons.visibility
+                      : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        visiblePass = !visiblePass;
+                      });
+                    },
+                  ),
                 labelText: "Introduzca contraseña:",
                 labelStyle: GoogleFonts.fredokaOne(textStyle: TextStyle(fontSize: queryData.size.width*0.03)), 
               ),
@@ -222,9 +236,6 @@ String? validateEmail(String? value) {
   await Firebase.initializeApp();
   User? user;
 
-  print("EMAIL: "+ email);
-  print("Password: "+ password);
-
   try {
     UserCredential userCredential = await _auth.signInWithEmailAndPassword(
       email: email,
@@ -240,12 +251,80 @@ String? validateEmail(String? value) {
       await prefs.setBool('auth', true);
     }
   } on FirebaseAuthException catch (e) {
-    if (e.code == 'user-not-found') {
-      print('No user found for that email.');
-    } else if (e.code == 'wrong-password') {
-      print('Wrong password provided.');
+    print("Error: "+e.toString());
+
+      final regexEmail = RegExp(r"\[+[a-z]+_+[a-z]+\/+invalid-email+\]");
+      final regexUserNotFound = RegExp(r"\[+[a-z]+_+[a-z]+\/+user-not-found+\]");
+      final regexWrongPassw = RegExp(r"\[+[a-z]+_+[a-z]+\/+wrong-password+\]");
+      final regexTooManyRequest = RegExp(r"\[+[a-z]+_+[a-z]+\/+too-many-requests+\]");
+
+      if (regexEmail.hasMatch(e.toString())){
+        
+         final snackBar = SnackBar(
+            backgroundColor: Colors.redAccent,
+            
+            content: const Text('Introduzca un correo válido'),
+            action: SnackBarAction(
+              textColor: Colors.white,
+              label: 'OK',
+              onPressed: () {
+                // Some code to undo the change.
+              },
+            )
+         );
+        
+         ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      }else if(regexUserNotFound.hasMatch(e.toString())){
+
+        final snackBar = SnackBar(
+            backgroundColor: Colors.redAccent,
+            content: const Text('No existe ese usuario'),
+            action: SnackBarAction(
+              textColor: Colors.white,
+              label: 'OK',
+              onPressed: () {
+                // Some code to undo the change.
+              },
+            )
+         );
+        
+         ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      }else if(regexWrongPassw.hasMatch(e.toString())){
+        
+        final snackBar = SnackBar(
+            backgroundColor: Colors.redAccent,
+            content: const Text('Email o contraseña inválido'),
+            action: SnackBarAction(
+              textColor: Colors.white,
+              label: 'Try again',
+              onPressed: () {
+                // Some code to undo the change.
+              },
+            )
+         );
+        
+         ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      }else if(regexTooManyRequest.hasMatch(e.toString())){
+        
+        final snackBar = SnackBar(
+            backgroundColor: Colors.redAccent,
+            content: const Text('Error del servidor, inténtelo de nuevo más tarde'),
+            action: SnackBarAction(
+              textColor: Colors.white,
+              label: 'OK',
+              onPressed: () {
+                // Some code to undo the change.
+              },
+            )
+         );
+        
+         ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      }
     }
-  }
 
   return user;
 }
