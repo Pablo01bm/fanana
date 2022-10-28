@@ -1,7 +1,5 @@
 // ignore_for_file: camel_case_types
-
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:fanana/Pages/pictoPasswd.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:math' as math;
@@ -30,10 +28,10 @@ class _landingPagePictoState extends State<landingPagePicto> {
     queryData = MediaQuery.of(context);
 
     usuarios = [
-      Usuario(foto: "https://play-lh.googleusercontent.com/5B6Z4GWPuAlrnZDtqI8tdlnngu4dg-QG3lD2OTIvyvzSGCRJibEDaAbvQr6TMCPjqUc", nombre: "amogus"),
+      Usuario(foto: "https://pbs.twimg.com/profile_images/1585680203350786048/YNmlhVnJ_400x400.jpg", nombre: "amogus"),
       Usuario(foto: "https://pbs.twimg.com/profile_images/1558401344653893632/i5SAyTMC_400x400.jpg", nombre: "vine boom"),
       Usuario(foto: "https://pbs.twimg.com/profile_images/1508837414621650955/dijKwcEc_400x400.jpg", nombre: "hard"),
-      Usuario(foto: "https://play-lh.googleusercontent.com/5B6Z4GWPuAlrnZDtqI8tdlnngu4dg-QG3lD2OTIvyvzSGCRJibEDaAbvQr6TMCPjqUc", nombre: "amogus"),
+      Usuario(foto: "https://pbs.twimg.com/profile_images/1585680203350786048/YNmlhVnJ_400x400.jpg", nombre: "amogus"),
       Usuario(foto: "https://pbs.twimg.com/profile_images/1558401344653893632/i5SAyTMC_400x400.jpg", nombre: "vine boom"),
       Usuario(foto: "https://pbs.twimg.com/profile_images/1508837414621650955/dijKwcEc_400x400.jpg", nombre: "hard"),    
       Usuario(foto: "https://pbs.twimg.com/profile_images/1558401344653893632/i5SAyTMC_400x400.jpg", nombre: "vine boom"),
@@ -82,12 +80,13 @@ class _landingPagePictoState extends State<landingPagePicto> {
                 child: Image(
                   fit: BoxFit.fill,
                   width: queryData.size.width * 0.12,
-                  image: AssetImage("unselectablearrow.png")
+                  image: AssetImage("volver.png")
                   ),
-                onPressed: () {},
+                onPressed: () {Navigator.pop(context);},
               ),
             if(posicion+4 >= usuarios.length-1 && !left) 
-              TextButton(
+              Container(
+                padding: const EdgeInsets.all(8.0),
                 child: Transform(
                   alignment: Alignment.center,
                   transform: Matrix4.rotationY(math.pi),
@@ -97,8 +96,6 @@ class _landingPagePictoState extends State<landingPagePicto> {
                     image: AssetImage("unselectablearrow.png")
                   ),
                 ),
-                
-                onPressed: () {},
               ),
               if(posicion+4 < usuarios.length-1 && !left) 
               TextButton(
@@ -166,10 +163,15 @@ class _landingPagePictoState extends State<landingPagePicto> {
           
         ]
       ),
-      onPressed: () {},
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const pictoPasswd()),
+        );
+      },
     );
     }else{
-      return SizedBox( width: queryData.size.width * 0.28);
+      return Container(padding: const EdgeInsets.all(8.0), child: SizedBox(width: queryData.size.width * 0.28,) );
     }
   }
 
