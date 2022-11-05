@@ -1,5 +1,7 @@
 import 'package:fanana/Pages/landingPageDefault.dart';
 import 'package:fanana/Pages/landingPagePicto.dart';
+import 'package:fanana/Pages/splash.dart';
+import 'package:fanana/Pages/utils/globalValues.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
@@ -162,11 +164,12 @@ class _LoginState extends State<Login> {
                 user = await signInWithEmailPassword(userEmail!, password!);
                 if (user != null) {
                   print("Login correcto");
-                  print("Usuario"+ user!.toString());
+                  globalValues.user = userEmail!.substring(0, userEmail!.indexOf('@'));
+                 // print("Usuario"+ user!.toString());
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const landingPageDefault()),
+                          builder: (context) =>  SplashScreen()),
                     );
                 }
                 
