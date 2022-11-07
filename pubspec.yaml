@@ -34,6 +34,8 @@ dependencies:
   email_validator: ^2.1.17
   shared_preferences: ^2.0.15
   file_picker: ^5.2.2
+  web_socket_channel: ^2.2.0
+  http: ^0.13.5
   flutter:
     sdk: flutter
 
