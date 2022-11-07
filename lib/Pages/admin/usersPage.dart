@@ -1,3 +1,4 @@
+import 'package:fanana/Pages/admin/userMenu.dart';
 import 'package:fanana/Pages/services/userService.dart';
 import 'package:fanana/Pages/utils/globalValues.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -6,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:fanana/components/searchBar.dart';
+
+import 'landingPageAdmin.dart';
 
 class usersPage extends StatefulWidget {
   const usersPage({super.key});
@@ -93,7 +96,14 @@ class _usersPageState extends State<usersPage> {
                   fit: BoxFit.fill,
                   width: queryData.size.width * 0.25,
                   image: AssetImage("images/aniadir.png")),
-              onPressed: () {},
+              onPressed: () {
+                  Map<String,dynamic> vacio = {};
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>  userMenu(vacio)),
+                  );
+              },
             ),
           ],
         ),
@@ -125,11 +135,56 @@ class _usersPageState extends State<usersPage> {
    subtitle: Text(user["clase"], style: GoogleFonts.fredokaOne(
                textStyle: TextStyle(fontSize: queryData.size.width*0.04, color: Colors.black, height: 1.5))
              ),
-    trailing: Icon(Icons.delete),
+    trailing: IconButton( 
+      icon: Icon(Icons.delete),
+      onPressed: () {
+        howAlertDialog(context, user["id"]);
+      },
+      ),
     // onTap: () => Navigator.of(context).push(MaterialPageRoute(
     //   builder: (context) => ContactMenu(myContact: contact),
     // ))
   );
+
+  howAlertDialog(BuildContext context, String id) {
+
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("Cancel"),
+      onPressed:  () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text("Continuar"),
+      onPressed:  () {
+
+          userService().deleteUser(id);
+          Navigator.of(context).pushReplacement(
+              new MaterialPageRoute(builder: (context) => new landingPageAdmin()));
+          
+       
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Atención!"),
+      content: Text("Seguro que quieres eliminar el usuario: ${id}"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 
 
     Widget buildSearch() => SearchWidget(
