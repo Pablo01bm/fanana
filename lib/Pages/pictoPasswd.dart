@@ -27,18 +27,18 @@ class _pictoPasswdState extends State<pictoPasswd> {
     fondos = [];
     icons = [];
     nulos = [];
-    fondos.add("verde.png");
-    fondos.add("rojo.png");
-    fondos.add("azul.png");
-    fondos.add("amarillo.png");
-    fondos.add("marino.png");
-    fondos.add("rosa.png");
-    icons.add("coche.png");
-    icons.add("pelot.png");
-    icons.add("avion.png");
-    icons.add("perro.png");
-    icons.add("sol.png");
-    icons.add("mochila.png");
+    fondos.add("assets/verde.png");
+    fondos.add("assets/rojo.png");
+    fondos.add("assets/azul.png");
+    fondos.add("assets/amarillo.png");
+    fondos.add("assets/marino.png");
+    fondos.add("assets/rosa.png");
+    icons.add("assets/coche.png");
+    icons.add("assets/pelot.png");
+    icons.add("assets/avion.png");
+    icons.add("assets/perro.png");
+    icons.add("assets/sol.png");
+    icons.add("assets/mochila.png");
     nulos.add(true);
     nulos.add(true);
     nulos.add(true);
@@ -62,7 +62,7 @@ class _pictoPasswdState extends State<pictoPasswd> {
             child: Image(
                 fit: BoxFit.fill,
                 width: queryData.size.width * 0.12,
-                image: AssetImage("volver.png")),
+                image: AssetImage("assets/volver.png")),
             onPressed: () {
               Navigator.pop(context);
             },

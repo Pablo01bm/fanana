@@ -68,7 +68,7 @@ class _landingPagePictoState extends State<landingPagePicto> {
                 child: Image(
                   fit: BoxFit.fill,
                   width: queryData.size.width * 0.12,
-                  image: AssetImage("selectablearrow.png")
+                  image: AssetImage("assets/selectablearrow.png")
                   ),
                 onPressed: () {setState(() {
                                 posicion = posicion-4;
@@ -80,7 +80,7 @@ class _landingPagePictoState extends State<landingPagePicto> {
                 child: Image(
                   fit: BoxFit.fill,
                   width: queryData.size.width * 0.12,
-                  image: AssetImage("volver.png")
+                  image: AssetImage("assets/volver.png")
                   ),
                 onPressed: () {Navigator.pop(context);},
               ),
@@ -93,7 +93,7 @@ class _landingPagePictoState extends State<landingPagePicto> {
                   child: Image(
                     fit: BoxFit.fill,
                     width: queryData.size.width * 0.12,
-                    image: AssetImage("unselectablearrow.png")
+                    image: AssetImage("assets/unselectablearrow.png")
                   ),
                 ),
               ),
@@ -105,7 +105,7 @@ class _landingPagePictoState extends State<landingPagePicto> {
                   child: Image(
                     fit: BoxFit.fill,
                     width: queryData.size.width * 0.12,
-                    image: AssetImage("selectablearrow.png")
+                    image: AssetImage("assets/selectablearrow.png")
                   ),
                 ),
                 
@@ -147,7 +147,7 @@ class _landingPagePictoState extends State<landingPagePicto> {
           Image(
             fit: BoxFit.fill,
             width: queryData.size.width * 0.28,
-            image: AssetImage("marco.png")
+            image: AssetImage("assets/marco.png")
           ),
           Column(
             children: <Widget> [
