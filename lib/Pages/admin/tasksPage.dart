@@ -27,21 +27,18 @@ class _tasksPageState extends State<tasksPage> {
   late MediaQueryData queryData;
   String query = '';
 
-
   @override
   void initState() {
     loadStorageData();
     super.initState();
   }
 
-
   void loadStorageData() async {
-    _userList =  taskService().getTaskInfo();
+    _userList = taskService().getTaskInfo();
 
-    if(_userList != null){
+    if (_userList != null) {
       loading = false;
     }
-
   }
 
   @override
@@ -49,118 +46,143 @@ class _tasksPageState extends State<tasksPage> {
     queryData = MediaQuery.of(context);
     return Scaffold(
       body: !loading
-        ? FutureBuilder(
-            future: _userList,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                allTasks = snapshot.data as List<dynamic>;
-                tasks.clear();
+          ? FutureBuilder(
+              future: _userList,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  allTasks = snapshot.data as List<dynamic>;
+                  tasks.clear();
 
-              for(int i=0; i<allTasks.length; i++) {
-                final userName = allTasks[i]["enunciado"].toLowerCase();
-                //final userSurname = allTasks[i]["apellidos"].toLowerCase();
-               // final userEmail = allUsers[i].mail.toLowerCase(); //aqui poner la condicion de buscar por clase
-                final input = query.toLowerCase();
+                  for (int i = 0; i < allTasks.length; i++) {
+                    final userName = allTasks[i]["enunciado"].toLowerCase();
+                    //final userSurname = allTasks[i]["apellidos"].toLowerCase();
+                    // final userEmail = allUsers[i].mail.toLowerCase(); //aqui poner la condicion de buscar por clase
+                    final input = query.toLowerCase();
 
-                if(userName.contains(input) ) {
-                  tasks.add(allTasks[i]);
+                    if (userName.contains(input)) {
+                      tasks.add(allTasks[i]);
+                    }
+                  }
+                  return getBody();
+                } else if (snapshot.hasError) {
+                  print(snapshot.error);
+                  return Text('Error loading users');
                 }
-              }
-                return getBody();
-              } else if (snapshot.hasError) {
-                print(snapshot.error);
-                return Text('Error loading users');
-              }
 
-              return Center(
-                  child: Container(
-                      padding: EdgeInsets.only(top: 50),
-                      child: CircularProgressIndicator()));
-            })
-        : SizedBox.shrink(),
+                return Center(
+                    child: Container(
+                        padding: EdgeInsets.only(top: 50),
+                        child: CircularProgressIndicator()));
+              })
+          : SizedBox.shrink(),
     );
   }
 
-
-
-    Widget getBody() {
+  Widget getBody() {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        Text("Usuarios", style:GoogleFonts.fredokaOne(
-                textStyle: TextStyle(fontSize: queryData.size.width*0.04, color: Colors.black, height: 1.5))
-              ),
-        buildSearch(),
+        SizedBox(
+          height: queryData.size.width * 0.04,
+        ),
+        Text("Tareas",
+            style: GoogleFonts.fredokaOne(
+                textStyle: TextStyle(
+                    fontSize: queryData.size.width * 0.04,
+                    color: Colors.black,
+                    height: 1.5))),
+        SizedBox(
+          height: queryData.size.width * 0.04,
+        ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            SizedBox(width: queryData.size.width * 0.01),
+            SizedBox(
+              width: queryData.size.width * 0.55,
+              child: buildSearch(),
+            ),
+            SizedBox(width: queryData.size.width * 0.01),
             TextButton(
               child: Image(
                   fit: BoxFit.fill,
-                  width: queryData.size.width * 0.25,
+                  width: queryData.size.width * 0.18,
                   image: AssetImage("images/aniadir.png")),
               onPressed: () {
-                  Map<String,dynamic> vacio = {};
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>  userMenu(vacio)),
-                  );
+                Map<String, dynamic> vacio = {};
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => userMenu(vacio)),
+                );
               },
             ),
+            SizedBox(width: queryData.size.width * 0.01),
           ],
         ),
-        Expanded(
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: tasks.length,
-            itemBuilder: (context, index) {
-              final contact = tasks[index];
-
-              return buildContact(contact, index);
-            }
-          ),
+        SizedBox(
+          height: queryData.size.width * 0.04,
         ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            SizedBox(width: queryData.size.width * 0.01),
+            SizedBox(
+              width: queryData.size.width * 0.80,
+              child: Expanded(
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: tasks.length,
+                    itemBuilder: (context, index) {
+                      final contact = tasks[index];
+
+                      return buildContact(contact, index);
+                    }),
+              ),
+            ),
+            SizedBox(width: queryData.size.width * 0.01),
+          ],
+        )
       ],
     );
   }
 
-    Widget buildContact(Map<String,dynamic> user, int i) => ListTile(
-      tileColor: i.isOdd ? Color.fromARGB(255, 254, 231, 158) : Color.fromARGB(255, 255, 252, 221),
-    title: Text(user["enunciado"] , style:GoogleFonts.fredokaOne(
-                textStyle: TextStyle(fontSize: queryData.size.width*0.04, color: Colors.black, height: 1.5))
-              ),
-   subtitle: Text("Nº pasos: "+(user.length-3).toString(), style: GoogleFonts.fredokaOne(
-               textStyle: TextStyle(fontSize: queryData.size.width*0.04, color: Colors.black, height: 1.5))
-             ),
-    trailing: IconButton( 
-      icon: Icon(Icons.delete),
-      onPressed: () {
-        howAlertDialog(context, user["id"]);
-      },
+  Widget buildContact(Map<String, dynamic> user, int i) => ListTile(
+      tileColor: !i.isOdd ? Color.fromARGB(255, 255, 247, 160) : null,
+      title: Text(user["enunciado"],
+          style: GoogleFonts.fredokaOne(
+              textStyle: TextStyle(
+                  fontSize: queryData.size.width * 0.03,
+                  color: Colors.black,
+                  height: 1.5))),
+      subtitle: Text("Nº pasos: " + (user.length - 3).toString(),
+          style: GoogleFonts.fredokaOne(
+              textStyle: TextStyle(
+                  fontSize: queryData.size.width * 0.02,
+                  color: Color.fromARGB(255, 51, 51, 51),
+                  height: 1.5))),
+      trailing: IconButton(
+        icon: Icon(Icons.delete, size: 40),
+        onPressed: () {
+          howAlertDialog(context, user["id"]);
+        },
       ),
-    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => taskAdmin(user),
-    ))
-  );
+      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => taskAdmin(user),
+          )));
 
   howAlertDialog(BuildContext context, String id) {
-
     // set up the buttons
     Widget cancelButton = TextButton(
       child: Text("Cancel"),
-      onPressed:  () {
+      onPressed: () {
         Navigator.pop(context);
       },
     );
     Widget continueButton = TextButton(
       child: Text("Continuar"),
-      onPressed:  () {
-
-         taskService().deleteTask(id);
-          Navigator.of(context).pushReplacement(
-              new MaterialPageRoute(builder: (context) => new landingPageAdmin()));
-          
-       
+      onPressed: () {
+        taskService().deleteTask(id);
+        Navigator.of(context).pushReplacement(new MaterialPageRoute(
+            builder: (context) => new landingPageAdmin()));
       },
     );
 
@@ -183,18 +205,12 @@ class _tasksPageState extends State<tasksPage> {
     );
   }
 
-
-    Widget buildSearch() => SearchWidget(
-    text: query,
-    hintText: 'Buscar tarea',
-    onChanged: searchContact
-  );
-
+  Widget buildSearch() => SearchWidget(
+      text: query, hintText: 'Buscar tarea', onChanged: searchContact);
 
   void searchContact(String query) {
     setState(() {
       this.query = query;
     });
   }
-  
 }

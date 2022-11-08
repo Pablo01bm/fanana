@@ -10,8 +10,10 @@ import 'package:fanana/components/searchBar.dart';
 
 import 'landingPageAdmin.dart';
 
-class userMenu extends StatefulWidget {
+const List<String> lista_login = <String>["Pictograma", "Default"];
+const List<String> lista_tipo = <String>["Alumno", "Profesor", "Administrador"];
 
+class userMenu extends StatefulWidget {
   Map<String, dynamic>? userData;
 
   userMenu(this.userData, {Key? key}) : super(key: key);
@@ -25,6 +27,8 @@ class _userMenuState extends State<userMenu> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   bool visiblePass = true;
+  String? tipo_login;
+  String? tipo;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -41,57 +45,123 @@ class _userMenuState extends State<userMenu> {
     );
   }
 
-  Widget userForm(){
+  Widget userForm() {
     return Form(
-      child:Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          FittedBox(
-            fit:BoxFit.fill,
-            child: TextButton(
-                child: Image(
-                  fit: BoxFit.fill,
-                  width: queryData.size.width * 0.12,
-                  image: AssetImage("images/sus.png")
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <
+            Widget>[
+      SizedBox(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            SizedBox(
+              width: queryData.size.width * 0.4,
+              child: TextFormField(
+                controller: emailController,
+                decoration: InputDecoration(
+                  labelText: "Nombre",
+                  labelStyle: GoogleFonts.fredokaOne(
+                      textStyle:
+                          TextStyle(fontSize: queryData.size.width * 0.03)),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: queryData.size.width * 0.4,
+              child: TextFormField(
+                controller: emailController,
+                decoration: InputDecoration(
+                  labelText: "Apellidos",
+                  labelStyle: GoogleFonts.fredokaOne(
+                      textStyle:
+                          TextStyle(fontSize: queryData.size.width * 0.03)),
+                ),
+              ),
+            ),
+            SizedBox(
+                width: queryData.size.width * 0.4,
+                child: DropdownButtonFormField(
+                  decoration: InputDecoration(
+                    labelText: "Tipo de login",
+                    labelStyle: GoogleFonts.fredokaOne(
+                        textStyle:
+                            TextStyle(fontSize: queryData.size.width * 0.03)),
                   ),
+                  value: tipo_login,
+                  icon: const Icon(Icons.arrow_downward),
+                  elevation: 16,
+                  onChanged: (String? value) {
+                    setState(() {
+                      tipo_login = value!;
+                    });
+                  },
+                  items:
+                      lista_login.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                )),
+            SizedBox(
+                width: queryData.size.width * 0.4,
+                child: DropdownButtonFormField(
+                  decoration: InputDecoration(
+                    labelText: "Tipo de usuario",
+                    labelStyle: GoogleFonts.fredokaOne(
+                        textStyle:
+                            TextStyle(fontSize: queryData.size.width * 0.03)),
+                  ),
+                  value: tipo,
+                  icon: const Icon(Icons.arrow_downward),
+                  elevation: 16,
+                  onChanged: (String? value) {
+                    setState(() {
+                      tipo = value!;
+                    });
+                  },
+                  items:
+                      lista_tipo.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                )),
+          ],
+        ),
+      ),
+      SizedBox(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            FittedBox(
+              fit: BoxFit.fill,
+              child: TextButton(
+                child: Image(
+                    fit: BoxFit.fill,
+                    width: queryData.size.width * 0.12,
+                    image: AssetImage("images/sus.png")),
                 onPressed: () {
-                  setState(() {
-                  
-                });
-              },
+                  setState(() {});
+                },
               ),
-          ),
-          FittedBox(
-            fit: BoxFit.fill,
-            child: Text("ID", style: GoogleFonts.fredokaOne(
-              textStyle: TextStyle(fontSize: queryData.size.width*0.04)
-            )),      
-          ),
-          SizedBox(        
-            width: queryData.size.width * 0.4,
-            child: TextFormField(
-              controller: emailController,
-              decoration: InputDecoration(
-                labelText: "ID usuario",
-                labelStyle: GoogleFonts.fredokaOne(textStyle: TextStyle(fontSize: queryData.size.width*0.03)), 
-              ),
-              autovalidateMode: AutovalidateMode.always,
-              validator: (value) => EmailValidator.validate(value!) ? null:"Introduzca email válido"
-            ), 
-          ),
-
-          SizedBox(
-            width: queryData.size.width * 0.4,
-            child: TextField(
-              
-              controller: passwordController,
-              obscureText: visiblePass,
-              decoration: InputDecoration(
-                suffixIcon: IconButton(
+            ),
+            FittedBox(
+              fit: BoxFit.fill,
+              child: Text("DNI",
+                  style: GoogleFonts.fredokaOne(
+                      textStyle:
+                          TextStyle(fontSize: queryData.size.width * 0.04))),
+            ),
+            SizedBox(
+              width: queryData.size.width * 0.4,
+              child: TextField(
+                controller: passwordController,
+                obscureText: visiblePass,
+                decoration: InputDecoration(
+                  suffixIcon: IconButton(
                     icon: Icon(
-                      visiblePass
-                      ? Icons.visibility
-                      : Icons.visibility_off,
+                      visiblePass ? Icons.visibility : Icons.visibility_off,
                     ),
                     onPressed: () {
                       setState(() {
@@ -99,50 +169,36 @@ class _userMenuState extends State<userMenu> {
                       });
                     },
                   ),
-                labelText: "Introduzca contraseña:",
-                labelStyle: GoogleFonts.fredokaOne(textStyle: TextStyle(fontSize: queryData.size.width*0.03)), 
+                  labelText: "Introduzca contraseña:",
+                  labelStyle: GoogleFonts.fredokaOne(
+                      textStyle:
+                          TextStyle(fontSize: queryData.size.width * 0.03)),
+                ),
               ),
-            ), 
-          ),
-        //   FittedBox(
-        //   fit: BoxFit.fill,
-        //   child: InkWell(   
-        //     onTap: () {
-              
-        //     },
-        //     child: TextButton(
-        //       child: Image(
-        //         fit: BoxFit.fill,
-        //         //height: queryData.size.height * 0.7,
-        //         width: queryData.size.width * 0.15,
-        //         image: const AssetImage("images/botonfumon.png")
-        //         ),
-        //       onPressed: () async {
-        //         User? user;
-        //         user = await signInWithEmailPassword(userEmail!, password!);
-        //         if (user != null) {
-        //           print("Login correcto");
-        //           globalValues.user = userEmail!.substring(0, userEmail!.indexOf('@'));
-        //          // print("Usuario"+ user!.toString());
-        //             Navigator.push(
-        //               context,
-        //               MaterialPageRoute(
-        //                   builder: (context) =>  SplashScreen()),
-        //             );
-        //         }
-                
-        //       },
-        //     ),
-        //   ),
-        // )
-          
-
-        ],
+            ),
+            FittedBox(
+              fit: BoxFit.fill,
+              child: InkWell(
+                onTap: () {},
+                child: TextButton(
+                  child: Stack(alignment: Alignment.center, children: <Widget>[
+                    Image(
+                        fit: BoxFit.fill,
+                        width: queryData.size.width * 0.15,
+                        image: AssetImage("assets/aceptar.png")),
+                    Text("Aceptar",
+                        style: GoogleFonts.fredokaOne(
+                            textStyle: TextStyle(
+                                fontSize: queryData.size.width * 0.02,
+                                color: Color.fromARGB(255, 0, 0, 0)))),
+                  ]),
+                  onPressed: () {},
+                ),
+              ),
+            )
+          ],
+        ),
       ),
-
-    );
+    ]));
   }
-
-
-
 }
