@@ -1,3 +1,6 @@
+import 'package:fanana/Pages/addStep.dart';
+import 'package:fanana/Pages/admin/tasksPage.dart';
+import 'package:fanana/Pages/services/taskService.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
@@ -19,62 +22,41 @@ class _taskAdminState extends State<taskAdmin> {
   late MediaQueryData queryData;
   late List<String> titulos;
   late List<String> descripciones;
+  final titleController = TextEditingController();
+  final descriptionController = TextEditingController();
+
+  String? titulo;
+  String? descripcion;
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is removed from the
+    // widget tree.
+    titleController.dispose();
+    descriptionController.dispose();
+    super.dispose();
+  }
+
 
   @override
   void initState() {
+    titleController.text = widget.task!["enunciado"];
+    descriptionController.text = widget.task!["descripcion"];
     super.initState();
-    titulos = [];
-    descripciones = [];
-    titulos.add("paso 1");
-    titulos.add("paso 2");
-    titulos.add("paso 3");
-    titulos.add("paso 4");
-    descripciones.add("jdkladsjfkejf");
-    descripciones.add("jf adskfje klfjkfel jfekfjef ");
-    descripciones.add(" fjkewfhqewjk efk anfeekfjewkl jewfkljefkljaweklfj ewklfj ewklfk jekfl ejfkle fjeklf je kflfj ekfj wklf ");
-    descripciones.add("sdffjkhef");
-    titulos.add("paso 1");
-    titulos.add("paso 2");
-    titulos.add("paso 3");
-    titulos.add("paso 4");
-    descripciones.add("jdkladsjfkejf");
-    descripciones.add("jf adskfje klfjkfel jfekfjef ");
-    descripciones.add(" fjkewfhqewjk efk anfeekfjewkl jewfkljefkljaweklfj ewklfj ewklfk jekfl ejfkle fjeklf je kflfj ekfj wklf ");
-    descripciones.add("sdffjkhef");
-    titulos.add("paso 1");
-    titulos.add("paso 2");
-    titulos.add("paso 3");
-    titulos.add("paso 4");
-    descripciones.add("jdkladsjfkejf");
-    descripciones.add("jf adskfje klfjkfel jfekfjef ");
-    descripciones.add(" fjkewfhqewjk efk anfeekfjewkl jewfkljefkljaweklfj ewklfj ewklfk jekfl ejfkle fjeklf je kflfj ekfj wklf ");
-    descripciones.add("sdffjkhef");
-    titulos.add("paso 1");
-    titulos.add("paso 2");
-    titulos.add("paso 3");
-    titulos.add("paso 4");
-    descripciones.add("jdkladsjfkejf");
-    descripciones.add("jf adskfje klfjkfel jfekfjef ");
-    descripciones.add(" fjkewfhqewjk efk anfeekfjewkl jewfkljefkljaweklfj ewklfj ewklfk jekfl ejfkle fjeklf je kflfj ekfj wklf ");
-    descripciones.add("sdffjkhef");
-    titulos.add("paso 1");
-    titulos.add("paso 2");
-    titulos.add("paso 3");
-    titulos.add("paso 4");
-    descripciones.add("jdkladsjfkejf");
-    descripciones.add("jf adskfje klfjkfel jfekfjef ");
-    descripciones.add(" fjkewfhqewjk efk anfeekfjewkl jewfkljefkljaweklfj ewklfj ewklfk jekfl ejfkle fjeklf je kflfj ekfj wklf ");
-    descripciones.add("sdffjkhef");
-    titulos.add("paso 1");
-    titulos.add("paso 2");
-    titulos.add("paso 3");
-    titulos.add("paso 4");
-    descripciones.add("jdkladsjfkejf");
-    descripciones.add("jf adskfje klfjkfel jfekfjef ");
-    descripciones.add(" fjkewfhqewjk efk anfeekfjewkl jewfkljefkljaweklfj ewklfj ewklfk jekfl ejfkle fjeklf je kflfj ekfj wklf ");
-    descripciones.add("sdffjkhef");
-    
+
+    titleController.addListener(() {
+      setState(() {
+        titulo = titleController.text;
+      });
+    });
+
+    descriptionController.addListener(() {
+      setState(() {
+        descripcion = descriptionController.text;
+      });
+    });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +75,7 @@ class _taskAdminState extends State<taskAdmin> {
             children: <Widget>[
               SizedBox(height: queryData.size.width * 0.07,),
               header(),
+              tituloField(),
               SizedBox(height: queryData.size.width * 0.04,),
               description(),
               SizedBox(height: queryData.size.width * 0.04,),
@@ -109,24 +92,35 @@ class _taskAdminState extends State<taskAdmin> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         SizedBox(width: queryData.size.width * 0.05),
-        FittedBox(
-            fit: BoxFit.fill,
-            child: Text("Título tarea", style: GoogleFonts.fredokaOne(
-              textStyle: TextStyle(fontSize: queryData.size.width*0.04)
-            )),      
-          ),
+        // FittedBox(
+        //     fit: BoxFit.fill,
+        //     child: TextField(       
+        //       controller: titleController,
+        //       decoration: InputDecoration(
+        //         labelText: "Titulo",
+        //         labelStyle: GoogleFonts.fredokaOne(textStyle: TextStyle(fontSize: queryData.size.width*0.03)), 
+        //       ),
+        //     ), 
+        //   ),
         SizedBox(width: queryData.size.width * 0.1,),
-        Stack(
-          alignment: Alignment.center,
-          children: <Widget>[
-            Image(
-                fit: BoxFit.fill,
-                width: queryData.size.width * 0.09,
-                image: AssetImage("assets/borrar.png")),
-            Text("Borrar", style: GoogleFonts.fredokaOne(
-              textStyle: TextStyle(fontSize: queryData.size.width*0.02)
-            )), 
-          ]),
+        TextButton(
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Image(
+                  fit: BoxFit.fill,
+                  width: queryData.size.width * 0.09,
+                  image: AssetImage("assets/borrar.png")),
+              Text("Borrar", style: GoogleFonts.fredokaOne(
+                textStyle: TextStyle(fontSize: queryData.size.width*0.02, color: Color.fromARGB(255, 0, 0, 0))
+              )), 
+            ]),
+          onPressed: () { 
+            taskService().deleteTask(widget.task!["id"]);
+            Navigator.of(context).pushReplacement(
+              new MaterialPageRoute(builder: (context) => new tasksPage()));
+          },
+        ),
         TextButton(
           child: Stack(
             alignment: Alignment.center,
@@ -140,9 +134,40 @@ class _taskAdminState extends State<taskAdmin> {
               )), 
             ]
           ),
-          onPressed: () {  },
+          onPressed: () { 
+              taskService().modifyTask(widget.task!["id"], titulo!, descripcion!);
+              Navigator.of(context).pushReplacement(
+                new MaterialPageRoute(builder: (context) => new tasksPage()));
+            },
         ),
         SizedBox(width: queryData.size.width * 0.05),
+      ]
+    );
+  }
+
+  Widget tituloField(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        SizedBox(width: queryData.size.width * 0.1),
+        SizedBox(
+            width: queryData.size.width * 0.2,
+            child: Text("Enunciado:", style: GoogleFonts.fredokaOne(
+              textStyle: TextStyle(fontSize: queryData.size.width*0.03)
+            )),      
+          ),
+        SizedBox(width: queryData.size.width * 0.01),
+        SizedBox(
+          width:queryData.size.width * 0.59,
+          child: TextField(       
+               controller: titleController,
+               decoration: InputDecoration(
+                 labelStyle: GoogleFonts.fredokaOne(textStyle: TextStyle(fontSize: queryData.size.width*0.03)), 
+              ),
+            ), 
+        ),
+        SizedBox(width: queryData.size.width * 0.1),
       ]
     );
   }
@@ -163,8 +188,9 @@ class _taskAdminState extends State<taskAdmin> {
         SizedBox(
           width:queryData.size.width * 0.59,
           child: TextFormField(
+            controller: descriptionController,
             decoration: InputDecoration(hintText: "Añade una descripción"),
-            initialValue: widget.task!["descripcion"],
+            //initialValue: widget.task!["descripcion"],
             keyboardType: TextInputType.multiline,
             maxLines: null,
             style: TextStyle(fontSize: queryData.size.width*0.02)
@@ -204,7 +230,12 @@ class _taskAdminState extends State<taskAdmin> {
                   )), 
                 ]
               ),
-              onPressed: () {  },
+              onPressed: () {  
+                Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) =>  addStep(widget.task, widget.task!["pasos"].length)),
+                    );
+              },
             ),
           ],
         ),
@@ -213,21 +244,21 @@ class _taskAdminState extends State<taskAdmin> {
           width:queryData.size.width * 0.59,
           child: Column(
             children: <Widget>[
-              for (int i = 0; i < titulos.length; i++)
+              for (int i = 0; i < widget.task!["pasos"].length; i++)
                 TextButton(
                   child: Row(
                     children: <Widget>[
                       SizedBox(width: queryData.size.width * 0.01),
                       SizedBox(
                         width: queryData.size.width * 0.08,
-                        child: Text(titulos[i], style: GoogleFonts.fredokaOne(
+                        child: Text("Paso "+i.toString()+" :", style: GoogleFonts.fredokaOne(
                           textStyle: TextStyle(fontSize: queryData.size.width*0.02, color: Color.fromARGB(255, 0, 0, 0))
                         )),      
                       ),
                       SizedBox(width: queryData.size.width * 0.01),
                       Flexible(
                         child: SizedBox(
-                          child: Text(descripciones[i], overflow: TextOverflow.ellipsis, style: GoogleFonts.fredokaOne(
+                          child: Text(widget.task!["pasos"][i], overflow: TextOverflow.ellipsis, style: GoogleFonts.fredokaOne(
                             textStyle: TextStyle(fontSize: queryData.size.width*0.015, color: Color.fromARGB(255, 107, 107, 107))
                           )),      
                       ),
@@ -245,7 +276,7 @@ class _taskAdminState extends State<taskAdmin> {
                   onPressed: () { 
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const stepAdmin()),
+                      MaterialPageRoute(builder: (context) =>  stepAdmin(widget.task, i)),
                     );
                    }, 
                 ),

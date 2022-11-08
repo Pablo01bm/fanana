@@ -27,7 +27,7 @@ Future <List<dynamic>> getTaskInfo() async {
 
 }
 
-//method which delete the user given by id in the database 
+//method which delete the task given by id in the database 
 deleteTask(String idTarea) async {
   List<dynamic> lista = ['tarea'];
   final client = http.Client();
@@ -37,6 +37,63 @@ deleteTask(String idTarea) async {
     var uri = Uri.http(url, 'delete/tarea/$idTarea');
     print("URL: "+uri.toString());
     var response = await http.delete(uri);
+    
+  }catch (SocketException){
+    print(SocketException);
+    return Future.error("Error no se ha podido conectar");
+
+  }
+
+}
+
+//method which modify the task given by id in the database 
+modifyTask(String id,String enun, String desc) async {
+  List<dynamic> lista = ['tarea'];
+  final client = http.Client();
+
+  try {
+    String url = "10.0.2.2:5050";
+    var uri = Uri.http(url, 'update/tarea/$id/$enun/$desc');
+    print("URL: "+uri.toString());
+    var response = await http.put(uri);
+    
+  }catch (SocketException){
+    print(SocketException);
+    return Future.error("Error no se ha podido conectar");
+
+  }
+
+}
+
+//method which modify the task given by id in the database 
+modifySteps(String id,String pasos) async {
+  List<dynamic> lista = ['tarea'];
+  final client = http.Client();
+
+  try {
+    String url = "10.0.2.2:5050";
+    var uri = Uri.http(url, 'update/tarea/$id/$pasos');
+    print("URL: "+uri.toString());
+    var response = await http.put(uri);
+    
+  }catch (SocketException){
+    print(SocketException);
+    return Future.error("Error no se ha podido conectar");
+
+  }
+
+}
+
+//method which modify the task given by id in the database 
+addSteps(String id,String pasos) async {
+  List<dynamic> lista = ['tarea'];
+  final client = http.Client();
+
+  try {
+    String url = "10.0.2.2:5050";
+    var uri = Uri.http(url, 'update/tarea/$id/$pasos');
+    print("URL: "+uri.toString());
+    var response = await http.put(uri);
     
   }catch (SocketException){
     print(SocketException);
