@@ -1,6 +1,6 @@
 // ignore_for_file: sort_child_properties_last
 
-import 'package:file_picker/_internal/file_picker_web.dart';
+//import 'package:file_picker/_internal/file_picker_web.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -137,17 +137,17 @@ class _stepAdminState extends State<stepAdmin> {
               ),
               onPressed: () async { 
                 FilePickerResult? picked;
-                if(kIsWeb) {
-                  picked = await FilePickerWeb.platform.pickFiles(
-                    type: FileType.image
-                  );
-                }
-                else{
+                // if(kIsWeb) {
+                //   picked = await FilePickerWeb.platform.pickFiles(
+                //     type: FileType.image
+                //   );
+                // }
+               // else{
                   picked = await FilePicker.platform.pickFiles(
                     type: FileType.custom,
                     allowedExtensions: ['jpg', 'png', 'jpeg'],
                   );
-                }
+                //}
 
                 if (picked != null) {
                   setState(() {

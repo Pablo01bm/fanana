@@ -1,5 +1,7 @@
 import 'package:fanana/Pages/admin/userMenu.dart';
+import 'package:fanana/Pages/services/taskService.dart';
 import 'package:fanana/Pages/services/userService.dart';
+import 'package:fanana/Pages/taskAdmin.dart';
 import 'package:fanana/Pages/utils/globalValues.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -20,8 +22,8 @@ class tasksPage extends StatefulWidget {
 class _tasksPageState extends State<tasksPage> {
   bool loading = true;
   late Future<List<dynamic>> _userList;
-  late List<dynamic> allUsers = [];
-  late List<dynamic> users = [];
+  late List<dynamic> allTasks = [];
+  late List<dynamic> tasks = [];
   late MediaQueryData queryData;
   String query = '';
 
@@ -34,7 +36,7 @@ class _tasksPageState extends State<tasksPage> {
 
 
   void loadStorageData() async {
-    _userList =  userService().getUserInfo();
+    _userList =  taskService().getTaskInfo();
 
     if(_userList != null){
       loading = false;
@@ -51,17 +53,17 @@ class _tasksPageState extends State<tasksPage> {
             future: _userList,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                allUsers = snapshot.data as List<dynamic>;
-                users.clear();
+                allTasks = snapshot.data as List<dynamic>;
+                tasks.clear();
 
-              for(int i=0; i<allUsers.length; i++) {
-                final userName = allUsers[i]["nombre"].toLowerCase();
-                final userSurname = allUsers[i]["apellidos"].toLowerCase();
+              for(int i=0; i<allTasks.length; i++) {
+                final userName = allTasks[i]["enunciado"].toLowerCase();
+                //final userSurname = allTasks[i]["apellidos"].toLowerCase();
                // final userEmail = allUsers[i].mail.toLowerCase(); //aqui poner la condicion de buscar por clase
                 final input = query.toLowerCase();
 
-                if(userName.contains(input) || userSurname.contains(input)) {
-                  users.add(allUsers[i]);
+                if(userName.contains(input) ) {
+                  tasks.add(allTasks[i]);
                 }
               }
                 return getBody();
@@ -110,9 +112,9 @@ class _tasksPageState extends State<tasksPage> {
         Expanded(
           child: ListView.builder(
             shrinkWrap: true,
-            itemCount: users.length,
+            itemCount: tasks.length,
             itemBuilder: (context, index) {
-              final contact = users[index];
+              final contact = tasks[index];
 
               return buildContact(contact, index);
             }
@@ -124,15 +126,10 @@ class _tasksPageState extends State<tasksPage> {
 
     Widget buildContact(Map<String,dynamic> user, int i) => ListTile(
       tileColor: i.isOdd ? Color.fromARGB(255, 254, 231, 158) : Color.fromARGB(255, 255, 252, 221),
-    leading: CircleAvatar(
-      child: Icon(Icons.person_sharp),
-      // backgroundColor: Colors.orange,
-      // foregroundColor: Colors.white,
-    ),
-    title: Text(user["nombre"] + " " + user["apellidos"], style:GoogleFonts.fredokaOne(
+    title: Text(user["enunciado"] , style:GoogleFonts.fredokaOne(
                 textStyle: TextStyle(fontSize: queryData.size.width*0.04, color: Colors.black, height: 1.5))
               ),
-   subtitle: Text(user["clase"], style: GoogleFonts.fredokaOne(
+   subtitle: Text("Nº pasos: "+(user.length-3).toString(), style: GoogleFonts.fredokaOne(
                textStyle: TextStyle(fontSize: queryData.size.width*0.04, color: Colors.black, height: 1.5))
              ),
     trailing: IconButton( 
@@ -141,9 +138,9 @@ class _tasksPageState extends State<tasksPage> {
         howAlertDialog(context, user["id"]);
       },
       ),
-    // onTap: () => Navigator.of(context).push(MaterialPageRoute(
-    //   builder: (context) => ContactMenu(myContact: contact),
-    // ))
+    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => taskAdmin(user),
+    ))
   );
 
   howAlertDialog(BuildContext context, String id) {
@@ -159,7 +156,7 @@ class _tasksPageState extends State<tasksPage> {
       child: Text("Continuar"),
       onPressed:  () {
 
-          userService().deleteUser(id);
+         taskService().deleteTask(id);
           Navigator.of(context).pushReplacement(
               new MaterialPageRoute(builder: (context) => new landingPageAdmin()));
           
@@ -189,7 +186,7 @@ class _tasksPageState extends State<tasksPage> {
 
     Widget buildSearch() => SearchWidget(
     text: query,
-    hintText: 'Buscar usuario',
+    hintText: 'Buscar tarea',
     onChanged: searchContact
   );
 

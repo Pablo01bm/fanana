@@ -1,5 +1,3 @@
-// ignore_for_file: sort_child_properties_last
-
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +6,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:email_validator/email_validator.dart';
 
 class taskAdmin extends StatefulWidget {
-  const taskAdmin({super.key});
+
+  Map<String, dynamic>? task;
+
+  taskAdmin(this.task, {Key? key}) : super(key: key);
 
   @override
   State<taskAdmin> createState() => _taskAdminState();
@@ -121,7 +122,7 @@ class _taskAdminState extends State<taskAdmin> {
             Image(
                 fit: BoxFit.fill,
                 width: queryData.size.width * 0.09,
-                image: AssetImage("borrar.png")),
+                image: AssetImage("assets/borrar.png")),
             Text("Borrar", style: GoogleFonts.fredokaOne(
               textStyle: TextStyle(fontSize: queryData.size.width*0.02)
             )), 
@@ -133,7 +134,7 @@ class _taskAdminState extends State<taskAdmin> {
               Image(
                   fit: BoxFit.fill,
                   width: queryData.size.width * 0.19,
-                  image: AssetImage("aceptar.png")),
+                  image: AssetImage("assets/aceptar.png")),
               Text("Listo", style: GoogleFonts.fredokaOne(
                 textStyle: TextStyle(fontSize: queryData.size.width*0.03, color: Color.fromARGB(255, 0, 0, 0))
               )), 
@@ -163,7 +164,7 @@ class _taskAdminState extends State<taskAdmin> {
           width:queryData.size.width * 0.59,
           child: TextFormField(
             decoration: InputDecoration(hintText: "Añade una descripción"),
-            initialValue: "Descripción anterior",
+            initialValue: widget.task!["descripcion"],
             keyboardType: TextInputType.multiline,
             maxLines: null,
             style: TextStyle(fontSize: queryData.size.width*0.02)
@@ -197,7 +198,7 @@ class _taskAdminState extends State<taskAdmin> {
                   Image(
                       fit: BoxFit.fill,
                       width: queryData.size.width * 0.12,
-                      image: AssetImage("aceptar.png")),
+                      image: AssetImage("assets/aceptar.png")),
                   Text("Añadir", style: GoogleFonts.fredokaOne(
                     textStyle: TextStyle(fontSize: queryData.size.width*0.02, color: Color.fromARGB(255, 0, 0, 0))
                   )), 
