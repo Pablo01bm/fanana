@@ -103,4 +103,23 @@ addSteps(String id,String pasos) async {
 
 }
 
+//method which modify the task given by id in the database 
+createTask(String id,String enunciado, String descripcion, String pasos) async {
+  List<dynamic> lista = ['tarea'];
+  final client = http.Client();
+
+  try {
+    String url = "10.0.2.2:5050";
+    var uri = Uri.http(url, 'post/tarea/$id/$enunciado/$descripcion/$pasos');
+    print("URL: "+uri.toString());
+    var response = await http.post(uri);
+    
+  }catch (SocketException){
+    print(SocketException);
+    return Future.error("Error no se ha podido conectar");
+
+  }
+
+}
+
 }
