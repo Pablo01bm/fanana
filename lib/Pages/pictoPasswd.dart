@@ -1,13 +1,19 @@
 // ignore_for_file: sort_child_properties_last
 
+import 'package:fanana/Pages/landingPageDefault.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class pictoPasswd extends StatefulWidget {
-  const pictoPasswd({super.key});
+  Map<String, dynamic>? task;
+
+  pictoPasswd(this.task, {Key? key}) : super(key: key);
 
   @override
   State<pictoPasswd> createState() => _pictoPasswdState();
@@ -18,7 +24,14 @@ class _pictoPasswdState extends State<pictoPasswd> {
   late List<String> fondos;
   late List<String> icons;
   late List<bool> nulos;
-  late String password;
+  int contador = 0;
+
+  String? uid;
+  String? password;
+  String? userEmail;
+
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -92,12 +105,32 @@ class _pictoPasswdState extends State<pictoPasswd> {
                                   width: queryData.size.width<queryData.size.height ?queryData.size.width * 0.19 : null,
                                   image: AssetImage(icons[i])),
                             ]),
-                        onPressed: nulos[i] ? ()  {
-                          password = password + i.toString();
+                        onPressed: nulos[i] ? () async {
+                          contador++;
+                        
+                          print(contador);
+                          password = password! + i.toString();
                           print(password);
                           setState(() {
                             nulos[i] = false;
                           });
+
+                          if(contador == 6){
+                           User? user;
+                          user = await signInWithEmailPassword(widget.task!["email"]!!, password!);
+
+                          if (user != null) {
+                            print("Login correcto");
+                            var globalValues;
+                           // globalValues.user = widget.task!["email"]!.substring(0, widget.task!["email"]!.indexOf('@'));
+                          // print("Usuario"+ user!.toString());
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>  landingPageDefault()),
+                              );
+                          }
+                        }
                         }: null
                       ),
                   ],
@@ -124,12 +157,32 @@ class _pictoPasswdState extends State<pictoPasswd> {
                                   width: queryData.size.width<queryData.size.height ?queryData.size.width * 0.19 : null,
                                   image: AssetImage(icons[i])),
                             ]),
-                        onPressed: nulos[i] ? ()  {
-                          password = password + i.toString();
+                        onPressed: nulos[i] ? () async {
+                          contador++;
+                        
+                          print(contador);
+                          password = password! + i.toString();
                           print(password);
                           setState(() {
                             nulos[i] = false;
                           });
+
+                          if(contador == 6){
+                           User? user;
+                          user = await signInWithEmailPassword(widget.task!["email"]!, password!);
+
+                          if (user != null) {
+                            print("Login correcto");
+                            var globalValues;
+                           //globalValues.user = widget.task!["email"]!.substring(0, widget.task!["email"]!.indexOf('@'));
+                          // print("Usuario"+ user!.toString());
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>  landingPageDefault()),
+                              );
+                          }
+                        }
                         }: null
                       ),
                   ],
@@ -139,5 +192,119 @@ class _pictoPasswdState extends State<pictoPasswd> {
           
         ]);
   }
+
+  // Firebase auth method
+  Future<User?> signInWithEmailPassword(String email, String password) async {
+  await Firebase.initializeApp();
+  User? user;
+
+  try {
+    UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    user = userCredential.user;
+
+    if (user != null) {
+      uid = user.uid;
+      userEmail = user.email;
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('auth', true);
+    }
+  } on FirebaseAuthException catch (e) {
+    print("Error: "+e.toString());
+
+      final regexEmail = RegExp(r"\[+[a-z]+_+[a-z]+\/+invalid-email+\]");
+      final regexUserNotFound = RegExp(r"\[+[a-z]+_+[a-z]+\/+user-not-found+\]");
+      final regexWrongPassw = RegExp(r"\[+[a-z]+_+[a-z]+\/+wrong-password+\]");
+      final regexTooManyRequest = RegExp(r"\[+[a-z]+_+[a-z]+\/+too-many-requests+\]");
+
+      if (regexEmail.hasMatch(e.toString())){
+        
+         final snackBar = SnackBar(
+            backgroundColor: Colors.redAccent,
+            
+            content: const Text('Introduzca un correo válido'),
+            action: SnackBarAction(
+              textColor: Colors.white,
+              label: 'OK',
+              onPressed: () {
+                // Some code to undo the change.
+              },
+            )
+         );
+        
+         ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      }else if(regexUserNotFound.hasMatch(e.toString())){
+
+        final snackBar = SnackBar(
+            backgroundColor: Colors.redAccent,
+            content: const Text('No existe ese usuario'),
+            action: SnackBarAction(
+              textColor: Colors.white,
+              label: 'OK',
+              onPressed: () {
+                // Some code to undo the change.
+              },
+            )
+         );
+        
+         ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      }else if(regexWrongPassw.hasMatch(e.toString())){
+        
+        final snackBar = SnackBar(
+            backgroundColor: Colors.redAccent,
+            content: const Text('Email o contraseña inválido'),
+            action: SnackBarAction(
+              textColor: Colors.white,
+              label: 'Try again',
+              onPressed: () {
+                // Some code to undo the change.
+              },
+            )
+         );
+        
+         ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      }else if(regexTooManyRequest.hasMatch(e.toString())){
+        
+        final snackBar = SnackBar(
+            backgroundColor: Colors.redAccent,
+            content: const Text('Error del servidor, inténtelo de nuevo más tarde'),
+            action: SnackBarAction(
+              textColor: Colors.white,
+              label: 'OK',
+              onPressed: () {
+                // Some code to undo the change.
+              },
+            )
+         );
+        
+         ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      }
+    }
+
+  return user;
+}
+
+
+//Sign out firebase
+Future<String> signOut() async {
+  await _auth.signOut();
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setBool('auth', false);
+
+  uid = null;
+  userEmail = null;
+
+  return 'User signed out';
+}
+
+
 }
 
