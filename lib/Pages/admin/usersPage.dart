@@ -1,3 +1,4 @@
+import 'package:fanana/Pages/addUser.dart';
 import 'package:fanana/Pages/admin/userMenu.dart';
 import 'package:fanana/Pages/services/userService.dart';
 import 'package:fanana/Pages/utils/globalValues.dart';
@@ -113,7 +114,7 @@ class _usersPageState extends State<usersPage> {
                     Map<String, dynamic> vacio = {};
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => userMenu(vacio)),
+                      MaterialPageRoute(builder: (context) => adduser(vacio)),
                     );
                   },
                 ),
