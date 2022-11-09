@@ -1,5 +1,6 @@
 import 'package:fanana/Pages/services/userService.dart';
 import 'package:fanana/Pages/utils/globalValues.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -10,6 +11,7 @@ import 'package:fanana/components/searchBar.dart';
 
 import 'landingPageAdmin.dart';
 
+const List<String> lista_clase = <String>["A", "B", "C", "D"];
 const List<String> lista_login = <String>["Pictograma", "Default"];
 const List<String> lista_tipo = <String>["Alumno", "Profesor", "Administrador"];
 
@@ -29,16 +31,19 @@ class _userMenuState extends State<userMenu> {
   bool visiblePass = true;
   String? tipo_login;
   String? tipo;
+  String? clase;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   String? uid;
   String? password;
   String? userEmail;
+  String? nombreImagen;
 
   @override
   Widget build(BuildContext context) {
     queryData = MediaQuery.of(context);
+    nombreImagen = "images/sus.png";
 
     return Scaffold(
       body: userForm(),
@@ -81,7 +86,7 @@ class _userMenuState extends State<userMenu> {
                 width: queryData.size.width * 0.4,
                 child: DropdownButtonFormField(
                   decoration: InputDecoration(
-                    labelText: "Tipo de login",
+                    labelText: "Clase",
                     labelStyle: GoogleFonts.fredokaOne(
                         textStyle:
                             TextStyle(fontSize: queryData.size.width * 0.03)),
@@ -92,6 +97,31 @@ class _userMenuState extends State<userMenu> {
                   onChanged: (String? value) {
                     setState(() {
                       tipo_login = value!;
+                    });
+                  },
+                  items:
+                      lista_clase.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                )),
+            SizedBox(
+                width: queryData.size.width * 0.4,
+                child: DropdownButtonFormField(
+                  decoration: InputDecoration(
+                    labelText: "Tipo de login",
+                    labelStyle: GoogleFonts.fredokaOne(
+                        textStyle:
+                            TextStyle(fontSize: queryData.size.width * 0.03)),
+                  ),
+                  value: clase,
+                  icon: const Icon(Icons.arrow_downward),
+                  elevation: 16,
+                  onChanged: (String? value) {
+                    setState(() {
+                      clase = value!;
                     });
                   },
                   items:
@@ -136,22 +166,39 @@ class _userMenuState extends State<userMenu> {
           children: <Widget>[
             FittedBox(
               fit: BoxFit.fill,
-              child: TextButton(
-                child: Image(
-                    fit: BoxFit.fill,
-                    width: queryData.size.width * 0.12,
-                    image: AssetImage("images/sus.png")),
-                onPressed: () {
-                  setState(() {});
-                },
-              ),
-            ),
-            FittedBox(
-              fit: BoxFit.fill,
               child: Text("DNI",
                   style: GoogleFonts.fredokaOne(
                       textStyle:
                           TextStyle(fontSize: queryData.size.width * 0.04))),
+            ),
+            FittedBox(
+              fit: BoxFit.fill,
+              child: TextButton(
+                child: Image(
+                    fit: BoxFit.fill,
+                    width: queryData.size.width * 0.12,
+                    image: AssetImage(nombreImagen!)),
+                onPressed: () async {
+                  FilePickerResult? picked;
+                // if(kIsWeb) {
+                //   picked = await FilePickerWeb.platform.pickFiles(
+                //     type: FileType.image
+                //   );
+                // }
+               // else{
+                  picked = await FilePicker.platform.pickFiles(
+                    type: FileType.custom,
+                    allowedExtensions: ['jpg', 'png', 'jpeg'],
+                  );
+                //}
+
+                if (picked != null) {
+                  setState(() {
+                    nombreImagen = picked!.files.first.name;
+                  });
+                }
+                },
+              ),
             ),
             SizedBox(
               width: queryData.size.width * 0.4,
