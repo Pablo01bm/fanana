@@ -33,6 +33,9 @@ class _userMenuState extends State<userMenu> {
   final tipo_loginController = TextEditingController();
   final tipoController = TextEditingController();
   final claseController = TextEditingController();
+  final emailController = TextEditingController();
+  final userController = TextEditingController();
+
   bool visiblePass = true;
   String? nombre;
   String? apellidos;
@@ -40,6 +43,8 @@ class _userMenuState extends State<userMenu> {
   String? tipo_login;
   String? tipo;
   String? clase;
+  String? email;
+  String? user;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -58,6 +63,8 @@ class _userMenuState extends State<userMenu> {
     tipo_loginController.dispose();
     tipoController.dispose();
     claseController.dispose();
+    emailController.dispose();
+    userController.dispose();
     super.dispose();
   }
 
@@ -66,10 +73,19 @@ class _userMenuState extends State<userMenu> {
     if (!globalValues.nuevo) {
       nombreController.text = widget.userData!["nombre"];
       apellidosController.text = widget.userData!["apellidos"];
+      userController.text = widget.userData!["user"];
       contraseniaController.text = "";
-      tipo_loginController.text = "";
+      tipo_loginController.text =  widget.userData!["tipo_login"];
       tipoController.text = widget.userData!["tipo"];
       claseController.text = widget.userData!["clase"];
+      emailController.text = widget.userData!["email"];
+      nombre = widget.userData!["nombre"];
+      apellidos =  widget.userData!["apellidos"];
+      tipo_login = widget.userData!["tipo_login"];
+      tipo = widget.userData!["tipo"];
+      clase = widget.userData!["clase"];
+      email = widget.userData!["email"];
+      user = widget.userData!["user"];
     } else {
       nombreController.text = "";
       apellidosController.text = "";
@@ -112,6 +128,12 @@ class _userMenuState extends State<userMenu> {
     claseController.addListener(() {
       setState(() {
         clase = claseController.text;
+      });
+    });
+
+    emailController.addListener(() {
+      setState(() {
+        email = emailController.text;
       });
     });
     setState(() {});
@@ -300,6 +322,30 @@ class _userMenuState extends State<userMenu> {
             SizedBox(
               width: queryData.size.width * 0.4,
               child: TextField(
+                controller: emailController,
+                decoration: InputDecoration(
+                  labelText: "Email:",
+                  labelStyle: GoogleFonts.fredokaOne(
+                      textStyle:
+                          TextStyle(fontSize: queryData.size.width * 0.03)),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: queryData.size.width * 0.4,
+              child: TextField(
+                controller: userController,
+                decoration: InputDecoration(
+                  labelText: "Usuario:",
+                  labelStyle: GoogleFonts.fredokaOne(
+                      textStyle:
+                          TextStyle(fontSize: queryData.size.width * 0.03)),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: queryData.size.width * 0.4,
+              child: TextField(
                 controller: contraseniaController,
                 obscureText: visiblePass,
                 decoration: InputDecoration(
@@ -338,7 +384,7 @@ class _userMenuState extends State<userMenu> {
                   ]),
                   onPressed: () {
                     userService().modifyUser(widget.userData!["id"], nombre!,
-                        apellidos!, contrasenia!, tipo_login!, tipo!);
+                        apellidos!, user!, tipo_login!, tipo!, email!, clase!);
                     Navigator.of(context).pushReplacement(new MaterialPageRoute(
                         builder: (context) => new usersPage()));
                   },

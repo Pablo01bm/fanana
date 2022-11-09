@@ -1,3 +1,4 @@
+import 'package:fanana/Pages/addTask.dart';
 import 'package:fanana/Pages/admin/userMenu.dart';
 import 'package:fanana/Pages/services/taskService.dart';
 import 'package:fanana/Pages/services/userService.dart';
@@ -114,7 +115,7 @@ class _tasksPageState extends State<tasksPage> {
                     Map<String, dynamic> vacio = {};
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => userMenu(vacio)),
+                      MaterialPageRoute(builder: (context) => addTask(vacio)),
                     );
                   },
                 ),
