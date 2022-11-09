@@ -1,5 +1,6 @@
 // ignore_for_file: camel_case_types
 import 'package:fanana/Pages/pictoPasswd.dart';
+import 'package:fanana/Pages/services/userService.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:math' as math;
@@ -20,29 +21,64 @@ class landingPagePicto extends StatefulWidget {
 
 class _landingPagePictoState extends State<landingPagePicto> {
   late MediaQueryData queryData;
-  late List<Usuario> usuarios;
+  late Future<List<dynamic>> _userList;
+   late List<dynamic> allUsers = [];
+  late List<dynamic> usuarios = [];
+  String query = '';
+  bool loading = true;
   int posicion = 0;
+
+    @override
+  void initState() {
+    loadStorageData();
+    super.initState();
+  }
+
+  void loadStorageData() async {
+    _userList = userService().getUserInfo();
+
+    if (_userList != null) {
+      loading = false;
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
     queryData = MediaQuery.of(context);
 
-    usuarios = [
-      Usuario(foto: "https://pbs.twimg.com/profile_images/1585680203350786048/YNmlhVnJ_400x400.jpg", nombre: "amogus"),
-      Usuario(foto: "https://pbs.twimg.com/profile_images/1558401344653893632/i5SAyTMC_400x400.jpg", nombre: "vine boom"),
-      Usuario(foto: "https://pbs.twimg.com/profile_images/1508837414621650955/dijKwcEc_400x400.jpg", nombre: "hard"),
-      Usuario(foto: "https://pbs.twimg.com/profile_images/1585680203350786048/YNmlhVnJ_400x400.jpg", nombre: "amogus"),
-      Usuario(foto: "https://pbs.twimg.com/profile_images/1558401344653893632/i5SAyTMC_400x400.jpg", nombre: "vine boom"),
-      Usuario(foto: "https://pbs.twimg.com/profile_images/1508837414621650955/dijKwcEc_400x400.jpg", nombre: "hard"),    
-      Usuario(foto: "https://pbs.twimg.com/profile_images/1558401344653893632/i5SAyTMC_400x400.jpg", nombre: "vine boom"),
-      Usuario(foto: "https://pbs.twimg.com/profile_images/1508837414621650955/dijKwcEc_400x400.jpg", nombre: "hard"),  
-      Usuario(foto: "https://pbs.twimg.com/profile_images/1508837414621650955/dijKwcEc_400x400.jpg", nombre: "hard"),    
-      Usuario(foto: "https://pbs.twimg.com/profile_images/1558401344653893632/i5SAyTMC_400x400.jpg", nombre: "vine boom"),
-      Usuario(foto: "https://pbs.twimg.com/profile_images/1508837414621650955/dijKwcEc_400x400.jpg", nombre: "hard"),              
-    ];
-
     return Scaffold(
-      body: mainMenuPicto()
+      resizeToAvoidBottomInset: false,
+      body: !loading
+          ? FutureBuilder(
+              future: _userList,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  allUsers = snapshot.data as List<dynamic>;
+                  usuarios.clear();
+
+                  for (int i = 0; i < allUsers.length; i++) {
+                    final userName = allUsers[i]["nombre"].toLowerCase();
+                    final userSurname = allUsers[i]["apellidos"].toLowerCase();
+                    // final userEmail = allUsers[i].mail.toLowerCase(); //aqui poner la condicion de buscar por clase
+                    final input = query.toLowerCase();
+
+                    if (userName.contains(input) ||
+                        userSurname.contains(input)) {
+                      usuarios.add(allUsers[i]);
+                    }
+                  }
+                  return mainMenuPicto();
+                } else if (snapshot.hasError) {
+                  print(snapshot.error);
+                  return Text('Error loading users');
+                }
+
+                return Center(
+                    child: Container(child: CircularProgressIndicator()));
+              })
+          : SizedBox.shrink(),
     );
   }
 
@@ -156,9 +192,9 @@ class _landingPagePictoState extends State<landingPagePicto> {
                 fit: BoxFit.fill,
                 height: queryData.size.width>queryData.size.height ?queryData.size.height * 0.25 : null,
                 width: queryData.size.width<queryData.size.height ?queryData.size.width * 0.2 : null,
-                image: NetworkImage(usuarios[alumno].foto)
+                image: NetworkImage(usuarios[alumno]["imagen"])
               ),
-              Text(usuarios[alumno].nombre, style: GoogleFonts.fredokaOne(
+              Text(usuarios[alumno]["nombre"], style: GoogleFonts.fredokaOne(
                 textStyle: TextStyle(fontSize: queryData.size.width<queryData.size.height ? queryData.size.width*0.04: queryData.size.height*0.04, color: Colors.black, height: 1.5))
               ),
             ],)
@@ -168,7 +204,7 @@ class _landingPagePictoState extends State<landingPagePicto> {
       onPressed: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const pictoPasswd()),
+          MaterialPageRoute(builder: (context) =>  pictoPasswd(usuarios[alumno])),
         );
       },
     );
