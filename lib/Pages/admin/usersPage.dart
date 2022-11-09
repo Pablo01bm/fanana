@@ -109,6 +109,7 @@ class _usersPageState extends State<usersPage> {
                       width: queryData.size.width * 0.18,
                       image: AssetImage("images/aniadir.png")),
                   onPressed: () {
+                    globalValues.nuevo = true;
                     Map<String, dynamic> vacio = {};
                     Navigator.push(
                       context,
@@ -164,9 +165,12 @@ class _usersPageState extends State<usersPage> {
               howAlertDialog(context, user["id"]);
             },
           ),
-          onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => userMenu(user),
-              ))));
+          onTap: () {
+            globalValues.nuevo = false;
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => userMenu(user),
+            ));
+          }));
 
   howAlertDialog(BuildContext context, String id) {
     // set up the buttons

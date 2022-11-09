@@ -1,3 +1,4 @@
+import 'package:fanana/Pages/admin/usersPage.dart';
 import 'package:fanana/Pages/services/userService.dart';
 import 'package:fanana/Pages/utils/globalValues.dart';
 import 'package:file_picker/file_picker.dart';
@@ -26,9 +27,16 @@ class userMenu extends StatefulWidget {
 
 class _userMenuState extends State<userMenu> {
   late MediaQueryData queryData;
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final nombreController = TextEditingController();
+  final apellidosController = TextEditingController();
+  final contraseniaController = TextEditingController();
+  final tipo_loginController = TextEditingController();
+  final tipoController = TextEditingController();
+  final claseController = TextEditingController();
   bool visiblePass = true;
+  String? nombre;
+  String? apellidos;
+  String? contrasenia;
   String? tipo_login;
   String? tipo;
   String? clase;
@@ -39,6 +47,81 @@ class _userMenuState extends State<userMenu> {
   String? password;
   String? userEmail;
   String? nombreImagen;
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is removed from the
+    // widget tree.
+    nombreController.dispose();
+    apellidosController.dispose();
+    contraseniaController.dispose();
+    tipo_loginController.dispose();
+    tipoController.dispose();
+    claseController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    if (!globalValues.nuevo) {
+      nombreController.text = widget.userData!["nombre"];
+      apellidosController.text = widget.userData!["apellidos"];
+      contraseniaController.text = "";
+      tipo_loginController.text = "";
+      tipoController.text = widget.userData!["tipo"];
+      claseController.text = widget.userData!["clase"];
+    } else {
+      nombreController.text = "";
+      apellidosController.text = "";
+      contraseniaController.text = "";
+      tipo_loginController.text = "";
+      tipoController.text = "";
+      claseController.text = "";
+    }
+
+    nombreController.addListener(() {
+      setState(() {
+        nombre = nombreController.text;
+      });
+    });
+
+    apellidosController.addListener(() {
+      setState(() {
+        apellidos = apellidosController.text;
+      });
+    });
+
+    contraseniaController.addListener(() {
+      setState(() {
+        contrasenia = contraseniaController.text;
+      });
+    });
+
+    tipo_loginController.addListener(() {
+      setState(() {
+        tipo_login = tipo_loginController.text;
+      });
+    });
+
+    tipoController.addListener(() {
+      setState(() {
+        tipo = tipoController.text;
+      });
+    });
+
+    claseController.addListener(() {
+      setState(() {
+        clase = claseController.text;
+      });
+    });
+    setState(() {});
+    if (!globalValues.nuevo) {
+      tipo = tipoController.text;
+      clase = claseController.text;
+    }
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +144,7 @@ class _userMenuState extends State<userMenu> {
             SizedBox(
               width: queryData.size.width * 0.4,
               child: TextFormField(
-                controller: emailController,
+                controller: nombreController,
                 decoration: InputDecoration(
                   labelText: "Nombre",
                   labelStyle: GoogleFonts.fredokaOne(
@@ -73,7 +156,7 @@ class _userMenuState extends State<userMenu> {
             SizedBox(
               width: queryData.size.width * 0.4,
               child: TextFormField(
-                controller: emailController,
+                controller: apellidosController,
                 decoration: InputDecoration(
                   labelText: "Apellidos",
                   labelStyle: GoogleFonts.fredokaOne(
@@ -91,12 +174,12 @@ class _userMenuState extends State<userMenu> {
                         textStyle:
                             TextStyle(fontSize: queryData.size.width * 0.03)),
                   ),
-                  value: tipo_login,
+                  value: clase,
                   icon: const Icon(Icons.arrow_downward),
                   elevation: 16,
                   onChanged: (String? value) {
                     setState(() {
-                      tipo_login = value!;
+                      clase = value ?? "";
                     });
                   },
                   items:
@@ -116,12 +199,12 @@ class _userMenuState extends State<userMenu> {
                         textStyle:
                             TextStyle(fontSize: queryData.size.width * 0.03)),
                   ),
-                  value: clase,
+                  value: tipo_login,
                   icon: const Icon(Icons.arrow_downward),
                   elevation: 16,
                   onChanged: (String? value) {
                     setState(() {
-                      clase = value!;
+                      tipo_login = value ?? "";
                     });
                   },
                   items:
@@ -146,7 +229,8 @@ class _userMenuState extends State<userMenu> {
                   elevation: 16,
                   onChanged: (String? value) {
                     setState(() {
-                      tipo = value!;
+                      print(value);
+                      tipo = value ?? "";
                     });
                   },
                   items:
@@ -164,13 +248,26 @@ class _userMenuState extends State<userMenu> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            FittedBox(
-              fit: BoxFit.fill,
-              child: Text("DNI",
-                  style: GoogleFonts.fredokaOne(
-                      textStyle:
-                          TextStyle(fontSize: queryData.size.width * 0.04))),
-            ),
+            if (globalValues.nuevo == false)
+              FittedBox(
+                fit: BoxFit.fill,
+                child: Text("DNI",
+                    style: GoogleFonts.fredokaOne(
+                        textStyle:
+                            TextStyle(fontSize: queryData.size.width * 0.04))),
+              ),
+            if (globalValues.nuevo)
+              SizedBox(
+                width: queryData.size.width * 0.4,
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    labelText: "DNI",
+                    labelStyle: GoogleFonts.fredokaOne(
+                        textStyle:
+                            TextStyle(fontSize: queryData.size.width * 0.03)),
+                  ),
+                ),
+              ),
             FittedBox(
               fit: BoxFit.fill,
               child: TextButton(
@@ -180,30 +277,30 @@ class _userMenuState extends State<userMenu> {
                     image: AssetImage(nombreImagen!)),
                 onPressed: () async {
                   FilePickerResult? picked;
-                // if(kIsWeb) {
-                //   picked = await FilePickerWeb.platform.pickFiles(
-                //     type: FileType.image
-                //   );
-                // }
-               // else{
+                  // if(kIsWeb) {
+                  //   picked = await FilePickerWeb.platform.pickFiles(
+                  //     type: FileType.image
+                  //   );
+                  // }
+                  // else{
                   picked = await FilePicker.platform.pickFiles(
                     type: FileType.custom,
                     allowedExtensions: ['jpg', 'png', 'jpeg'],
                   );
-                //}
+                  //}
 
-                if (picked != null) {
-                  setState(() {
-                    nombreImagen = picked!.files.first.name;
-                  });
-                }
+                  if (picked != null) {
+                    setState(() {
+                      nombreImagen = picked!.files.first.name;
+                    });
+                  }
                 },
               ),
             ),
             SizedBox(
               width: queryData.size.width * 0.4,
               child: TextField(
-                controller: passwordController,
+                controller: contraseniaController,
                 obscureText: visiblePass,
                 decoration: InputDecoration(
                   suffixIcon: IconButton(
@@ -239,7 +336,12 @@ class _userMenuState extends State<userMenu> {
                                 fontSize: queryData.size.width * 0.02,
                                 color: Color.fromARGB(255, 0, 0, 0)))),
                   ]),
-                  onPressed: () {},
+                  onPressed: () {
+                    userService().modifyUser(widget.userData!["id"], nombre!,
+                        apellidos!, contrasenia!, tipo_login!, tipo!);
+                    Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                        builder: (context) => new usersPage()));
+                  },
                 ),
               ),
             )

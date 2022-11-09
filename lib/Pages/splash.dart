@@ -25,12 +25,12 @@ class _SplashScreenState extends State<SplashScreen> {
     });
 
     Future.delayed(const Duration(milliseconds: 2000), () {
-      if (globalValues.infoUser["tipo"] == "admin"){
+      if (globalValues.infoUser["tipo"] == "Administrador"){
         new Timer(new Duration(milliseconds: 2000), () { // set your desired delay time here
           Navigator.of(context).pushReplacement(
               new MaterialPageRoute(builder: (context) => new landingPageAdmin()));
         });
-      }else if (globalValues.infoUser["tipo"] == "alumno"){
+      }else if (globalValues.infoUser["tipo"] == "Alumno"){
           new Timer(new Duration(milliseconds: 2000), () { // set your desired delay time here
             Navigator.of(context).pushReplacement(
               new MaterialPageRoute(builder: (context) => new landingPageDefault()));

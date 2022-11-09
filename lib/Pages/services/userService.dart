@@ -27,6 +27,24 @@ Future <List<dynamic>> getUserInfo() async {
 
 }
 
+modifyUser(String id,String nombre, String apellidos, String contrasenia, String tipo_login, String tipo) async {
+  List<dynamic> lista = ['tarea'];
+  final client = http.Client();
+
+  try {
+    String url = "10.0.2.2:5050";
+    var uri = Uri.http(url, 'update/usuario/$id/$nombre/$apellidos/$id/$contrasenia/$tipo_login/$tipo');
+    print("URL: "+uri.toString());
+    var response = await http.put(uri);
+    
+  }catch (SocketException){
+    print(SocketException);
+    return Future.error("Error no se ha podido conectar");
+
+  }
+
+}
+
 //method which delete the user given by id in the database 
 deleteUser(String idUser) async {
   List<dynamic> lista = ['alumno'];
