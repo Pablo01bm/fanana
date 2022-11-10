@@ -151,6 +151,7 @@ class _userMenuState extends State<userMenu> {
     nombreImagen = "images/sus.png";
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: userForm(),
     );
   }
@@ -270,10 +271,13 @@ class _userMenuState extends State<userMenu> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            if (globalValues.nuevo == false)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                if (globalValues.nuevo == false)
               FittedBox(
                 fit: BoxFit.fill,
-                child: Text("DNI",
+                child: Text(widget.userData!["id"] + "    ",
                     style: GoogleFonts.fredokaOne(
                         textStyle:
                             TextStyle(fontSize: queryData.size.width * 0.04))),
@@ -295,7 +299,7 @@ class _userMenuState extends State<userMenu> {
               child: TextButton(
                 child: Image(
                     fit: BoxFit.fill,
-                    width: queryData.size.width * 0.12,
+                    width: queryData.size.width * 0.05,
                     image: AssetImage(nombreImagen!)),
                 onPressed: () async {
                   FilePickerResult? picked;
@@ -318,6 +322,8 @@ class _userMenuState extends State<userMenu> {
                   }
                 },
               ),
+            ),
+              ],
             ),
             SizedBox(
               width: queryData.size.width * 0.4,

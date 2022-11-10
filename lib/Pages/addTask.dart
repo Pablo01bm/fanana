@@ -74,6 +74,7 @@ class _addTaskState extends State<addTask> {
     queryData = MediaQuery.of(context);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: cuerpo()
     );
   }

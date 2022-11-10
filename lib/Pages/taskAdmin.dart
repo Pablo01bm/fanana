@@ -63,6 +63,7 @@ class _taskAdminState extends State<taskAdmin> {
     queryData = MediaQuery.of(context);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: cuerpo()
     );
   }

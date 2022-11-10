@@ -151,6 +151,7 @@ class _adduserState extends State<adduser> {
     nombreImagen = "images/sus.png";
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: userForm(),
     );
   }
@@ -270,10 +271,13 @@ class _adduserState extends State<adduser> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            if (globalValues.nuevo == false)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                if (globalValues.nuevo == false)
               FittedBox(
                 fit: BoxFit.fill,
-                child: Text("DNI",
+                child: Text(dni!,
                     style: GoogleFonts.fredokaOne(
                         textStyle:
                             TextStyle(fontSize: queryData.size.width * 0.04))),
@@ -281,8 +285,7 @@ class _adduserState extends State<adduser> {
             if (globalValues.nuevo)
               SizedBox(
                 width: queryData.size.width * 0.4,
-                child: TextField(
-                  controller: dniController,
+                child: TextFormField(
                   decoration: InputDecoration(
                     labelText: "DNI",
                     labelStyle: GoogleFonts.fredokaOne(
@@ -296,7 +299,7 @@ class _adduserState extends State<adduser> {
               child: TextButton(
                 child: Image(
                     fit: BoxFit.fill,
-                    width: queryData.size.width * 0.12,
+                    width: queryData.size.width * 0.05,
                     image: AssetImage(nombreImagen!)),
                 onPressed: () async {
                   FilePickerResult? picked;
@@ -319,6 +322,8 @@ class _adduserState extends State<adduser> {
                   }
                 },
               ),
+            ),
+              ],
             ),
             SizedBox(
               width: queryData.size.width * 0.4,

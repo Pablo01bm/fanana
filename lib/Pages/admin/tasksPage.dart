@@ -46,6 +46,7 @@ class _tasksPageState extends State<tasksPage> {
   Widget build(BuildContext context) {
     queryData = MediaQuery.of(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: !loading
           ? FutureBuilder(
               future: _userList,

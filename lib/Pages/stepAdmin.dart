@@ -63,6 +63,7 @@ final descriptionController = TextEditingController();
     queryData = MediaQuery.of(context);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: cuerpo()
     );
   }
