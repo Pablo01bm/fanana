@@ -286,6 +286,7 @@ class _adduserState extends State<adduser> {
               SizedBox(
                 width: queryData.size.width * 0.4,
                 child: TextFormField(
+                  controller: dniController,
                   decoration: InputDecoration(
                     labelText: "DNI",
                     labelStyle: GoogleFonts.fredokaOne(

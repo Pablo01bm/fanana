@@ -86,6 +86,14 @@ class _userMenuState extends State<userMenu> {
       clase = widget.userData!["clase"];
       email = widget.userData!["email"];
       user = widget.userData!["user"];
+
+      if(widget.userData!["imagen"] == null){
+              nombreImagen = "https://firebasestorage.googleapis.com/v0/b/fanana-dev.appspot.com/o/userImages%2Favatar-16a443349aadc0e71c74fd62d29c1098.jpg?alt=media&token=1d9b5cd8-e3dc-42d9-9bb4-9b4a878d88fd";
+
+      }else{
+        nombreImagen = widget.userData!["imagen"];
+      }
+  
     } else {
       nombreController.text = "";
       apellidosController.text = "";
@@ -148,7 +156,6 @@ class _userMenuState extends State<userMenu> {
   @override
   Widget build(BuildContext context) {
     queryData = MediaQuery.of(context);
-    nombreImagen = "images/sus.png";
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -277,7 +284,7 @@ class _userMenuState extends State<userMenu> {
                 if (globalValues.nuevo == false)
               FittedBox(
                 fit: BoxFit.fill,
-                child: Text(widget.userData!["id"] + "    ",
+                child: Text("${widget.userData!["id"]}    ",
                     style: GoogleFonts.fredokaOne(
                         textStyle:
                             TextStyle(fontSize: queryData.size.width * 0.04))),
@@ -300,7 +307,7 @@ class _userMenuState extends State<userMenu> {
                 child: Image(
                     fit: BoxFit.fill,
                     width: queryData.size.width * 0.05,
-                    image: AssetImage(nombreImagen!)),
+                    image: NetworkImage(nombreImagen!)),
                 onPressed: () async {
                   FilePickerResult? picked;
                   // if(kIsWeb) {
