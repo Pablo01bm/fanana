@@ -1,3 +1,4 @@
+import 'package:fanana/Pages/admin/tasksPage.dart';
 import 'package:fanana/Pages/admin/usersPage.dart';
 import 'package:fanana/Pages/utils/globalValues.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -57,7 +58,8 @@ class _landingPageAdminState extends State<landingPageAdmin> {
                       image: const AssetImage("images/botonTareas.png")
                     ),
                   onPressed: () {
-                    
+                    Navigator.of(context).push(
+                    new MaterialPageRoute(builder: (context) => new tasksPage()));
                   },
               ),
             ],

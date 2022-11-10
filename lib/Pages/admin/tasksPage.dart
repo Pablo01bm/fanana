@@ -1,6 +1,8 @@
-import 'package:fanana/Pages/addUser.dart';
+import 'package:fanana/Pages/addTask.dart';
 import 'package:fanana/Pages/admin/userMenu.dart';
+import 'package:fanana/Pages/services/taskService.dart';
 import 'package:fanana/Pages/services/userService.dart';
+import 'package:fanana/Pages/taskAdmin.dart';
 import 'package:fanana/Pages/utils/globalValues.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -11,18 +13,18 @@ import 'package:fanana/components/searchBar.dart';
 
 import 'landingPageAdmin.dart';
 
-class usersPage extends StatefulWidget {
-  const usersPage({super.key});
+class tasksPage extends StatefulWidget {
+  const tasksPage({super.key});
 
   @override
-  State<usersPage> createState() => _usersPageState();
+  State<tasksPage> createState() => _tasksPageState();
 }
 
-class _usersPageState extends State<usersPage> {
+class _tasksPageState extends State<tasksPage> {
   bool loading = true;
   late Future<List<dynamic>> _userList;
-  late List<dynamic> allUsers = [];
-  late List<dynamic> users = [];
+  late List<dynamic> allTasks = [];
+  late List<dynamic> tasks = [];
   late MediaQueryData queryData;
   String query = '';
 
@@ -33,7 +35,7 @@ class _usersPageState extends State<usersPage> {
   }
 
   void loadStorageData() async {
-    _userList = userService().getUserInfo();
+    _userList = taskService().getTaskInfo();
 
     if (_userList != null) {
       loading = false;
@@ -50,18 +52,17 @@ class _usersPageState extends State<usersPage> {
               future: _userList,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  allUsers = snapshot.data as List<dynamic>;
-                  users.clear();
+                  allTasks = snapshot.data as List<dynamic>;
+                  tasks.clear();
 
-                  for (int i = 0; i < allUsers.length; i++) {
-                    final userName = allUsers[i]["nombre"].toLowerCase();
-                    final userSurname = allUsers[i]["apellidos"].toLowerCase();
+                  for (int i = 0; i < allTasks.length; i++) {
+                    final userName = allTasks[i]["enunciado"].toLowerCase();
+                    //final userSurname = allTasks[i]["apellidos"].toLowerCase();
                     // final userEmail = allUsers[i].mail.toLowerCase(); //aqui poner la condicion de buscar por clase
                     final input = query.toLowerCase();
 
-                    if (userName.contains(input) ||
-                        userSurname.contains(input)) {
-                      users.add(allUsers[i]);
+                    if (userName.contains(input)) {
+                      tasks.add(allTasks[i]);
                     }
                   }
                   return getBody();
@@ -71,7 +72,9 @@ class _usersPageState extends State<usersPage> {
                 }
 
                 return Center(
-                    child: Container(child: CircularProgressIndicator()));
+                    child: Container(
+                        padding: EdgeInsets.only(top: 50),
+                        child: CircularProgressIndicator()));
               })
           : SizedBox.shrink(),
     );
@@ -87,7 +90,7 @@ class _usersPageState extends State<usersPage> {
             SizedBox(
               height: queryData.size.width * 0.04,
             ),
-            Text("Usuarios",
+            Text("Tareas",
                 style: GoogleFonts.fredokaOne(
                     textStyle: TextStyle(
                         fontSize: queryData.size.width * 0.04,
@@ -110,11 +113,10 @@ class _usersPageState extends State<usersPage> {
                       width: queryData.size.width * 0.18,
                       image: AssetImage("images/aniadir.png")),
                   onPressed: () {
-                    globalValues.nuevo = true;
                     Map<String, dynamic> vacio = {};
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => adduser(vacio)),
+                      MaterialPageRoute(builder: (context) => addTask(vacio)),
                     );
                   },
                 ),
@@ -126,9 +128,9 @@ class _usersPageState extends State<usersPage> {
             Expanded(
               child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: users.length,
+                  itemCount: tasks.length,
                   itemBuilder: (context, index) {
-                    final contact = users[index];
+                    final contact = tasks[index];
 
                     return buildContact(contact, index);
                   }),
@@ -143,18 +145,13 @@ class _usersPageState extends State<usersPage> {
           tileColor: !i.isOdd
               ? Color.fromARGB(255, 255, 247, 160)
               : Color.fromARGB(255, 255, 252, 221),
-          leading: CircleAvatar(
-            child: Icon(Icons.person_sharp),
-            // backgroundColor: Colors.orange,
-            // foregroundColor: Colors.white,
-          ),
-          title: Text(user["nombre"] + " " + user["apellidos"],
+          title: Text(user["enunciado"],
               style: GoogleFonts.fredokaOne(
                   textStyle: TextStyle(
                       fontSize: queryData.size.width * 0.03,
                       color: Colors.black,
                       height: 1.5))),
-          subtitle: Text(user["clase"],
+          subtitle: Text("Nº pasos: " + (user.length - 3).toString(),
               style: GoogleFonts.fredokaOne(
                   textStyle: TextStyle(
                       fontSize: queryData.size.width * 0.02,
@@ -166,12 +163,9 @@ class _usersPageState extends State<usersPage> {
               howAlertDialog(context, user["id"]);
             },
           ),
-          onTap: () {
-            globalValues.nuevo = false;
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => userMenu(user),
-            ));
-          }));
+          onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => taskAdmin(user),
+              ))));
 
   howAlertDialog(BuildContext context, String id) {
     // set up the buttons
@@ -184,7 +178,7 @@ class _usersPageState extends State<usersPage> {
     Widget continueButton = TextButton(
       child: Text("Continuar"),
       onPressed: () {
-        userService().deleteUser(id);
+        taskService().deleteTask(id);
         Navigator.of(context).pushReplacement(new MaterialPageRoute(
             builder: (context) => new landingPageAdmin()));
       },
@@ -210,7 +204,7 @@ class _usersPageState extends State<usersPage> {
   }
 
   Widget buildSearch() => SearchWidget(
-      text: query, hintText: 'Buscar usuario', onChanged: searchContact);
+      text: query, hintText: 'Buscar tarea', onChanged: searchContact);
 
   void searchContact(String query) {
     setState(() {

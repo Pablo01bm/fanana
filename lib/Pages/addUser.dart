@@ -10,22 +10,22 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:fanana/components/searchBar.dart';
 
-import 'landingPageAdmin.dart';
+
 
 const List<String> lista_clase = <String>["A", "B", "C", "D"];
 const List<String> lista_login = <String>["Pictograma", "Default"];
 const List<String> lista_tipo = <String>["Alumno", "Profesor", "Administrador"];
 
-class userMenu extends StatefulWidget {
+class adduser extends StatefulWidget {
   Map<String, dynamic>? userData;
 
-  userMenu(this.userData, {Key? key}) : super(key: key);
+  adduser(this.userData, {Key? key}) : super(key: key);
 
   @override
-  State<userMenu> createState() => _userMenuState();
+  State<adduser> createState() => _adduserState();
 }
 
-class _userMenuState extends State<userMenu> {
+class _adduserState extends State<adduser> {
   late MediaQueryData queryData;
   final nombreController = TextEditingController();
   final apellidosController = TextEditingController();
@@ -35,6 +35,7 @@ class _userMenuState extends State<userMenu> {
   final claseController = TextEditingController();
   final emailController = TextEditingController();
   final userController = TextEditingController();
+  final dniController = TextEditingController();
 
   bool visiblePass = true;
   String? nombre;
@@ -45,6 +46,7 @@ class _userMenuState extends State<userMenu> {
   String? clase;
   String? email;
   String? user;
+  String? dni;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -57,6 +59,7 @@ class _userMenuState extends State<userMenu> {
   void dispose() {
     // Clean up the controller when the widget is removed from the
     // widget tree.
+    dniController.dispose();
     nombreController.dispose();
     apellidosController.dispose();
     contraseniaController.dispose();
@@ -70,42 +73,31 @@ class _userMenuState extends State<userMenu> {
 
   @override
   void initState() {
-    if (!globalValues.nuevo) {
-      nombreController.text = widget.userData!["nombre"];
-      apellidosController.text = widget.userData!["apellidos"];
-      userController.text = widget.userData!["user"];
-      contraseniaController.text = "";
-      tipo_loginController.text =  widget.userData!["tipo_login"];
-      tipoController.text = widget.userData!["tipo"];
-      claseController.text = widget.userData!["clase"];
-      emailController.text = widget.userData!["email"];
-      nombre = widget.userData!["nombre"];
-      apellidos =  widget.userData!["apellidos"];
-      tipo_login = widget.userData!["tipo_login"];
-      tipo = widget.userData!["tipo"];
-      clase = widget.userData!["clase"];
-      email = widget.userData!["email"];
-      user = widget.userData!["user"];
 
-      if(widget.userData!["imagen"] == null){
-              nombreImagen = "https://firebasestorage.googleapis.com/v0/b/fanana-dev.appspot.com/o/userImages%2Favatar-16a443349aadc0e71c74fd62d29c1098.jpg?alt=media&token=1d9b5cd8-e3dc-42d9-9bb4-9b4a878d88fd";
+      nombre = "";
+      apellidos =  "";
+      tipo_login = "Pictograma";
+      tipo = "Alumno";
+      clase = "A";
+      email = "";
+      user = "";
+      dni = "";
 
-      }else{
-        nombreImagen = widget.userData!["imagen"];
-      }
-  
-    } else {
-      nombreController.text = "";
-      apellidosController.text = "";
-      contraseniaController.text = "";
-      tipo_loginController.text = "";
-      tipoController.text = "";
-      claseController.text = "";
-    }
+    dniController.addListener(() {
+      setState(() {
+        dni = dniController.text;
+      });
+    });
 
     nombreController.addListener(() {
       setState(() {
         nombre = nombreController.text;
+      });
+    });
+
+     userController.addListener(() {
+      setState(() {
+        user = userController.text;
       });
     });
 
@@ -156,6 +148,7 @@ class _userMenuState extends State<userMenu> {
   @override
   Widget build(BuildContext context) {
     queryData = MediaQuery.of(context);
+    nombreImagen = "images/sus.png";
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -284,7 +277,7 @@ class _userMenuState extends State<userMenu> {
                 if (globalValues.nuevo == false)
               FittedBox(
                 fit: BoxFit.fill,
-                child: Text("${widget.userData!["id"]}    ",
+                child: Text(dni!,
                     style: GoogleFonts.fredokaOne(
                         textStyle:
                             TextStyle(fontSize: queryData.size.width * 0.04))),
@@ -293,6 +286,7 @@ class _userMenuState extends State<userMenu> {
               SizedBox(
                 width: queryData.size.width * 0.4,
                 child: TextFormField(
+                  controller: dniController,
                   decoration: InputDecoration(
                     labelText: "DNI",
                     labelStyle: GoogleFonts.fredokaOne(
@@ -307,7 +301,7 @@ class _userMenuState extends State<userMenu> {
                 child: Image(
                     fit: BoxFit.fill,
                     width: queryData.size.width * 0.05,
-                    image: NetworkImage(nombreImagen!)),
+                    image: AssetImage(nombreImagen!)),
                 onPressed: () async {
                   FilePickerResult? picked;
                   // if(kIsWeb) {
@@ -395,11 +389,16 @@ class _userMenuState extends State<userMenu> {
                                 fontSize: queryData.size.width * 0.02,
                                 color: Color.fromARGB(255, 0, 0, 0)))),
                   ]),
-                  onPressed: () {
-                    userService().modifyUser(widget.userData!["id"], nombre!,
+                  onPressed: () async{
+                    print("PRUEBA");
+                    print(dni);
+                   // FirebaseAuth.instance.createUserWithEmailAndPassword(email: email!, password: contrasenia!);
+                    await userService().createUser(dni!, nombre!,
                         apellidos!, user!, tipo_login!, tipo!, email!, clase!);
+                    
                     Navigator.of(context).pushReplacement(new MaterialPageRoute(
                         builder: (context) => new usersPage()));
+                      await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email!, password: contrasenia!);
                   },
                 ),
               ),

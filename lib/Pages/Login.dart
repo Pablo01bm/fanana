@@ -74,6 +74,7 @@ class _LoginState extends State<Login> {
 
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: mainLogin()
     );
   }
@@ -83,7 +84,6 @@ class _LoginState extends State<Login> {
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      
       children: <Widget>[
         loginDefault(),
         const VerticalDivider(
@@ -205,8 +205,8 @@ class _LoginState extends State<Login> {
             child: TextButton(
               child: Image(
                 fit: BoxFit.fill,
-                //height: queryData.size.height * 0.7,
-                width: queryData.size.width * 0.4,
+                height: queryData.size.width>queryData.size.height ? queryData.size.height * 0.7 : null,
+                width: queryData.size.width<queryData.size.height ? queryData.size.width * 0.4 : null,
                 image: const AssetImage("images/nino.png")
                 ),
               onPressed: () {

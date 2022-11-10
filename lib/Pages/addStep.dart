@@ -12,17 +12,17 @@ import 'package:fanana/Pages/services/taskService.dart';
 
 import 'admin/tasksPage.dart';
 
-class stepAdmin extends StatefulWidget {
+class addStep extends StatefulWidget {
   Map<String, dynamic>? task;
   int index;
 
-  stepAdmin(this.task, this.index,{Key? key}) : super(key: key);
+  addStep(this.task, this.index,{Key? key}) : super(key: key);
 
   @override
-  State<stepAdmin> createState() => _stepAdminState();
+  State<addStep> createState() => _addStepState();
 }
 
-class _stepAdminState extends State<stepAdmin> {
+class _addStepState extends State<addStep> {
   late MediaQueryData queryData;
   late List<String> titulos;
   late List<String> descripciones;
@@ -44,7 +44,7 @@ final descriptionController = TextEditingController();
 
   @override
   void initState() {
-    descriptionController.text = widget.task!["pasos"][widget.index];
+    //descriptionController.text = widget.task!["pasos"][widget.index];
     super.initState();
     titulos = [];
     descripciones = [];
@@ -201,13 +201,13 @@ final descriptionController = TextEditingController();
                   fit: BoxFit.fill,
                   width: queryData.size.width * 0.19,
                   image: AssetImage("assets/aceptar.png")),
-              Text("Listo", style: GoogleFonts.fredokaOne(
+              Text("Añadir", style: GoogleFonts.fredokaOne(
                 textStyle: TextStyle(fontSize: queryData.size.width*0.03, color: Color.fromARGB(255, 0, 0, 0))
               )), 
             ]
           ),
           onPressed: () { 
-            widget.task!["pasos"][widget.index] = descriptionController.text;
+            widget.task!["pasos"].add(descriptionController.text);
             taskService().modifySteps(widget.task!["id"], widget.task!["pasos"].toString());
             Navigator.of(context).pushReplacement(
                 new MaterialPageRoute(builder: (context) => new tasksPage()));

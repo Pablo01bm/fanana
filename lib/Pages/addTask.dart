@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fanana/Pages/addStep.dart';
 import 'package:fanana/Pages/admin/tasksPage.dart';
 import 'package:fanana/Pages/services/taskService.dart';
@@ -8,25 +10,27 @@ import 'package:fanana/Pages/stepAdmin.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:email_validator/email_validator.dart';
 
-class taskAdmin extends StatefulWidget {
+class addTask extends StatefulWidget {
 
   Map<String, dynamic>? task;
 
-  taskAdmin(this.task, {Key? key}) : super(key: key);
+  addTask(this.task, {Key? key}) : super(key: key);
 
   @override
-  State<taskAdmin> createState() => _taskAdminState();
+  State<addTask> createState() => _addTaskState();
 }
 
-class _taskAdminState extends State<taskAdmin> {
+class _addTaskState extends State<addTask> {
   late MediaQueryData queryData;
   late List<String> titulos;
   late List<String> descripciones;
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
+  final pasoController = TextEditingController();
 
   String? titulo;
   String? descripcion;
+  String? paso;
 
   @override
   void dispose() {
@@ -34,14 +38,15 @@ class _taskAdminState extends State<taskAdmin> {
     // widget tree.
     titleController.dispose();
     descriptionController.dispose();
+    pasoController.dispose();
     super.dispose();
   }
 
 
   @override
   void initState() {
-    titleController.text = widget.task!["enunciado"];
-    descriptionController.text = widget.task!["descripcion"];
+    // titleController.text = widget.task!["enunciado"];
+    // descriptionController.text = widget.task!["descripcion"];
     super.initState();
 
     titleController.addListener(() {
@@ -53,6 +58,12 @@ class _taskAdminState extends State<taskAdmin> {
     descriptionController.addListener(() {
       setState(() {
         descripcion = descriptionController.text;
+      });
+    });
+
+    pasoController.addListener(() {
+      setState(() {
+        paso = pasoController.text;
       });
     });
   }
@@ -80,7 +91,7 @@ class _taskAdminState extends State<taskAdmin> {
               SizedBox(height: queryData.size.width * 0.04,),
               description(),
               SizedBox(height: queryData.size.width * 0.04,),
-              steps()
+              primerPaso(),
             ],
           )
         )
@@ -135,8 +146,11 @@ class _taskAdminState extends State<taskAdmin> {
               )), 
             ]
           ),
-          onPressed: () { 
-              taskService().modifyTask(widget.task!["id"], titulo!, descripcion!);
+          onPressed: () {
+            var rng = new Random();
+            var code = rng.nextInt(90000000) + 10000000;
+
+              taskService().createTask(code.toString(), titulo!, descripcion!, paso!);
               Navigator.of(context).pushReplacement(
                 new MaterialPageRoute(builder: (context) => new tasksPage()));
             },
@@ -203,91 +217,122 @@ class _taskAdminState extends State<taskAdmin> {
   }
 
 
-  Widget steps(){
+  Widget primerPaso(){
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         SizedBox(width: queryData.size.width * 0.1),
-        Column(
-          children: <Widget>[
-            SizedBox(
-              width: queryData.size.width * 0.20,
-              child: Text("Pasos:", textAlign: TextAlign.start, style: GoogleFonts.fredokaOne(
-                textStyle: TextStyle(fontSize: queryData.size.width*0.03)
-              )),      
-            ),
-            SizedBox(height: queryData.size.width * 0.02),
-            TextButton(
-              child: Stack(
-                alignment: Alignment.center,
-                children: <Widget>[
-                  Image(
-                      fit: BoxFit.fill,
-                      width: queryData.size.width * 0.12,
-                      image: AssetImage("assets/aceptar.png")),
-                  Text("Añadir", style: GoogleFonts.fredokaOne(
-                    textStyle: TextStyle(fontSize: queryData.size.width*0.02, color: Color.fromARGB(255, 0, 0, 0))
-                  )), 
-                ]
-              ),
-              onPressed: () {  
-                Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) =>  addStep(widget.task, widget.task!["pasos"].length)),
-                    );
-              },
-            ),
-          ],
-        ),
+        SizedBox(
+            width: queryData.size.width * 0.2,
+            child: Text("Primer paso:", style: GoogleFonts.fredokaOne(
+              textStyle: TextStyle(fontSize: queryData.size.width*0.03)
+            )),      
+          ),
         SizedBox(width: queryData.size.width * 0.01),
         SizedBox(
           width:queryData.size.width * 0.59,
-          child: Column(
-            children: <Widget>[
-              for (int i = 0; i < widget.task!["pasos"].length; i++)
-                TextButton(
-                  child: Row(
-                    children: <Widget>[
-                      SizedBox(width: queryData.size.width * 0.01),
-                      SizedBox(
-                        width: queryData.size.width * 0.08,
-                        child: Text("Paso "+i.toString()+" :", style: GoogleFonts.fredokaOne(
-                          textStyle: TextStyle(fontSize: queryData.size.width*0.02, color: Color.fromARGB(255, 0, 0, 0))
-                        )),      
-                      ),
-                      SizedBox(width: queryData.size.width * 0.01),
-                      Flexible(
-                        child: SizedBox(
-                          child: Text(widget.task!["pasos"][i], overflow: TextOverflow.ellipsis, style: GoogleFonts.fredokaOne(
-                            textStyle: TextStyle(fontSize: queryData.size.width*0.015, color: Color.fromARGB(255, 107, 107, 107))
-                          )),      
-                      ),
-                      )
-                    ],
-                  ),
-                  style: !i.isOdd ? ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 255, 247, 160)),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero)),
-                    minimumSize: MaterialStateProperty.all(Size(queryData.size.width * 0.59, queryData.size.width * 0.05))
-                  ) : ButtonStyle(
-                    minimumSize: MaterialStateProperty.all(Size(queryData.size.width * 0.59, queryData.size.width * 0.05))
-                  ),
-                  onPressed: () { 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) =>  stepAdmin(widget.task, i)),
-                    );
-                   }, 
-                ),
-            ],
-          )
+          child: TextFormField(
+            controller: pasoController,
+            decoration: InputDecoration(hintText: "Primer paso..."),
+            //initialValue: widget.task!["descripcion"],
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
+            style: TextStyle(fontSize: queryData.size.width*0.02)
+          ),
         ),
         SizedBox(width: queryData.size.width * 0.1),
       ]
     );
   }
+
+
+
+  // Widget steps(){
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: <Widget>[
+  //       SizedBox(width: queryData.size.width * 0.1),
+  //       Column(
+  //         children: <Widget>[
+  //           SizedBox(
+  //             width: queryData.size.width * 0.20,
+  //             child: Text("Pasos:", textAlign: TextAlign.start, style: GoogleFonts.fredokaOne(
+  //               textStyle: TextStyle(fontSize: queryData.size.width*0.03)
+  //             )),      
+  //           ),
+  //           SizedBox(height: queryData.size.width * 0.02),
+  //           TextButton(
+  //             child: Stack(
+  //               alignment: Alignment.center,
+  //               children: <Widget>[
+  //                 Image(
+  //                     fit: BoxFit.fill,
+  //                     width: queryData.size.width * 0.12,
+  //                     image: AssetImage("assets/aceptar.png")),
+  //                 Text("Añadir", style: GoogleFonts.fredokaOne(
+  //                   textStyle: TextStyle(fontSize: queryData.size.width*0.02, color: Color.fromARGB(255, 0, 0, 0))
+  //                 )), 
+  //               ]
+  //             ),
+  //             onPressed: () {  
+  //               Navigator.push(
+  //                     context,
+  //                     MaterialPageRoute(builder: (context) =>  addStep(widget.task, widget.task!["pasos"].length)),
+  //                   );
+  //             },
+  //           ),
+  //         ],
+  //       ),
+  //       SizedBox(width: queryData.size.width * 0.01),
+  //       SizedBox(
+  //         width:queryData.size.width * 0.59,
+  //         child: Column(
+  //           children: <Widget>[
+  //             for (int i = 0; i < widget.task!["pasos"].length; i++)
+  //               TextButton(
+  //                 child: Row(
+  //                   children: <Widget>[
+  //                     SizedBox(width: queryData.size.width * 0.01),
+  //                     SizedBox(
+  //                       width: queryData.size.width * 0.08,
+  //                       child: Text("Paso "+i.toString()+" :", style: GoogleFonts.fredokaOne(
+  //                         textStyle: TextStyle(fontSize: queryData.size.width*0.02, color: Color.fromARGB(255, 0, 0, 0))
+  //                       )),      
+  //                     ),
+  //                     SizedBox(width: queryData.size.width * 0.01),
+  //                     Flexible(
+  //                       child: SizedBox(
+  //                         child: Text(widget.task!["pasos"][i], overflow: TextOverflow.ellipsis, style: GoogleFonts.fredokaOne(
+  //                           textStyle: TextStyle(fontSize: queryData.size.width*0.015, color: Color.fromARGB(255, 107, 107, 107))
+  //                         )),      
+  //                     ),
+  //                     )
+  //                   ],
+  //                 ),
+  //                 style: !i.isOdd ? ButtonStyle(
+  //                   backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 255, 247, 160)),
+  //                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(const RoundedRectangleBorder(
+  //                     borderRadius: BorderRadius.zero)),
+  //                   minimumSize: MaterialStateProperty.all(Size(queryData.size.width * 0.59, queryData.size.width * 0.05))
+  //                 ) : ButtonStyle(
+  //                   minimumSize: MaterialStateProperty.all(Size(queryData.size.width * 0.59, queryData.size.width * 0.05))
+  //                 ),
+  //                 onPressed: () { 
+  //                   Navigator.push(
+  //                     context,
+  //                     MaterialPageRoute(builder: (context) =>  stepAdmin(widget.task, i)),
+  //                   );
+  //                  }, 
+  //               ),
+  //           ],
+  //         )
+  //       ),
+  //       SizedBox(width: queryData.size.width * 0.1),
+  //     ]
+  //   );
+  // }
 
 }
 
