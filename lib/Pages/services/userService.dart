@@ -27,15 +27,18 @@ Future <List<dynamic>> getUserInfo() async {
 
 }
 
-modifyUser(String id,String nombre, String apellidos, String user, String tipo_login, String tipo, String email, String clase) async {
+modifyUser(String id,String nombre, String apellidos, String user, String tipo_login, String tipo, String email, String clase, String imagen) async {
   List<dynamic> lista = ['tarea'];
   final client = http.Client();
+  print(imagen);
+  var img = { "imagen": "${imagen}" };
 
+  //var body = json.encode(img);
   try {
     String url = "10.0.2.2:5050";
-    var uri = Uri.http(url, 'update/usuario/$id/$nombre/$apellidos/$user/$tipo_login/$tipo/$email/$clase');
+    var uri = Uri.http(url, 'update/usuario/$id/$nombre/$apellidos/$user/$tipo_login/$tipo/$email/$clase', img);
     print("URL: "+uri.toString());
-    var response = await http.put(uri);
+    var response = await http.put(uri );
     
   }catch (SocketException){
     print(SocketException);
