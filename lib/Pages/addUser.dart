@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:fanana/Pages/admin/usersPage.dart';
 import 'package:fanana/Pages/services/userService.dart';
 import 'package:fanana/Pages/utils/globalValues.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
@@ -82,6 +85,7 @@ class _adduserState extends State<adduser> {
       email = "";
       user = "";
       dni = "";
+      nombreImagen = "https://firebasestorage.googleapis.com/v0/b/fanana-dev.appspot.com/o/userImages%2Fbanana.jpg?alt=media&token=13b9921d-3699-4bfe-9a4c-88d7db8f66f0";
 
     dniController.addListener(() {
       setState(() {
@@ -148,7 +152,6 @@ class _adduserState extends State<adduser> {
   @override
   Widget build(BuildContext context) {
     queryData = MediaQuery.of(context);
-    nombreImagen = "images/sus.png";
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -301,9 +304,11 @@ class _adduserState extends State<adduser> {
                 child: Image(
                     fit: BoxFit.fill,
                     width: queryData.size.width * 0.05,
-                    image: AssetImage(nombreImagen!)),
+                    image: NetworkImage(nombreImagen!)),
                 onPressed: () async {
                   FilePickerResult? picked;
+                  PlatformFile? archivo;
+                  UploadTask? uploadTask;
                   // if(kIsWeb) {
                   //   picked = await FilePickerWeb.platform.pickFiles(
                   //     type: FileType.image
@@ -317,10 +322,20 @@ class _adduserState extends State<adduser> {
                   //}
 
                   if (picked != null) {
-                    setState(() {
-                      nombreImagen = picked!.files.first.name;
-                    });
+                    archivo = picked.files.first;
+                    nombreImagen = picked.files.first.name;
                   }
+                  final path = 'userImages/${archivo!.name}';
+                  final file = File(archivo.path!);
+
+                  final ref = FirebaseStorage.instance.ref().child(path);
+                  uploadTask = ref.putFile(file);
+
+                  final snapshot = await uploadTask.whenComplete(() {});
+                  final urlDownload = await snapshot.ref.getDownloadURL();
+                  setState(() {
+                      nombreImagen = urlDownload.toString();
+                    });
                 },
               ),
             ),
@@ -394,7 +409,7 @@ class _adduserState extends State<adduser> {
                     print(dni);
                    // FirebaseAuth.instance.createUserWithEmailAndPassword(email: email!, password: contrasenia!);
                     await userService().createUser(dni!, nombre!,
-                        apellidos!, user!, tipo_login!, tipo!, email!, clase!);
+                        apellidos!, user!, tipo_login!, tipo!, email!, clase!, nombreImagen!);
                     
                     Navigator.of(context).pushReplacement(new MaterialPageRoute(
                         builder: (context) => new usersPage()));

@@ -48,13 +48,15 @@ modifyUser(String id,String nombre, String apellidos, String user, String tipo_l
 
 }
 
-createUser(String id,String nombre, String apellidos, String user, String tipo_login, String tipo, String email, String clase) async {
+createUser(String id,String nombre, String apellidos, String user, String tipo_login, String tipo, String email, String clase, String imagen) async {
   List<dynamic> lista = ['tarea'];
   final client = http.Client();
+  print(imagen);
+  var img = { "imagen": "${imagen}" };
 
   try {
     String url = "10.0.2.2:5050";
-    var uri = Uri.http(url, 'post/usuario/$id/$nombre/$apellidos/$user/$tipo_login/$tipo/$email/$clase');
+    var uri = Uri.http(url, 'post/usuario/$id/$nombre/$apellidos/$user/$tipo_login/$tipo/$email/$clase', img);
     print("URL: "+uri.toString());
     var response = await http.post(uri);
     

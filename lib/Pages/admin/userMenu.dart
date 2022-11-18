@@ -92,7 +92,7 @@ class _userMenuState extends State<userMenu> {
       user = widget.userData!["user"];
 
       if(widget.userData!["imagen"] == null){
-              nombreImagen = "https://firebasestorage.googleapis.com/v0/b/fanana-dev.appspot.com/o/userImages%2Favatar-16a443349aadc0e71c74fd62d29c1098.jpg?alt=media&token=1d9b5cd8-e3dc-42d9-9bb4-9b4a878d88fd";
+              nombreImagen = "https://firebasestorage.googleapis.com/v0/b/fanana-dev.appspot.com/o/userImages%2Fbanana.jpg?alt=media&token=13b9921d-3699-4bfe-9a4c-88d7db8f66f0";
 
       }else{
         nombreImagen = widget.userData!["imagen"];
