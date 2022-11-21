@@ -1,5 +1,6 @@
 
 import 'package:fanana/Pages/admin/usersPage.dart';
+import 'package:fanana/Pages/pictoPasswd.dart';
 import 'package:fanana/Pages/services/userService.dart';
 import 'package:fanana/Pages/utils/globalValues.dart';
 import 'package:file_picker/file_picker.dart';
@@ -14,6 +15,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:fanana/components/searchBar.dart';
 import 'dart:io';
 
+import '../pictoConfig.dart';
 import 'landingPageAdmin.dart';
 
 const List<String> lista_clase = <String>["A", "B", "C", "D"];
@@ -224,31 +226,7 @@ class _userMenuState extends State<userMenu> {
                     );
                   }).toList(),
                 )),
-            SizedBox(
-                width: queryData.size.width * 0.4,
-                child: DropdownButtonFormField(
-                  decoration: InputDecoration(
-                    labelText: "Tipo de login",
-                    labelStyle: GoogleFonts.fredokaOne(
-                        textStyle:
-                            TextStyle(fontSize: queryData.size.width * 0.03)),
-                  ),
-                  value: tipo_login,
-                  icon: const Icon(Icons.arrow_downward),
-                  elevation: 16,
-                  onChanged: (String? value) {
-                    setState(() {
-                      tipo_login = value ?? "";
-                    });
-                  },
-                  items:
-                      lista_login.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                )),
+            
             SizedBox(
                 width: queryData.size.width * 0.4,
                 child: DropdownButtonFormField(
@@ -282,35 +260,12 @@ class _userMenuState extends State<userMenu> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                if (globalValues.nuevo == false)
-              FittedBox(
-                fit: BoxFit.fill,
-                child: Text("${widget.userData!["id"]}    ",
-                    style: GoogleFonts.fredokaOne(
-                        textStyle:
-                            TextStyle(fontSize: queryData.size.width * 0.04))),
-              ),
-            if (globalValues.nuevo)
-              SizedBox(
-                width: queryData.size.width * 0.4,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    labelText: "DNI",
-                    labelStyle: GoogleFonts.fredokaOne(
-                        textStyle:
-                            TextStyle(fontSize: queryData.size.width * 0.03)),
-                  ),
-                ),
-              ),
             FittedBox(
               fit: BoxFit.fill,
               child: TextButton(
                 child: Image(
                     fit: BoxFit.fill,
-                    width: queryData.size.width * 0.05,
+                    width: queryData.size.width * 0.2,
                     image: NetworkImage(nombreImagen!)),
                 onPressed: () async {
                   FilePickerResult? picked;
@@ -351,52 +306,59 @@ class _userMenuState extends State<userMenu> {
                 },
               ),
             ),
-              ],
-            ),
-            SizedBox(
-              width: queryData.size.width * 0.4,
-              child: TextField(
-                controller: emailController,
-                decoration: InputDecoration(
-                  labelText: "Email:",
-                  labelStyle: GoogleFonts.fredokaOne(
-                      textStyle:
-                          TextStyle(fontSize: queryData.size.width * 0.03)),
+              FittedBox(
+                fit: BoxFit.fill,
+                child: Text("${widget.userData!["user"]}",
+                    style: GoogleFonts.fredokaOne(
+                        textStyle:
+                            TextStyle(fontSize: queryData.size.width * 0.04))),
+              ),
+            
+            if(tipo_login != "Pictograma")
+            FittedBox(
+              fit: BoxFit.fill,
+              child: InkWell(
+                onTap: () {},
+                child: TextButton(
+                  child: Stack(alignment: Alignment.center, children: <Widget>[
+                    Image(
+                        fit: BoxFit.fill,
+                        width: queryData.size.width * 0.26,
+                        image: AssetImage("assets/aceptar.png")),
+                    Text("Correo de cambio de contraseña",
+                        style: GoogleFonts.fredokaOne(
+                            textStyle: TextStyle(
+                                fontSize: queryData.size.width * 0.015,
+                                color: Color.fromARGB(255, 0, 0, 0)))),
+                  ]),
+                  onPressed: () async{
+                    
+                  },
                 ),
               ),
             ),
-            SizedBox(
-              width: queryData.size.width * 0.4,
-              child: TextField(
-                controller: userController,
-                decoration: InputDecoration(
-                  labelText: "Usuario:",
-                  labelStyle: GoogleFonts.fredokaOne(
-                      textStyle:
-                          TextStyle(fontSize: queryData.size.width * 0.03)),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: queryData.size.width * 0.4,
-              child: TextField(
-                controller: contraseniaController,
-                obscureText: visiblePass,
-                decoration: InputDecoration(
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      visiblePass ? Icons.visibility : Icons.visibility_off,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        visiblePass = !visiblePass;
-                      });
-                    },
-                  ),
-                  labelText: "Introduzca contraseña:",
-                  labelStyle: GoogleFonts.fredokaOne(
-                      textStyle:
-                          TextStyle(fontSize: queryData.size.width * 0.03)),
+            if(tipo_login == "Pictograma")
+            FittedBox(
+              fit: BoxFit.fill,
+              child: InkWell(
+                onTap: () {},
+                child: TextButton(
+                  child: Stack(alignment: Alignment.center, children: <Widget>[
+                    Image(
+                        fit: BoxFit.fill,
+                        width: queryData.size.width * 0.15,
+                        image: AssetImage("assets/aceptar.png")),
+                    Text("Crear contraseña",
+                        style: GoogleFonts.fredokaOne(
+                            textStyle: TextStyle(
+                                fontSize: queryData.size.width * 0.015,
+                                color: Color.fromARGB(255, 0, 0, 0)))),
+                  ]),
+                  onPressed: () async{
+                    
+                    Navigator.of(context).push(new MaterialPageRoute(
+                        builder: (context) => new pictoConfig()));
+                  },
                 ),
               ),
             ),
@@ -408,19 +370,24 @@ class _userMenuState extends State<userMenu> {
                   child: Stack(alignment: Alignment.center, children: <Widget>[
                     Image(
                         fit: BoxFit.fill,
-                        width: queryData.size.width * 0.15,
+                        width: queryData.size.width * 0.20,
                         image: AssetImage("assets/aceptar.png")),
-                    Text("Aceptar",
+                    Text("Modificar",
                         style: GoogleFonts.fredokaOne(
                             textStyle: TextStyle(
-                                fontSize: queryData.size.width * 0.02,
+                                fontSize: queryData.size.width * 0.025,
                                 color: Color.fromARGB(255, 0, 0, 0)))),
                   ]),
                   onPressed: () {
+                    String pictogrampassword;
+                    if(globalValues.pictopass == ""){
+                      pictogrampassword = widget.userData!["pictopass"];
+                    }else{
+                      pictogrampassword = globalValues.pictopass;
+                    }
                     userService().modifyUser(widget.userData!["id"], nombre!,
-                        apellidos!, user!, tipo_login!, tipo!, email!, clase!, nombreImagen!);
-                    Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                        builder: (context) => new usersPage()));
+                        apellidos!, user!, tipo_login!, tipo!, email!, clase!, pictogrampassword, nombreImagen!);
+                    Navigator.of(context).pop(true);
                   },
                 ),
               ),

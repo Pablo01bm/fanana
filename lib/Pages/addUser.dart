@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:fanana/Pages/admin/usersPage.dart';
+import 'package:fanana/Pages/pictoConfig.dart';
 import 'package:fanana/Pages/services/userService.dart';
 import 'package:fanana/Pages/utils/globalValues.dart';
 import 'package:file_picker/file_picker.dart';
@@ -274,36 +275,12 @@ class _adduserState extends State<adduser> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                if (globalValues.nuevo == false)
-              FittedBox(
-                fit: BoxFit.fill,
-                child: Text(dni!,
-                    style: GoogleFonts.fredokaOne(
-                        textStyle:
-                            TextStyle(fontSize: queryData.size.width * 0.04))),
-              ),
-            if (globalValues.nuevo)
-              SizedBox(
-                width: queryData.size.width * 0.4,
-                child: TextFormField(
-                  controller: dniController,
-                  decoration: InputDecoration(
-                    labelText: "DNI",
-                    labelStyle: GoogleFonts.fredokaOne(
-                        textStyle:
-                            TextStyle(fontSize: queryData.size.width * 0.03)),
-                  ),
-                ),
-              ),
             FittedBox(
               fit: BoxFit.fill,
               child: TextButton(
                 child: Image(
                     fit: BoxFit.fill,
-                    width: queryData.size.width * 0.05,
+                    width: queryData.size.width * 0.2,
                     image: NetworkImage(nombreImagen!)),
                 onPressed: () async {
                   FilePickerResult? picked;
@@ -339,8 +316,19 @@ class _adduserState extends State<adduser> {
                 },
               ),
             ),
-              ],
+            SizedBox(
+              width: queryData.size.width * 0.4,
+              child: TextField(
+                controller: userController,
+                decoration: InputDecoration(
+                  labelText: "Nombre de usuario:",
+                  labelStyle: GoogleFonts.fredokaOne(
+                      textStyle:
+                          TextStyle(fontSize: queryData.size.width * 0.03)),
+                ),
+              ),
             ),
+            if(tipo_login != "Pictograma")
             SizedBox(
               width: queryData.size.width * 0.4,
               child: TextField(
@@ -353,18 +341,32 @@ class _adduserState extends State<adduser> {
                 ),
               ),
             ),
-            SizedBox(
-              width: queryData.size.width * 0.4,
-              child: TextField(
-                controller: userController,
-                decoration: InputDecoration(
-                  labelText: "Usuario:",
-                  labelStyle: GoogleFonts.fredokaOne(
-                      textStyle:
-                          TextStyle(fontSize: queryData.size.width * 0.03)),
+            if(tipo_login == "Pictograma")
+            FittedBox(
+              fit: BoxFit.fill,
+              child: InkWell(
+                onTap: () {},
+                child: TextButton(
+                  child: Stack(alignment: Alignment.center, children: <Widget>[
+                    Image(
+                        fit: BoxFit.fill,
+                        width: queryData.size.width * 0.15,
+                        image: AssetImage("assets/aceptar.png")),
+                    Text("Crear contraseña",
+                        style: GoogleFonts.fredokaOne(
+                            textStyle: TextStyle(
+                                fontSize: queryData.size.width * 0.015,
+                                color: Color.fromARGB(255, 0, 0, 0)))),
+                  ]),
+                  onPressed: () async{
+                    
+                    Navigator.of(context).push(new MaterialPageRoute(
+                        builder: (context) => new pictoConfig()));
+                  },
                 ),
               ),
             ),
+            if(tipo_login != "Pictograma")
             SizedBox(
               width: queryData.size.width * 0.4,
               child: TextField(
@@ -396,24 +398,28 @@ class _adduserState extends State<adduser> {
                   child: Stack(alignment: Alignment.center, children: <Widget>[
                     Image(
                         fit: BoxFit.fill,
-                        width: queryData.size.width * 0.15,
+                        width: queryData.size.width * 0.20,
                         image: AssetImage("assets/aceptar.png")),
-                    Text("Aceptar",
+                    Text("Crear",
                         style: GoogleFonts.fredokaOne(
                             textStyle: TextStyle(
-                                fontSize: queryData.size.width * 0.02,
+                                fontSize: queryData.size.width * 0.025,
                                 color: Color.fromARGB(255, 0, 0, 0)))),
                   ]),
                   onPressed: () async{
-                    print("PRUEBA");
-                    print(dni);
                    // FirebaseAuth.instance.createUserWithEmailAndPassword(email: email!, password: contrasenia!);
-                    await userService().createUser(dni!, nombre!,
-                        apellidos!, user!, tipo_login!, tipo!, email!, clase!, nombreImagen!);
-                    
-                    Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                        builder: (context) => new usersPage()));
+                   if(tipo_login != "Pictograma"){
                       await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email!, password: contrasenia!);
+                      await userService().createUser(nombre!,
+                        apellidos!, user!, tipo_login!, tipo!, email!, clase!, nombreImagen!, "nula");
+                      }else{
+                        await userService().createUser(nombre!,
+                        apellidos!, user!, tipo_login!, tipo!,"nula", clase!, nombreImagen!, globalValues.pictopass);
+                      }
+                    
+                    
+                    Navigator.of(context).pop(true);
+                      
                   },
                 ),
               ),
