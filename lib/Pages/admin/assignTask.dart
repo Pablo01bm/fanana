@@ -11,14 +11,16 @@ import 'package:fanana/components/searchBar.dart';
 
 import 'landingPageAdmin.dart';
 
-class usersPage extends StatefulWidget {
-  const usersPage({super.key});
+class assignTask extends StatefulWidget {
+  final user;
+  final bool asigned;
+  const assignTask(bool this.asigned, this.user, {super.key});
 
   @override
-  State<usersPage> createState() => _usersPageState();
+  State<assignTask> createState() => _assignTaskState();
 }
 
-class _usersPageState extends State<usersPage> {
+class _assignTaskState extends State<assignTask> {
   bool loading = true;
   late Future<List<dynamic>> _userList;
   late List<dynamic> allUsers = [];
@@ -89,7 +91,7 @@ class _usersPageState extends State<usersPage> {
             SizedBox(
               height: queryData.size.width * 0.04,
             ),
-            Text("Usuarios",
+            Text("Asignar Tarea "+ widget.user["enunciado"],
                 style: GoogleFonts.fredokaOne(
                     textStyle: TextStyle(
                         fontSize: queryData.size.width * 0.04,
@@ -107,22 +109,13 @@ class _usersPageState extends State<usersPage> {
                 ),
                 SizedBox(width: queryData.size.width * 0.01),
                 TextButton(
-                  child: Image(
-                      fit: BoxFit.fill,
-                      width: queryData.size.width * 0.18,
-                      image: AssetImage("images/aniadir.png")),
+                   child:  Text("Desasignar tarea"),
+                   //Image(
+                  //     fit: BoxFit.fill,
+                  //     width: queryData.size.width * 0.18,
+                  //     image: AssetImage("images/aniadir.png")),
                   onPressed: () async {
-                    globalValues.nuevo = true;
-                    Map<String, dynamic> vacio = {};
-                    bool refresh = await Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => adduser(vacio)),
-                    );
-                    if(refresh){
-                        setState((() {
-                          loadStorageData();
-                        }));
-                      }
+                   
                   },
                 ),
               ],
@@ -151,9 +144,7 @@ class _usersPageState extends State<usersPage> {
               ? Color.fromARGB(255, 255, 247, 160)
               : Color.fromARGB(255, 255, 252, 221),
           leading: CircleAvatar(
-            child: Image(
-              image: NetworkImage(user["imagen"]),
-            ),
+            child: Icon(Icons.person_sharp),
             // backgroundColor: Colors.orange,
             // foregroundColor: Colors.white,
           ),
@@ -169,23 +160,17 @@ class _usersPageState extends State<usersPage> {
                       fontSize: queryData.size.width * 0.02,
                       color: Color.fromARGB(255, 51, 51, 51),
                       height: 1.5))),
-          trailing: IconButton(
-            icon: Icon(Icons.delete, size: 40),
-            onPressed: () {
-              howAlertDialog(context, user["id"]);
-            },
-          ),
           onTap: () async {
-            globalValues.nuevo = false;
-            bool refresh = await Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => userMenu(user),
-            ));
+            // globalValues.nuevo = false;
+            // bool refresh = await Navigator.of(context).push(MaterialPageRoute(
+            //   builder: (context) => userMenu(user),
+            // ));
 
-            if(refresh){
-              setState((() {
-                          loadStorageData();
-                        }));
-            }
+            // if(refresh){
+            //   setState((() {
+            //               loadStorageData();
+            //             }));
+            // }
 
             
           }));

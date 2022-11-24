@@ -1,4 +1,4 @@
-import 'package:fanana/Pages/landingPageDefault.dart';
+import 'package:fanana/Pages/alumnos/landingPageDefault.dart';
 import 'package:fanana/Pages/utils/globalValues.dart';
 import "package:flutter/material.dart";
 import 'dart:async';

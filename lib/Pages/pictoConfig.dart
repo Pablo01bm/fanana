@@ -1,6 +1,6 @@
 // ignore_for_file: sort_child_properties_last
 
-import 'package:fanana/Pages/landingPageDefault.dart';
+import 'package:fanana/Pages/alumnos/landingPageDefault.dart';
 import 'package:fanana/Pages/utils/globalValues.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
