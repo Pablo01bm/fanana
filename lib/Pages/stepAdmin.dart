@@ -9,6 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:fanana/Pages/services/taskService.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+import 'dart:io';
 
 import 'admin/tasksPage.dart';
 
@@ -44,12 +48,20 @@ final descriptionController = TextEditingController();
 
   @override
   void initState() {
-    descriptionController.text = widget.task!["pasos"][widget.index];
+    
+    descriptionController.text = widget.task!["pasos"][widget.index]["titulo"];
+    
     super.initState();
     titulos = [];
     descripciones = [];
     nombreImagen = "";
-    
+
+    if (widget.task!["pasos"][widget.index]["imagen"] == false) {
+      nombreImagen =
+          "https://firebasestorage.googleapis.com/v0/b/fanana-dev.appspot.com/o/userImages%2Fbanana.jpg?alt=media&token=13b9921d-3699-4bfe-9a4c-88d7db8f66f0";
+    } else {
+      nombreImagen = widget.task!["pasos"][widget.index]["imagen"].toString();
+    }
      descriptionController.addListener(() {
       setState(() {
         descripcion = descriptionController.text;
@@ -148,6 +160,11 @@ final descriptionController = TextEditingController();
           ],
         ),
         SizedBox(width: queryData.size.width * 0.01),
+        SizedBox(
+          width: 100,
+          height: 100,
+          child: Image(image: NetworkImage(nombreImagen)),
+          ),
         TextButton(
               child: Stack(
                 alignment: Alignment.center,
@@ -163,28 +180,44 @@ final descriptionController = TextEditingController();
               ),
               onPressed: () async { 
                 FilePickerResult? picked;
-                // if(kIsWeb) {
-                //   picked = await FilePickerWeb.platform.pickFiles(
-                //     type: FileType.image
-                //   );
-                // }
-               // else{
+                  PlatformFile? archivo;
+                  UploadTask? uploadTask;
+                  // if(kIsWeb) {
+                  //   picked = await FilePickerWeb.platform.pickFiles(
+                  //     type: FileType.image
+                  //   );
+                  // }
+                  // else{
                   picked = await FilePicker.platform.pickFiles(
                     type: FileType.custom,
                     allowedExtensions: ['jpg', 'png', 'jpeg'],
-                  );
-                //}
+                  );              
+                  
 
-                if (picked != null) {
+                  
+                  //}
+
+                  if (picked != null) {
+                    //setState(() {
+                      archivo = picked.files.first;
+                      nombreImagen = picked.files.first.name;
+                    //});
+                  }
+                  final path = 'stepImages/${archivo!.name}';
+                  final file = File(archivo.path!);
+
+                  final ref = FirebaseStorage.instance.ref().child(path);
+                  uploadTask = ref.putFile(file);
+
+                  final snapshot = await uploadTask.whenComplete(() {});
+                  final urlDownload = await snapshot.ref.getDownloadURL();
                   setState(() {
-                    nombreImagen = picked!.files.first.name;
+                    nombreImagen = urlDownload.toString();
                   });
-                }
-               },
-            ),
-            Text(nombreImagen, overflow: TextOverflow.ellipsis, style: GoogleFonts.fredokaOne(
-                  textStyle: TextStyle(fontSize: queryData.size.width*0.015, color: Color.fromARGB(255, 107, 107, 107))
-                )),   
+                }),
+            // Text(nombreImagen, overflow: TextOverflow.ellipsis, style: GoogleFonts.fredokaOne(
+            //       textStyle: TextStyle(fontSize: queryData.size.width*0.015, color: Color.fromARGB(255, 107, 107, 107))
+            //     )),   
       ]
     );
   }
@@ -207,8 +240,9 @@ final descriptionController = TextEditingController();
             ]
           ),
           onPressed: () { 
-            widget.task!["pasos"][widget.index] = descriptionController.text;
-            taskService().modifySteps(widget.task!["id"], widget.task!["pasos"].toString());
+            widget.task!["pasos"][widget.index]["imagen"]  = nombreImagen;
+            widget.task!["pasos"][widget.index]["titulo"] = descriptionController.text;
+            taskService().modifySteps(widget.task!["id"], widget.task!["pasos"][widget.index].toString());
             Navigator.of(context).pushReplacement(
                 new MaterialPageRoute(builder: (context) => new tasksPage()));
           },

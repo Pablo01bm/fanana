@@ -259,7 +259,7 @@ class _taskAdminState extends State<taskAdmin> {
                       SizedBox(width: queryData.size.width * 0.01),
                       Flexible(
                         child: SizedBox(
-                          child: Text(widget.task!["pasos"][i], overflow: TextOverflow.ellipsis, style: GoogleFonts.fredokaOne(
+                          child: Text(widget.task!["pasos"][i]["titulo"], overflow: TextOverflow.ellipsis, style: GoogleFonts.fredokaOne(
                             textStyle: TextStyle(fontSize: queryData.size.width*0.015, color: Color.fromARGB(255, 107, 107, 107))
                           )),      
                       ),
