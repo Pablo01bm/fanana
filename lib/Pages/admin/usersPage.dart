@@ -25,9 +25,11 @@ class _usersPageState extends State<usersPage> {
   late List<dynamic> users = [];
   late MediaQueryData queryData;
   String query = '';
+  
 
   @override
   void initState() {
+    globalValues.pictopass = "";
     loadStorageData();
     super.initState();
   }
@@ -109,13 +111,18 @@ class _usersPageState extends State<usersPage> {
                       fit: BoxFit.fill,
                       width: queryData.size.width * 0.18,
                       image: AssetImage("images/aniadir.png")),
-                  onPressed: () {
+                  onPressed: () async {
                     globalValues.nuevo = true;
                     Map<String, dynamic> vacio = {};
-                    Navigator.push(
+                    bool refresh = await Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => adduser(vacio)),
                     );
+                    if(refresh){
+                        setState((() {
+                          loadStorageData();
+                        }));
+                      }
                   },
                 ),
               ],
@@ -166,11 +173,19 @@ class _usersPageState extends State<usersPage> {
               howAlertDialog(context, user["id"]);
             },
           ),
-          onTap: () {
+          onTap: () async {
             globalValues.nuevo = false;
-            Navigator.of(context).push(MaterialPageRoute(
+            bool refresh = await Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => userMenu(user),
             ));
+
+            if(refresh){
+              setState((() {
+                          loadStorageData();
+                        }));
+            }
+
+            
           }));
 
   howAlertDialog(BuildContext context, String id) {
@@ -185,8 +200,11 @@ class _usersPageState extends State<usersPage> {
       child: Text("Continuar"),
       onPressed: () {
         userService().deleteUser(id);
-        Navigator.of(context).pushReplacement(new MaterialPageRoute(
-            builder: (context) => new landingPageAdmin()));
+        Navigator.pop(context);
+        setState(() {
+          loadStorageData();
+        });
+        
       },
     );
 
