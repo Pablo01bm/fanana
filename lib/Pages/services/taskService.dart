@@ -70,9 +70,10 @@ modifySteps(String id,String pasos) async {
   List<dynamic> lista = ['tarea'];
   final client = http.Client();
 
+  Map<String,dynamic> pasosMap = {"pasos": pasos};
   try {
     String url = "10.0.2.2:5050";
-    var uri = Uri.http(url, 'update/tarea/$id/$pasos');
+    var uri = Uri.http(url, 'update/tarea/$id', pasosMap);
     print("URL: "+uri.toString());
     var response = await http.put(uri);
     
@@ -107,10 +108,11 @@ addSteps(String id,String pasos) async {
 createTask(String id,String enunciado, String descripcion, String pasos) async {
   List<dynamic> lista = ['tarea'];
   final client = http.Client();
-
+  Map <String, dynamic> pasosInfo = {"titulo": pasos, "imagen": ""};
+  Map <String, dynamic> pasosFinales = {"pasos": pasosInfo.toString()};
   try {
     String url = "10.0.2.2:5050";
-    var uri = Uri.http(url, 'post/tarea/$id/$enunciado/$descripcion/$pasos');
+    var uri = Uri.http(url, 'post/tarea/$id/$enunciado/$descripcion', pasosFinales);
     print("URL: "+uri.toString());
     var response = await http.post(uri);
     
