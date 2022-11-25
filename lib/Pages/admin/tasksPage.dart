@@ -181,9 +181,16 @@ class _tasksPageState extends State<tasksPage> {
               ),
             ]
           ),
-          onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => taskAdmin(user),
-              ))));
+          onTap: () async {
+            bool refresh = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => taskAdmin(user),
+            ));
+
+            if(refresh){
+              setState(((){
+                loadStorageData();
+              }));
+            }
+          }));
 
   howAlertDialog(BuildContext context, String id) {
     // set up the buttons

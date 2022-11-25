@@ -243,8 +243,8 @@ final descriptionController = TextEditingController();
             widget.task!["pasos"][widget.index]["imagen"]  = nombreImagen;
             widget.task!["pasos"][widget.index]["titulo"] = descriptionController.text;
             taskService().modifySteps(widget.task!["id"], widget.task!["pasos"][widget.index].toString());
-            Navigator.of(context).pushReplacement(
-                new MaterialPageRoute(builder: (context) => new tasksPage()));
+            Navigator.of(context).pop(true);
+            Navigator.of(context).pop(true);
           },
         ),
       ]

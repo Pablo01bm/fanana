@@ -209,8 +209,8 @@ final descriptionController = TextEditingController();
           onPressed: () { 
             widget.task!["pasos"].add(descriptionController.text);
             taskService().modifySteps(widget.task!["id"], widget.task!["pasos"].toString());
-            Navigator.of(context).pushReplacement(
-                new MaterialPageRoute(builder: (context) => new tasksPage()));
+            Navigator.of(context).pop(true);
+            Navigator.of(context).pop(true);
           },
         ),
       ]

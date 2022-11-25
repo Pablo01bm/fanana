@@ -57,6 +57,8 @@ class _taskAdminState extends State<taskAdmin> {
     });
   }
 
+ 
+
 
   @override
   Widget build(BuildContext context) {
@@ -274,11 +276,18 @@ class _taskAdminState extends State<taskAdmin> {
                   ) : ButtonStyle(
                     minimumSize: MaterialStateProperty.all(Size(queryData.size.width * 0.59, queryData.size.width * 0.05))
                   ),
-                  onPressed: () { 
-                    Navigator.push(
-                      context,
+                  onPressed: () async { 
+                    bool refresh = await
+                    Navigator.of(context).push(
+                      
                       MaterialPageRoute(builder: (context) =>  stepAdmin(widget.task, i)),
                     );
+                    widget.task = (await taskService().getTaskInfo()) as Map<String, dynamic>?;
+                    if(refresh){
+                      setState((() {
+                        
+                      }));
+                    }
                    }, 
                 ),
             ],
