@@ -124,4 +124,84 @@ createTask(String id,String enunciado, String descripcion, String pasos) async {
 
 }
 
+//ASIGNAR TAREAS
+
+createAssign(String id,String idUser, String idTask, String fechaInicio, String fechaFin) async {
+  List<dynamic> lista = ['tarea'];
+  final client = http.Client();
+ 
+  try {
+    String url = "10.0.2.2:5050";
+    var uri = Uri.http(url, 'post/asignar/$id/$idUser/$idTask/$fechaInicio/$fechaFin');
+    print("URL: "+uri.toString());
+    var response = await http.post(uri);
+    
+  }catch (SocketException){
+    print(SocketException);
+    return Future.error("Error no se ha podido conectar");
+
+  }
+
+}
+
+//DESASIGNAR TAREAS
+deleteAssign(String id) async {
+  List<dynamic> lista = ['tarea'];
+  final client = http.Client();
+ 
+  try {
+    String url = "10.0.2.2:5050";
+    var uri = Uri.http(url, 'delete/asignar/$id');
+    print("URL: "+uri.toString());
+    var response = await http.delete(uri);
+    
+  }catch (SocketException){
+    print(SocketException);
+    return Future.error("Error no se ha podido conectar");
+
+  }
+
+}
+
+Future <List<dynamic>> getAssign() async {
+  List<dynamic> lista = ['tarea'];
+  final client = http.Client();
+ 
+  try {
+    String url = "10.0.2.2:5050";
+    var uri = Uri.http(url, 'get/asignar');
+    print("URL: "+uri.toString());
+    var response = await http.get(uri);
+
+    var aux = json.decode(response.body);
+
+
+    return aux;
+    
+  }catch (SocketException){
+    print(SocketException);
+    return Future.error("Error no se ha podido conectar");
+
+  }
+
+}
+
+updateAlummnoAssign(String id, String idAlumno) async {
+  List<dynamic> lista = ['tarea'];
+  final client = http.Client();
+ 
+  try {
+    String url = "10.0.2.2:5050";
+    var uri = Uri.http(url, 'update_alumno/$id/$idAlumno');
+    print("URL: "+uri.toString());
+    var response = await http.put(uri);
+    
+  }catch (SocketException){
+    print(SocketException);
+    return Future.error("Error no se ha podido conectar");
+
+  }
+
+}
+
 }
