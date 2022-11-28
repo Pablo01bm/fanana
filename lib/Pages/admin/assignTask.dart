@@ -212,7 +212,7 @@ class _assignTaskState extends State<assignTask> {
                       color: Color.fromARGB(255, 51, 51, 51),
                       height: 1.5))),
           onTap: () async {
-            if(widget.user["asignada"] == "false"){
+            if(widget.user["asignado"] == "false"){
               var rng = new Random();
               var code = rng.nextInt(90000000) + 10000000;
               String id = code.toString();

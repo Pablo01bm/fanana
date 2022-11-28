@@ -163,14 +163,14 @@ class _tasksPageState extends State<tasksPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                icon: user["asignada"] == "true"
+                icon: user["asignado"] == "false"
                   ? Icon(Icons.assignment_ind, size: 40)
                   : Icon(Icons.assignment_late, size: 40)
                 ,
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => assignTask((user["asignada"] == "true"),  user),));
+                      builder: (context) => assignTask((user["asignado"] == "true"),  user),));
                   },
               ),
               IconButton(
