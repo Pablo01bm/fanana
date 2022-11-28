@@ -11,7 +11,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:email_validator/email_validator.dart';
 
 class addTask extends StatefulWidget {
-
   Map<String, dynamic>? task;
 
   addTask(this.task, {Key? key}) : super(key: key);
@@ -42,7 +41,6 @@ class _addTaskState extends State<addTask> {
     super.dispose();
   }
 
-
   @override
   void initState() {
     // titleController.text = widget.task!["enunciado"];
@@ -68,185 +66,199 @@ class _addTaskState extends State<addTask> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     queryData = MediaQuery.of(context);
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: cuerpo()
-    );
+    return Scaffold(resizeToAvoidBottomInset: false, body: cuerpo());
   }
 
   Widget cuerpo() {
     return Form(
-      child: Scrollbar(
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: queryData.size.width * 0.07,),
-              header(),
-              tituloField(),
-              SizedBox(height: queryData.size.width * 0.04,),
-              description(),
-              SizedBox(height: queryData.size.width * 0.04,),
-              primerPaso(),
-            ],
-          )
-        )
-      )
-    );
+        child: Scrollbar(
+            child: SingleChildScrollView(
+                child: Column(
+      children: <Widget>[
+        SizedBox(
+          height: queryData.size.width * 0.07,
+        ),
+        header(),
+        tituloField(),
+        SizedBox(
+          height: queryData.size.width * 0.04,
+        ),
+        description(),
+        SizedBox(
+          height: queryData.size.width * 0.04,
+        ),
+        primerPaso(),
+      ],
+    ))));
   }
 
-  Widget header(){
+  Widget header() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        SizedBox(width: queryData.size.width * 0.05),
-        // FittedBox(
-        //     fit: BoxFit.fill,
-        //     child: TextField(       
-        //       controller: titleController,
-        //       decoration: InputDecoration(
-        //         labelText: "Titulo",
-        //         labelStyle: GoogleFonts.fredokaOne(textStyle: TextStyle(fontSize: queryData.size.width*0.03)), 
-        //       ),
-        //     ), 
-        //   ),
-        SizedBox(width: queryData.size.width * 0.1,),
-        TextButton(
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          SizedBox(width: queryData.size.width * 0.05),
+          // FittedBox(
+          //     fit: BoxFit.fill,
+          //     child: TextField(
+          //       controller: titleController,
+          //       decoration: InputDecoration(
+          //         labelText: "Titulo",
+          //         labelStyle: GoogleFonts.fredokaOne(textStyle: TextStyle(fontSize: queryData.size.width*0.03)),
+          //       ),
+          //     ),
+          //   ),
+          SizedBox(
+            width: queryData.size.width * 0.1,
+          ),
+          TextButton(
+            child: Stack(alignment: Alignment.center, children: <Widget>[
               Image(
                   fit: BoxFit.fill,
                   width: queryData.size.width * 0.09,
                   image: AssetImage("assets/borrar.png")),
-              Text("Borrar", style: GoogleFonts.fredokaOne(
-                textStyle: TextStyle(fontSize: queryData.size.width*0.02, color: Color.fromARGB(255, 0, 0, 0))
-              )), 
+              Text("Borrar",
+                  style: GoogleFonts.fredokaOne(
+                      textStyle: TextStyle(
+                          fontSize: queryData.size.width * 0.02,
+                          color: Color.fromARGB(255, 0, 0, 0)))),
             ]),
-          onPressed: () { 
-            taskService().deleteTask(widget.task!["id"]);
-            Navigator.of(context).pushReplacement(
-              new MaterialPageRoute(builder: (context) => new tasksPage()));
-          },
-        ),
-        TextButton(
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
+            onPressed: () {
+              taskService().deleteTask(widget.task!["id"]);
+              Navigator.of(context).pushReplacement(
+                  new MaterialPageRoute(builder: (context) => new tasksPage()));
+            },
+          ),
+          TextButton(
+            child: Stack(alignment: Alignment.center, children: <Widget>[
               Image(
                   fit: BoxFit.fill,
                   width: queryData.size.width * 0.19,
                   image: AssetImage("assets/aceptar.png")),
-              Text("Listo", style: GoogleFonts.fredokaOne(
-                textStyle: TextStyle(fontSize: queryData.size.width*0.03, color: Color.fromARGB(255, 0, 0, 0))
-              )), 
-            ]
-          ),
-          onPressed: () {
-            var rng = new Random();
-            var code = rng.nextInt(90000000) + 10000000;
+              Text("Listo",
+                  style: GoogleFonts.fredokaOne(
+                      textStyle: TextStyle(
+                          fontSize: queryData.size.width * 0.03,
+                          color: Color.fromARGB(255, 0, 0, 0)))),
+            ]),
+            onPressed: () {
+              var rng = new Random();
+              var code = rng.nextInt(90000000) + 10000000;
+              if (titulo?.isEmpty == true ||
+                  descripcion?.isEmpty == true ||
+                  paso?.isEmpty == true) {
+                final snackBar = SnackBar(
+                    backgroundColor: Colors.redAccent,
+                    content: const Text('Debe rellenar todos los campos'),
+                    duration: Duration(seconds: 3),
+                    action: SnackBarAction(
+                      textColor: Colors.white,
+                      label: 'OK',
+                      onPressed: () {
+                        // Some code to undo the change.
+                      },
+                    ));
 
-              taskService().createTask(code.toString(), titulo!, descripcion!, paso!);
-              Navigator.of(context).pushReplacement(
-                new MaterialPageRoute(builder: (context) => new tasksPage()));
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              } else {
+                taskService()
+                    .createTask(code.toString(), titulo!, descripcion!, paso!);
+                Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                    builder: (context) => new tasksPage()));
+              }
             },
-        ),
-        SizedBox(width: queryData.size.width * 0.05),
-      ]
-    );
+          ),
+          SizedBox(width: queryData.size.width * 0.05),
+        ]);
   }
 
-  Widget tituloField(){
+  Widget tituloField() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        SizedBox(width: queryData.size.width * 0.1),
-        SizedBox(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(width: queryData.size.width * 0.1),
+          SizedBox(
             width: queryData.size.width * 0.2,
-            child: Text("Enunciado:", style: GoogleFonts.fredokaOne(
-              textStyle: TextStyle(fontSize: queryData.size.width*0.03)
-            )),      
+            child: Text("Enunciado:",
+                style: GoogleFonts.fredokaOne(
+                    textStyle:
+                        TextStyle(fontSize: queryData.size.width * 0.03))),
           ),
-        SizedBox(width: queryData.size.width * 0.01),
-        SizedBox(
-          width:queryData.size.width * 0.59,
-          child: TextField(       
-               controller: titleController,
-               decoration: InputDecoration(
-                 labelStyle: GoogleFonts.fredokaOne(textStyle: TextStyle(fontSize: queryData.size.width*0.03)), 
+          SizedBox(width: queryData.size.width * 0.01),
+          SizedBox(
+            width: queryData.size.width * 0.59,
+            child: TextField(
+              controller: titleController,
+              decoration: InputDecoration(
+                labelStyle: GoogleFonts.fredokaOne(
+                    textStyle:
+                        TextStyle(fontSize: queryData.size.width * 0.03)),
               ),
-            ), 
-        ),
-        SizedBox(width: queryData.size.width * 0.1),
-      ]
-    );
+            ),
+          ),
+          SizedBox(width: queryData.size.width * 0.1),
+        ]);
   }
 
-  Widget description(){
+  Widget description() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        SizedBox(width: queryData.size.width * 0.1),
-        SizedBox(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(width: queryData.size.width * 0.1),
+          SizedBox(
             width: queryData.size.width * 0.2,
-            child: Text("Descripción:", style: GoogleFonts.fredokaOne(
-              textStyle: TextStyle(fontSize: queryData.size.width*0.03)
-            )),      
+            child: Text("Descripción:",
+                style: GoogleFonts.fredokaOne(
+                    textStyle:
+                        TextStyle(fontSize: queryData.size.width * 0.03))),
           ),
-        SizedBox(width: queryData.size.width * 0.01),
-        SizedBox(
-          width:queryData.size.width * 0.59,
-          child: TextFormField(
-            controller: descriptionController,
-            decoration: InputDecoration(hintText: "Añade una descripción"),
-            //initialValue: widget.task!["descripcion"],
-            keyboardType: TextInputType.multiline,
-            maxLines: null,
-            style: TextStyle(fontSize: queryData.size.width*0.02)
+          SizedBox(width: queryData.size.width * 0.01),
+          SizedBox(
+            width: queryData.size.width * 0.59,
+            child: TextFormField(
+                controller: descriptionController,
+                decoration: InputDecoration(hintText: "Añade una descripción"),
+                //initialValue: widget.task!["descripcion"],
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                style: TextStyle(fontSize: queryData.size.width * 0.02)),
           ),
-        ),
-        SizedBox(width: queryData.size.width * 0.1),
-      ]
-    );
+          SizedBox(width: queryData.size.width * 0.1),
+        ]);
   }
 
-
-  Widget primerPaso(){
+  Widget primerPaso() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        SizedBox(width: queryData.size.width * 0.1),
-        SizedBox(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(width: queryData.size.width * 0.1),
+          SizedBox(
             width: queryData.size.width * 0.2,
-            child: Text("Primer paso:", style: GoogleFonts.fredokaOne(
-              textStyle: TextStyle(fontSize: queryData.size.width*0.03)
-            )),      
+            child: Text("Primer paso:",
+                style: GoogleFonts.fredokaOne(
+                    textStyle:
+                        TextStyle(fontSize: queryData.size.width * 0.03))),
           ),
-        SizedBox(width: queryData.size.width * 0.01),
-        SizedBox(
-          width:queryData.size.width * 0.59,
-          child: TextFormField(
-            controller: pasoController,
-            decoration: InputDecoration(hintText: "Primer paso..."),
-            //initialValue: widget.task!["descripcion"],
-            keyboardType: TextInputType.multiline,
-            maxLines: null,
-            style: TextStyle(fontSize: queryData.size.width*0.02)
+          SizedBox(width: queryData.size.width * 0.01),
+          SizedBox(
+            width: queryData.size.width * 0.59,
+            child: TextFormField(
+                controller: pasoController,
+                decoration: InputDecoration(hintText: "Primer paso..."),
+                //initialValue: widget.task!["descripcion"],
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                style: TextStyle(fontSize: queryData.size.width * 0.02)),
           ),
-        ),
-        SizedBox(width: queryData.size.width * 0.1),
-      ]
-    );
+          SizedBox(width: queryData.size.width * 0.1),
+        ]);
   }
-
-
 
   // Widget steps(){
   //   return Row(
@@ -260,7 +272,7 @@ class _addTaskState extends State<addTask> {
   //             width: queryData.size.width * 0.20,
   //             child: Text("Pasos:", textAlign: TextAlign.start, style: GoogleFonts.fredokaOne(
   //               textStyle: TextStyle(fontSize: queryData.size.width*0.03)
-  //             )),      
+  //             )),
   //           ),
   //           SizedBox(height: queryData.size.width * 0.02),
   //           TextButton(
@@ -273,10 +285,10 @@ class _addTaskState extends State<addTask> {
   //                     image: AssetImage("assets/aceptar.png")),
   //                 Text("Añadir", style: GoogleFonts.fredokaOne(
   //                   textStyle: TextStyle(fontSize: queryData.size.width*0.02, color: Color.fromARGB(255, 0, 0, 0))
-  //                 )), 
+  //                 )),
   //               ]
   //             ),
-  //             onPressed: () {  
+  //             onPressed: () {
   //               Navigator.push(
   //                     context,
   //                     MaterialPageRoute(builder: (context) =>  addStep(widget.task, widget.task!["pasos"].length)),
@@ -299,14 +311,14 @@ class _addTaskState extends State<addTask> {
   //                       width: queryData.size.width * 0.08,
   //                       child: Text("Paso "+i.toString()+" :", style: GoogleFonts.fredokaOne(
   //                         textStyle: TextStyle(fontSize: queryData.size.width*0.02, color: Color.fromARGB(255, 0, 0, 0))
-  //                       )),      
+  //                       )),
   //                     ),
   //                     SizedBox(width: queryData.size.width * 0.01),
   //                     Flexible(
   //                       child: SizedBox(
   //                         child: Text(widget.task!["pasos"][i], overflow: TextOverflow.ellipsis, style: GoogleFonts.fredokaOne(
   //                           textStyle: TextStyle(fontSize: queryData.size.width*0.015, color: Color.fromARGB(255, 107, 107, 107))
-  //                         )),      
+  //                         )),
   //                     ),
   //                     )
   //                   ],
@@ -319,12 +331,12 @@ class _addTaskState extends State<addTask> {
   //                 ) : ButtonStyle(
   //                   minimumSize: MaterialStateProperty.all(Size(queryData.size.width * 0.59, queryData.size.width * 0.05))
   //                 ),
-  //                 onPressed: () { 
+  //                 onPressed: () {
   //                   Navigator.push(
   //                     context,
   //                     MaterialPageRoute(builder: (context) =>  stepAdmin(widget.task, i)),
   //                   );
-  //                  }, 
+  //                  },
   //               ),
   //           ],
   //         )
@@ -335,4 +347,3 @@ class _addTaskState extends State<addTask> {
   // }
 
 }
-
