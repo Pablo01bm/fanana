@@ -86,15 +86,19 @@ modifySteps(String id,String pasos) async {
 }
 
 //method which modify the task given by id in the database 
-addSteps(String id,String pasos) async {
+addSteps(String id,Map pasos, String index) async {
   List<dynamic> lista = ['tarea'];
   final client = http.Client();
+  Map<String, dynamic> indice = {"paso": index};
+  var aux = json.encode(pasos);
+  
 
+  print(aux);
   try {
     String url = "10.0.2.2:5050";
-    var uri = Uri.http(url, 'update/tarea/$id/$pasos');
+    var uri = Uri.http(url, 'update/tarea/$id', indice);
     print("URL: "+uri.toString());
-    var response = await http.put(uri);
+    var response = await http.put(uri, headers:  {"Content-Type": "application/json"}, body: aux);
     
   }catch (SocketException){
     print(SocketException);
@@ -123,6 +127,49 @@ createTask(String id,String enunciado, String descripcion, String pasos) async {
   }
 
 }
+
+//method which modify the task given by id in the database 
+createComanda(String id,String enunciado, String descripcion, String tipo) async {
+  List<dynamic> lista = ['tarea'];
+  final client = http.Client();
+
+  try {
+    String url = "10.0.2.2:5050";
+    var uri = Uri.http(url, 'post/comanda/$id/$enunciado/$descripcion/$tipo');
+    print("URL: "+uri.toString());
+    var response = await http.post(uri);
+    
+  }catch (SocketException){
+    print(SocketException);
+    return Future.error("Error no se ha podido conectar");
+
+  }
+
+}
+
+//method which modify the task given by id in the database 
+updateComanda(String id, Map comanda) async {
+  List<dynamic> lista = ['tarea'];
+  final client = http.Client();
+
+  var aux = json.encode(comanda);
+
+  print("LA COMANDA: "+aux);
+
+  try {
+    String url = "10.0.2.2:5050";
+    var uri = Uri.http(url, 'update/comanda/$id');
+    print("URL: "+uri.toString());
+    var response = await http.put(uri, headers:  {"Content-Type": "application/json"}, body: aux);
+    
+  }catch (SocketException){
+    print(SocketException);
+    return Future.error("Error no se ha podido conectar");
+
+  }
+
+}
+
 
 //ASIGNAR TAREAS
 

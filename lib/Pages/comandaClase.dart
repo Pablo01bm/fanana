@@ -8,7 +8,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:email_validator/email_validator.dart';
 
 class comandaClase extends StatefulWidget {
-  const comandaClase({super.key});
+  final comanda;
+  const comandaClase(Map<String, dynamic> this.comanda, {super.key});
 
   @override
   State<comandaClase> createState() => _comandaClaseState();
@@ -54,7 +55,7 @@ class _comandaClaseState extends State<comandaClase> {
                 ]),
                 onPressed: () {
                   Navigator.of(context).push(new MaterialPageRoute(
-                      builder: (context) => new comandaList("A")));
+                      builder: (context) => new comandaList("A", widget.comanda)));
                 },
               ),
               SizedBox(
@@ -75,7 +76,7 @@ class _comandaClaseState extends State<comandaClase> {
                 ]),
                 onPressed: () {
                   Navigator.of(context).push(new MaterialPageRoute(
-                      builder: (context) => new comandaList("B")));
+                      builder: (context) => new comandaList("B", widget.comanda)));
                 },
               ),
               SizedBox(
@@ -96,7 +97,7 @@ class _comandaClaseState extends State<comandaClase> {
                 ]),
                 onPressed: () {
                   Navigator.of(context).push(new MaterialPageRoute(
-                      builder: (context) => new comandaList("C")));
+                      builder: (context) => new comandaList("C", widget.comanda)));
                 },
               ),
               SizedBox(
@@ -117,7 +118,7 @@ class _comandaClaseState extends State<comandaClase> {
                 ]),
                 onPressed: () {
                   Navigator.of(context).push(new MaterialPageRoute(
-                      builder: (context) => new comandaList("D")));
+                      builder: (context) => new comandaList("D", widget.comanda)));
                 },
               ),
               SizedBox(
@@ -138,7 +139,7 @@ class _comandaClaseState extends State<comandaClase> {
                 ]),
                 onPressed: () {
                   Navigator.of(context).push(new MaterialPageRoute(
-                      builder: (context) => new comandaList("E")));
+                      builder: (context) => new comandaList("E", widget.comanda)));
                 },
               ),
               SizedBox(

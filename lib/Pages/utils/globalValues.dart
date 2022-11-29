@@ -12,4 +12,5 @@ class globalValues {
     'D': [],
     'E': []
   };
+  static late bool esComanda;  
 }

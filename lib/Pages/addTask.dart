@@ -3,12 +3,16 @@ import 'dart:math';
 import 'package:fanana/Pages/addStep.dart';
 import 'package:fanana/Pages/admin/tasksPage.dart';
 import 'package:fanana/Pages/services/taskService.dart';
+import 'package:fanana/Pages/utils/globalValues.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
 import 'package:fanana/Pages/stepAdmin.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:email_validator/email_validator.dart';
+
+
+const List<String> ListaTipoTarea= <String>["menu", "materiales"];
 
 class addTask extends StatefulWidget {
   Map<String, dynamic>? task;
@@ -26,10 +30,12 @@ class _addTaskState extends State<addTask> {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
   final pasoController = TextEditingController();
+  final tipoTareaController = TextEditingController();
 
   String? titulo;
   String? descripcion;
   String? paso;
+  String? tipoTarea;
 
   @override
   void dispose() {
@@ -38,6 +44,7 @@ class _addTaskState extends State<addTask> {
     titleController.dispose();
     descriptionController.dispose();
     pasoController.dispose();
+    tipoTareaController.dispose();
     super.dispose();
   }
 
@@ -45,6 +52,7 @@ class _addTaskState extends State<addTask> {
   void initState() {
     // titleController.text = widget.task!["enunciado"];
     // descriptionController.text = widget.task!["descripcion"];
+    tipoTarea = "menu";
     super.initState();
 
     titleController.addListener(() {
@@ -62,6 +70,12 @@ class _addTaskState extends State<addTask> {
     pasoController.addListener(() {
       setState(() {
         paso = pasoController.text;
+      });
+    });
+
+    tipoTareaController.addListener(() {
+      setState(() {
+        tipoTarea = tipoTareaController.text;
       });
     });
   }
@@ -83,6 +97,7 @@ class _addTaskState extends State<addTask> {
           height: queryData.size.width * 0.07,
         ),
         header(),
+        selectorTipo(),
         tituloField(),
         SizedBox(
           height: queryData.size.width * 0.04,
@@ -164,15 +179,107 @@ class _addTaskState extends State<addTask> {
 
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               } else {
-                taskService()
-                    .createTask(code.toString(), titulo!, descripcion!, paso!);
-                Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                    builder: (context) => new tasksPage()));
+                if (!globalValues.esComanda){
+                  taskService()
+                      .createTask(code.toString(), titulo!, descripcion!, paso!);
+                  Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                      builder: (context) => new tasksPage()));
+                }else{
+                  taskService()
+                      .createComanda(code.toString(), titulo!, descripcion!, tipoTarea!);
+                  Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                      builder: (context) => new tasksPage()));
+                }
               }
             },
           ),
           SizedBox(width: queryData.size.width * 0.05),
         ]);
+  }
+
+  Widget botonComanda (){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+         // SizedBox(width: queryData.size.width * 0.1),
+          SizedBox(
+            width: queryData.size.width * 0.2,
+            child: Text("Pulsar para comanda:",
+                style: GoogleFonts.fredokaOne(
+                    textStyle:
+                        TextStyle(fontSize: queryData.size.width * 0.03))),
+          ),
+          IconButton(
+            onPressed:() {
+
+              globalValues.esComanda = true;
+
+
+              setState(() {
+                
+              });
+            }, 
+            icon: Icon(Icons.document_scanner_sharp)
+          ),
+      ],
+    );
+  }
+
+  Widget selectorTipo() {
+
+    if (globalValues.esComanda){
+      return  Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        
+      children: [
+         SizedBox(width: queryData.size.width * 0.1),
+         Form(
+            child: SizedBox(
+                width: queryData.size.width * 0.4,
+                child: DropdownButtonFormField(
+                  decoration: InputDecoration(
+                    labelText: "¿Que tipo de comanda?",
+                    labelStyle: GoogleFonts.fredokaOne(
+                        textStyle:
+                            TextStyle(fontSize: queryData.size.width * 0.03)),
+                  ),
+                  value: tipoTarea,
+                  icon: const Icon(Icons.arrow_downward),
+                  elevation: 16,
+                  onChanged: (String? value) {
+                    setState(() {
+                      tipoTarea = value ?? "";
+                    });
+                  },
+                  items:
+                      ListaTipoTarea.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                )),
+          ),
+          SizedBox(width: queryData.size.width * 0.1),
+          IconButton(
+            onPressed:() {
+              globalValues.esComanda = false;
+              setState(() {
+                
+              });
+            }, 
+            icon: Icon(Icons.keyboard_backspace_rounded)
+          ),
+          SizedBox(width: queryData.size.width * 0.1),
+      ],
+    );
+    }else{
+      return botonComanda();
+    }
+    
+          
   }
 
   Widget tituloField() {
@@ -233,7 +340,8 @@ class _addTaskState extends State<addTask> {
   }
 
   Widget primerPaso() {
-    return Row(
+    if (!globalValues.esComanda){
+      return Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -258,6 +366,34 @@ class _addTaskState extends State<addTask> {
           ),
           SizedBox(width: queryData.size.width * 0.1),
         ]);
+    }else{
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(width: queryData.size.width * 0.1),
+          SizedBox(
+            width: queryData.size.width * 0.2,
+            child: Text("Primer elemento:",
+                style: GoogleFonts.fredokaOne(
+                    textStyle:
+                        TextStyle(fontSize: queryData.size.width * 0.03))),
+          ),
+          SizedBox(width: queryData.size.width * 0.01),
+          SizedBox(
+            width: queryData.size.width * 0.59,
+            child: TextFormField(
+                controller: pasoController,
+                decoration: InputDecoration(hintText: "Primer elemento..."),
+                //initialValue: widget.task!["descripcion"],
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                style: TextStyle(fontSize: queryData.size.width * 0.02)),
+          ),
+          SizedBox(width: queryData.size.width * 0.1),
+        ]);
+    }
+    
   }
 
   // Widget steps(){

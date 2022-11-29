@@ -153,7 +153,7 @@ class _tasksPageState extends State<tasksPage> {
                       fontSize: queryData.size.width * 0.03,
                       color: Colors.black,
                       height: 1.5))),
-          subtitle: Text("Nº pasos: " + (user.length - 4).toString(),
+          subtitle: Text("Nº pasos: " + (user["pasos"].length).toString(),
               style: GoogleFonts.fredokaOne(
                   textStyle: TextStyle(
                       fontSize: queryData.size.width * 0.02,
@@ -163,7 +163,7 @@ class _tasksPageState extends State<tasksPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                icon: user["asignado"] == "false"
+                icon: user["asignado"] == "true"
                   ? Icon(Icons.assignment_ind, size: 40)
                   : Icon(Icons.assignment_late, size: 40)
                 ,

@@ -1,6 +1,7 @@
 import 'package:fanana/Pages/addTask.dart';
 import 'package:fanana/Pages/admin/assignTask.dart';
 import 'package:fanana/Pages/admin/userMenu.dart';
+import 'package:fanana/Pages/comandaClase.dart';
 import 'package:fanana/Pages/services/taskService.dart';
 import 'package:fanana/Pages/services/userService.dart';
 import 'package:fanana/Pages/taskAdmin.dart';
@@ -30,33 +31,29 @@ class _assignedTaskListState extends State<assignedTaskList> {
   String query = '';
   late bool asigando;
   late List<dynamic> listaAsignacion;
+  late Future<List<dynamic>> listaPrimera;
 
   @override
   void initState() {
     loadStorageData();
     super.initState();
   }
-
-  void loadStorageData() async {
+  Future<List<dynamic>> loadData1() async{
     _userList = taskService().getTaskInfo();
+    return _userList;
+  }
+  Future<List<dynamic>> loadData2() async{
+    listaPrimera = taskService().getAssign();
+    return taskService().getAssign();
+  }
+  void loadStorageData() async {
+    //_userList = taskService().getTaskInfo();
 
-    taskService().getAssign().then((value) {
-      listaAsignacion = value;
-    });
+    Future.wait([
+      loadData1(),
+      loadData2()
+    ]);
 
-    Future.delayed(const Duration(milliseconds: 600), () {
-      var allAssigned = listaAsignacion;
-
-      print(allAssigned.toString());
-
-      // for (int i = 0; i < allAssigned.length; i++) {
-      //   //print(allAssigned[i]);
-      //   if (allAssigned[i]["id_tarea"] == widget.user["id"]) {
-      //     idAssignacion = allAssigned[i]["id"];
-      //     //print("HolaDENTRO");
-      //   }
-      // }
-    });
 
     if (_userList != null) {
       loading = false;
@@ -70,31 +67,53 @@ class _assignedTaskListState extends State<assignedTaskList> {
       resizeToAvoidBottomInset: false,
       body: !loading
           ? FutureBuilder(
-              future: _userList,
+              future: listaPrimera,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   allTasks = snapshot.data as List<dynamic>;
                   tasks.clear();
 
-                  for (int i = 0; i < allTasks.length; i++) {
-                    final userName = allTasks[i]["enunciado"].toLowerCase();
-                    final idTareaActual = allTasks[i]["id"];
-                    //final userSurname = allTasks[i]["apellidos"].toLowerCase();
-                    // final userEmail = allUsers[i].mail.toLowerCase(); //aqui poner la condicion de buscar por clase
-                    final input = query.toLowerCase();
+                  listaPrimera.then((value) {
+                    listaAsignacion = value;
+                  });
 
-                    for (int j = 0; j < listaAsignacion.length; j++) {
+                    return FutureBuilder( //AQUI EMPIEZA
+                      future: _userList,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          allTasks = snapshot.data as List<dynamic>;
+                          tasks.clear();
 
-                      if (userName.contains(input) && listaAsignacion[j]["id_tarea"] == idTareaActual && listaAsignacion[j]["id_usuario"] == globalValues.infoUser["id"]) {
-                        tasks.add(allTasks[i]);
-                      }
+                          for (int i = 0; i < allTasks.length; i++) {
+                            final userName = allTasks[i]["enunciado"].toLowerCase();
+                            final idTareaActual = allTasks[i]["id"];
+                            //final userSurname = allTasks[i]["apellidos"].toLowerCase();
+                            // final userEmail = allUsers[i].mail.toLowerCase(); //aqui poner la condicion de buscar por clase
+                            final input = query.toLowerCase();
 
-                    }
-                  }
-                  return getBody();
+                            for (int j = 0; j < listaAsignacion.length; j++) {
+
+                              if (userName.contains(input) && listaAsignacion[j]["id_tarea"] == idTareaActual && listaAsignacion[j]["id_usuario"] == globalValues.infoUser["id"]) {
+                                tasks.add(allTasks[i]);
+                              }
+
+                            }
+                          }
+                          return getBody();
+                        } else if (snapshot.hasError) {
+                          print(snapshot.error);
+                          return Text('Error loading TASKS');
+                        }
+
+                return Center(
+                    child: Container(
+                        padding: EdgeInsets.only(top: 50),
+                        child: CircularProgressIndicator()));
+              }); 
+
                 } else if (snapshot.hasError) {
                   print(snapshot.error);
-                  return Text('Error loading users');
+                  return Text('Error loading TASKS');
                 }
 
                 return Center(
@@ -105,6 +124,7 @@ class _assignedTaskListState extends State<assignedTaskList> {
           : SizedBox.shrink(),
     );
   }
+
 
   Widget getBody() {
     return Container(
@@ -171,15 +191,18 @@ class _assignedTaskListState extends State<assignedTaskList> {
                       color: Color.fromARGB(255, 51, 51, 51),
                       height: 1.5))),
           onTap: () async {
-            bool refresh = await Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => taskAdmin(user),
-            ));
+            if (user["tipo"] != null){
+              bool refresh = await Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => comandaClase(user),
+              ));
+              if (refresh) {
+                setState((() {
+                  loadStorageData();
+                }));
+              }
 
-            if (refresh) {
-              setState((() {
-                loadStorageData();
-              }));
             }
+
           }));
 
   Widget buildSearch() => SearchWidget(

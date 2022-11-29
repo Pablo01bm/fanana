@@ -14,8 +14,9 @@ import 'package:fanana/components/searchBar.dart';
 
 class comandaList extends StatefulWidget {
   String letraclase = "";
+  var comanda;
 
-  comandaList(this.letraclase, {super.key});
+  comandaList(this.letraclase, this.comanda, {super.key});
 
   @override
   State<comandaList> createState() => _comandaListState();
@@ -122,10 +123,10 @@ class _comandaListState extends State<comandaList> {
             Expanded(
               child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: tasks.length + 1,
+                  itemCount: widget.comanda["comandas"].length + 1,
                   itemBuilder: (context, index) {
-                    if (index != tasks.length) {
-                      final contact = tasks[index];
+                    if (index != widget.comanda["comandas"].length) {
+                      final contact = widget.comanda["comandas"][widget.letraclase][index];
                       return buildContact(contact, index);
                     } else {
                       return aniade();
@@ -145,6 +146,19 @@ class _comandaListState extends State<comandaList> {
                             color: Color.fromARGB(255, 0, 0, 0)))),
               ]),
               onPressed: () {
+                
+
+                taskService().updateComanda(widget.comanda["id"], globalValues.comanda);
+
+                globalValues.comanda = {
+                  'A': [],
+                  'B': [],
+                  'C': [],
+                  'D': [],
+                  'E': []
+                };
+
+                Navigator.pop(context);
                 Navigator.pop(context);
               },
             ),
@@ -205,7 +219,11 @@ class _comandaListState extends State<comandaList> {
                   'cantidad': 0
                 };
                 globalValues.comanda[widget.letraclase].add(comandaNUEVA);
+                taskService().updateComanda(widget.comanda["id"], globalValues.comanda);
                 aniadiendo = false;
+                setState(() {
+                  
+                });
               });
             },
           ),
