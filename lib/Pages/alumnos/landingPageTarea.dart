@@ -1,6 +1,9 @@
 import 'package:fanana/Pages/admin/tasksPage.dart';
+import 'package:fanana/Pages/alumnos/assignedTaskList.dart';
+import 'package:fanana/main.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:fanana/Pages/pasosAlumno.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fanana/Pages/utils/globalValues.dart';
@@ -16,14 +19,18 @@ class landingPageTarea extends StatefulWidget {
 
 class _landingPageTareaState extends State<landingPageTarea> {
   late MediaQueryData queryData;
+  late List<dynamic> listaAsignacion = [];
+  int i = 0;
+  Map<String, dynamic> user = <String, dynamic>{};
 
   @override
   Widget build(BuildContext context) {
     queryData = MediaQuery.of(context);
-    return Scaffold(body: mainMenuDefault());
+    return Scaffold(body: mainMenuDefault(user, i, listaAsignacion));
   }
 
-  Widget mainMenuDefault() {
+  Widget mainMenuDefault(
+      Map<String, dynamic> user, int i, List<dynamic> listaAsignacion) {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -45,13 +52,16 @@ class _landingPageTareaState extends State<landingPageTarea> {
           Image(
               fit: BoxFit.fill,
               //height: queryData.size.height * 0.7,
-              width: queryData.size.width * 0.4,
+              width: queryData.size.width * 0.3,
               image: const AssetImage("images/pictocasa.png")),
           TextButton(
-            child: Image(image: const AssetImage("images/empecemosboton.png")),
+            child: Image(
+                width: queryData.size.width * 0.2,
+                image: const AssetImage("images/empecemosboton.png")),
             onPressed: () {
               Navigator.of(context).push(new MaterialPageRoute(
-                  builder: (context) => new primerPaso()));
+                  builder: (context) =>
+                      pasosAlumno(user, listaAsignacion[i]["id"])));
             },
           ),
           SizedBox(

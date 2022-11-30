@@ -1,6 +1,7 @@
 import 'package:fanana/Pages/addTask.dart';
 import 'package:fanana/Pages/admin/assignTask.dart';
 import 'package:fanana/Pages/admin/userMenu.dart';
+import 'package:fanana/Pages/alumnos/landingPageTarea.dart';
 import 'package:fanana/Pages/comandaClase.dart';
 import 'package:fanana/Pages/pasosAlumno.dart';
 import 'package:fanana/Pages/services/taskService.dart';
@@ -39,22 +40,21 @@ class _assignedTaskListState extends State<assignedTaskList> {
     loadStorageData();
     super.initState();
   }
-  Future<List<dynamic>> loadData1() async{
+
+  Future<List<dynamic>> loadData1() async {
     _userList = taskService().getTaskInfo();
     return _userList;
   }
-  Future<List<dynamic>> loadData2() async{
+
+  Future<List<dynamic>> loadData2() async {
     listaPrimera = taskService().getAssign();
     return taskService().getAssign();
   }
+
   void loadStorageData() async {
     //_userList = taskService().getTaskInfo();
 
-    Future.wait([
-      loadData1(),
-      loadData2()
-    ]);
-
+    Future.wait([loadData1(), loadData2()]);
 
     if (_userList != null) {
       loading = false;
@@ -78,7 +78,8 @@ class _assignedTaskListState extends State<assignedTaskList> {
                     listaAsignacion = value;
                   });
 
-                    return FutureBuilder( //AQUI EMPIEZA
+                  return FutureBuilder(
+                      //AQUI EMPIEZA
                       future: _userList,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
@@ -86,18 +87,21 @@ class _assignedTaskListState extends State<assignedTaskList> {
                           tasks.clear();
 
                           for (int i = 0; i < allTasks.length; i++) {
-                            final userName = allTasks[i]["enunciado"].toLowerCase();
+                            final userName =
+                                allTasks[i]["enunciado"].toLowerCase();
                             final idTareaActual = allTasks[i]["id"];
                             //final userSurname = allTasks[i]["apellidos"].toLowerCase();
                             // final userEmail = allUsers[i].mail.toLowerCase(); //aqui poner la condicion de buscar por clase
                             final input = query.toLowerCase();
 
                             for (int j = 0; j < listaAsignacion.length; j++) {
-
-                              if (userName.contains(input) && listaAsignacion[j]["id_tarea"] == idTareaActual && listaAsignacion[j]["id_usuario"] == globalValues.infoUser["id"]) {
+                              if (userName.contains(input) &&
+                                  listaAsignacion[j]["id_tarea"] ==
+                                      idTareaActual &&
+                                  listaAsignacion[j]["id_usuario"] ==
+                                      globalValues.infoUser["id"]) {
                                 tasks.add(allTasks[i]);
                               }
-
                             }
                           }
                           return getBody();
@@ -106,12 +110,11 @@ class _assignedTaskListState extends State<assignedTaskList> {
                           return Text('Error loading TASKS');
                         }
 
-                return Center(
-                    child: Container(
-                        padding: EdgeInsets.only(top: 50),
-                        child: CircularProgressIndicator()));
-              }); 
-
+                        return Center(
+                            child: Container(
+                                padding: EdgeInsets.only(top: 50),
+                                child: CircularProgressIndicator()));
+                      });
                 } else if (snapshot.hasError) {
                   print(snapshot.error);
                   return Text('Error loading TASKS');
@@ -125,7 +128,6 @@ class _assignedTaskListState extends State<assignedTaskList> {
           : SizedBox.shrink(),
     );
   }
-
 
   Widget getBody() {
     return Container(
@@ -192,7 +194,7 @@ class _assignedTaskListState extends State<assignedTaskList> {
                       color: Color.fromARGB(255, 51, 51, 51),
                       height: 1.5))),
           onTap: () async {
-            if (user["tipo"] != null){
+            if (user["tipo"] != null) {
               globalValues.comanda = {
                 'A': [],
                 'B': [],
@@ -208,10 +210,12 @@ class _assignedTaskListState extends State<assignedTaskList> {
                   loadStorageData();
                 }));
               }
-
-            }else{
+            } else {
+              // bool refresh = await Navigator.of(context).push(MaterialPageRoute(
+              //   builder: (context) => pasosAlumno(user, listaAsignacion[i]["id"] ),
+              // ));
               bool refresh = await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => pasosAlumno(user, listaAsignacion[i]["id"] ),
+                builder: (context) => landingPageTarea(),
               ));
               if (refresh) {
                 setState((() {
@@ -219,7 +223,6 @@ class _assignedTaskListState extends State<assignedTaskList> {
                 }));
               }
             }
-
           }));
 
   Widget buildSearch() => SearchWidget(
