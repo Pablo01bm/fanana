@@ -1,4 +1,5 @@
 import 'package:fanana/Pages/admin/usersPage.dart';
+import 'package:fanana/Pages/alumnos/assignedTaskList.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
@@ -43,11 +44,11 @@ class _landingPageDefaultState extends State<landingPageDefault> {
                       fit: BoxFit.fill,
                       //height: queryData.size.height * 0.7,
                       width: queryData.size.width * 0.4,
-                      image: const AssetImage("images/botonUsuarios.png")
+                      image: const AssetImage("images/tareasButton.png")
                     ),
                   onPressed: () {
                     Navigator.of(context).push(
-                    new MaterialPageRoute(builder: (context) => new usersPage()));
+                    new MaterialPageRoute(builder: (context) => new assignedTaskList()));
                   },
               ),
               SizedBox(height: 30,),

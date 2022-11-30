@@ -16,6 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
+    globalValues.esComanda = false;
     super.initState();
 
     connect();

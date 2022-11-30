@@ -153,7 +153,7 @@ class _tasksPageState extends State<tasksPage> {
                       fontSize: queryData.size.width * 0.03,
                       color: Colors.black,
                       height: 1.5))),
-          subtitle: Text("Nº pasos: " + (user.length - 4).toString(),
+          subtitle: Text("Nº pasos: " + (user["pasos"].length).toString(),
               style: GoogleFonts.fredokaOne(
                   textStyle: TextStyle(
                       fontSize: queryData.size.width * 0.02,

@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:fanana/Pages/addUser.dart';
 import 'package:fanana/Pages/admin/userMenu.dart';
+import 'package:fanana/Pages/services/taskService.dart';
 import 'package:fanana/Pages/services/userService.dart';
 import 'package:fanana/Pages/utils/globalValues.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -8,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:fanana/components/searchBar.dart';
+import 'package:intl/intl.dart';
 
 import 'landingPageAdmin.dart';
 
@@ -27,6 +31,8 @@ class _assignTaskState extends State<assignTask> {
   late List<dynamic> users = [];
   late MediaQueryData queryData;
   String query = '';
+  late String idAssignacion;
+  late List<dynamic> listaAsignacion;
   
 
   @override
@@ -39,9 +45,34 @@ class _assignTaskState extends State<assignTask> {
   void loadStorageData() async {
     _userList = userService().getUserInfo();
 
-    if (_userList != null) {
-      loading = false;
-    }
+    taskService().getAssign().then((value) {
+      listaAsignacion = value;
+    });
+
+    //print(listaAsignacion.toString());
+    //Future.delayed(const Duration(milliseconds: 1000), () {
+    Future.delayed(const Duration(milliseconds: 600), () {
+      
+      var allAssigned = listaAsignacion;
+
+      print(allAssigned.toString());
+
+      for (int i = 0; i < allAssigned.length; i++) {
+        //print(allAssigned[i]);
+        if (allAssigned[i]["id_tarea"] == widget.user["id"]) {
+          idAssignacion = allAssigned[i]["id"];
+          //print("HolaDENTRO");
+        }
+      }  
+
+    });
+
+      if (_userList != null) {
+        loading = false;
+        
+      }
+    //});
+    
   }
 
   @override
@@ -54,17 +85,18 @@ class _assignTaskState extends State<assignTask> {
               future: _userList,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
+                  
                   allUsers = snapshot.data as List<dynamic>;
                   users.clear();
 
                   for (int i = 0; i < allUsers.length; i++) {
                     final userName = allUsers[i]["nombre"].toLowerCase();
                     final userSurname = allUsers[i]["apellidos"].toLowerCase();
+                    final tipoUser = allUsers[i]["tipo"].toLowerCase();
                     // final userEmail = allUsers[i].mail.toLowerCase(); //aqui poner la condicion de buscar por clase
                     final input = query.toLowerCase();
 
-                    if (userName.contains(input) ||
-                        userSurname.contains(input)) {
+                    if ((userName.contains(input) || userSurname.contains(input) ) && tipoUser.contains("alumno")) {
                       users.add(allUsers[i]);
                     }
                   }
@@ -73,15 +105,19 @@ class _assignTaskState extends State<assignTask> {
                   print(snapshot.error);
                   return Text('Error loading users');
                 }
-
+            
                 return Center(
                     child: Container(child: CircularProgressIndicator()));
               })
-          : SizedBox.shrink(),
+          : Center(
+                  child: Container(child: CircularProgressIndicator()))
     );
   }
 
+
+
   Widget getBody() {
+    
     return Container(
         margin: EdgeInsets.only(
             left: queryData.size.width * 0.1,
@@ -108,16 +144,31 @@ class _assignTaskState extends State<assignTask> {
                   child: buildSearch(),
                 ),
                 SizedBox(width: queryData.size.width * 0.01),
-                TextButton(
-                   child:  Text("Desasignar tarea"),
-                   //Image(
-                  //     fit: BoxFit.fill,
-                  //     width: queryData.size.width * 0.18,
-                  //     image: AssetImage("images/aniadir.png")),
-                  onPressed: () async {
-                   
-                  },
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      child: Image(
+                          fit: BoxFit.fill,
+                          width: queryData.size.width * 0.18,
+                          image: AssetImage("images/desasignar.png")),
+                      onPressed: () async {
+                        taskService().deleteAssign(idAssignacion);
+                        Navigator.of(context).pop(true);
+                      },
+                    ),
+                    TextButton(
+                      child: Image(
+                          fit: BoxFit.fill,
+                          width: queryData.size.width * 0.18,
+                          image: AssetImage("images/cancelar.png")),
+                      onPressed: () async {
+                        Navigator.of(context).pop(true);
+                      },
+                    ),
+                  ],
                 ),
+                
               ],
             ),
             SizedBox(
@@ -144,9 +195,9 @@ class _assignTaskState extends State<assignTask> {
               ? Color.fromARGB(255, 255, 247, 160)
               : Color.fromARGB(255, 255, 252, 221),
           leading: CircleAvatar(
-            child: Icon(Icons.person_sharp),
-            // backgroundColor: Colors.orange,
-            // foregroundColor: Colors.white,
+            child: Image(
+              image: NetworkImage(user["imagen"]),
+            ),
           ),
           title: Text(user["nombre"] + " " + user["apellidos"],
               style: GoogleFonts.fredokaOne(
@@ -161,6 +212,25 @@ class _assignTaskState extends State<assignTask> {
                       color: Color.fromARGB(255, 51, 51, 51),
                       height: 1.5))),
           onTap: () async {
+            if(widget.user["asignado"] == "false"){
+              var rng = new Random();
+              var code = rng.nextInt(90000000) + 10000000;
+              String id = code.toString();
+
+              var now = new DateTime.now();
+              var formatter = new DateFormat('dd-MM-yyyy');
+              String formattedDate = formatter.format(now);
+
+              await taskService().createAssign(id, user["id"], widget.user["id"], formattedDate, formattedDate);
+
+                Future.delayed(const Duration(milliseconds: 1000), () {
+                  Navigator.of(context).pop(true);
+                });
+            }else{
+              await taskService().updateAlummnoAssign(idAssignacion, user["id"]);
+            }
+            
+
             // globalValues.nuevo = false;
             // bool refresh = await Navigator.of(context).push(MaterialPageRoute(
             //   builder: (context) => userMenu(user),
