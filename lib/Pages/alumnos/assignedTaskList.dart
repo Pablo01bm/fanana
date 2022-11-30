@@ -2,6 +2,7 @@ import 'package:fanana/Pages/addTask.dart';
 import 'package:fanana/Pages/admin/assignTask.dart';
 import 'package:fanana/Pages/admin/userMenu.dart';
 import 'package:fanana/Pages/comandaClase.dart';
+import 'package:fanana/Pages/pasosAlumno.dart';
 import 'package:fanana/Pages/services/taskService.dart';
 import 'package:fanana/Pages/services/userService.dart';
 import 'package:fanana/Pages/taskAdmin.dart';
@@ -184,7 +185,7 @@ class _assignedTaskListState extends State<assignedTaskList> {
                       fontSize: queryData.size.width * 0.03,
                       color: Colors.black,
                       height: 1.5))),
-          subtitle: Text("Nº pasos: " + (user.length - 4).toString(),
+          subtitle: Text("Nº pasos: " + (user["pasos"].length).toString(),
               style: GoogleFonts.fredokaOne(
                   textStyle: TextStyle(
                       fontSize: queryData.size.width * 0.02,
@@ -192,8 +193,15 @@ class _assignedTaskListState extends State<assignedTaskList> {
                       height: 1.5))),
           onTap: () async {
             if (user["tipo"] != null){
+              globalValues.comanda = {
+                'A': [],
+                'B': [],
+                'C': [],
+                'D': [],
+                'E': []
+              };
               bool refresh = await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => comandaClase(user),
+                builder: (context) => comandaClase(user["id"]),
               ));
               if (refresh) {
                 setState((() {
@@ -201,6 +209,15 @@ class _assignedTaskListState extends State<assignedTaskList> {
                 }));
               }
 
+            }else{
+              bool refresh = await Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => pasosAlumno(user, listaAsignacion[i]["id"] ),
+              ));
+              if (refresh) {
+                setState((() {
+                  loadStorageData();
+                }));
+              }
             }
 
           }));

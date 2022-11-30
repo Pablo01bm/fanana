@@ -1,5 +1,6 @@
 import 'package:fanana/Pages/admin/tasksPage.dart';
 import 'package:fanana/Pages/comandaList.dart';
+import 'package:fanana/Pages/services/taskService.dart';
 import 'package:fanana/Pages/utils/globalValues.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -8,8 +9,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:email_validator/email_validator.dart';
 
 class comandaClase extends StatefulWidget {
+
   final comanda;
-  const comandaClase(Map<String, dynamic> this.comanda, {super.key});
+
+  const comandaClase(this.comanda, {super.key});
 
   @override
   State<comandaClase> createState() => _comandaClaseState();
@@ -55,7 +58,7 @@ class _comandaClaseState extends State<comandaClase> {
                 ]),
                 onPressed: () {
                   Navigator.of(context).push(new MaterialPageRoute(
-                      builder: (context) => new comandaList("A", widget.comanda)));
+                      builder: (context) => new comandaList("A")));
                 },
               ),
               SizedBox(
@@ -76,7 +79,7 @@ class _comandaClaseState extends State<comandaClase> {
                 ]),
                 onPressed: () {
                   Navigator.of(context).push(new MaterialPageRoute(
-                      builder: (context) => new comandaList("B", widget.comanda)));
+                      builder: (context) => new comandaList("B")));
                 },
               ),
               SizedBox(
@@ -97,7 +100,7 @@ class _comandaClaseState extends State<comandaClase> {
                 ]),
                 onPressed: () {
                   Navigator.of(context).push(new MaterialPageRoute(
-                      builder: (context) => new comandaList("C", widget.comanda)));
+                      builder: (context) => new comandaList("C")));
                 },
               ),
               SizedBox(
@@ -118,7 +121,7 @@ class _comandaClaseState extends State<comandaClase> {
                 ]),
                 onPressed: () {
                   Navigator.of(context).push(new MaterialPageRoute(
-                      builder: (context) => new comandaList("D", widget.comanda)));
+                      builder: (context) => new comandaList("D")));
                 },
               ),
               SizedBox(
@@ -139,7 +142,7 @@ class _comandaClaseState extends State<comandaClase> {
                 ]),
                 onPressed: () {
                   Navigator.of(context).push(new MaterialPageRoute(
-                      builder: (context) => new comandaList("E", widget.comanda)));
+                      builder: (context) => new comandaList("E")));
                 },
               ),
               SizedBox(
@@ -162,7 +165,11 @@ class _comandaClaseState extends State<comandaClase> {
                           fontSize: queryData.size.width * 0.04,
                           color: Color.fromARGB(255, 0, 0, 0)))),
             ]),
-            onPressed: () {},
+            onPressed: () {
+
+              taskService().updateComanda(widget.comanda, globalValues.comanda);
+              Navigator.pop(context);
+            },
           ),
         ],
       ),

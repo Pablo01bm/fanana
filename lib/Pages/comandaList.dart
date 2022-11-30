@@ -14,9 +14,8 @@ import 'package:fanana/components/searchBar.dart';
 
 class comandaList extends StatefulWidget {
   String letraclase = "";
-  var comanda;
 
-  comandaList(this.letraclase, this.comanda, {super.key});
+  comandaList(this.letraclase, {super.key});
 
   @override
   State<comandaList> createState() => _comandaListState();
@@ -66,24 +65,6 @@ class _comandaListState extends State<comandaList> {
                   allTasks = snapshot.data as List<dynamic>;
                   tasks.clear();
 
-                  if (globalValues.comanda[widget.letraclase].length == 0) {
-                    Map<String, dynamic> comandaX = {
-                      'nombre': 'Menú sin carne',
-                      'cantidad': 0
-                    };
-                    Map<String, dynamic> comandaY = {
-                      'nombre': 'Menú sin gluten',
-                      'cantidad': 0
-                    };
-                    Map<String, dynamic> comandaZ = {
-                      'nombre': 'Menú completo',
-                      'cantidad': 0
-                    };
-                    globalValues.comanda[widget.letraclase].add(comandaX);
-                    globalValues.comanda[widget.letraclase].add(comandaY);
-                    globalValues.comanda[widget.letraclase].add(comandaZ);
-                  }
-
                   for (int i = 0;
                       i < globalValues.comanda[widget.letraclase].length;
                       i++) {
@@ -123,10 +104,10 @@ class _comandaListState extends State<comandaList> {
             Expanded(
               child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: widget.comanda["comandas"].length + 1,
+                  itemCount: tasks.length + 1,
                   itemBuilder: (context, index) {
-                    if (index != widget.comanda["comandas"].length) {
-                      final contact = widget.comanda["comandas"][widget.letraclase][index];
+                    if (index != tasks.length) {
+                      final contact = tasks[index];
                       return buildContact(contact, index);
                     } else {
                       return aniade();
@@ -146,19 +127,6 @@ class _comandaListState extends State<comandaList> {
                             color: Color.fromARGB(255, 0, 0, 0)))),
               ]),
               onPressed: () {
-                
-
-                taskService().updateComanda(widget.comanda["id"], globalValues.comanda);
-
-                globalValues.comanda = {
-                  'A': [],
-                  'B': [],
-                  'C': [],
-                  'D': [],
-                  'E': []
-                };
-
-                Navigator.pop(context);
                 Navigator.pop(context);
               },
             ),
@@ -219,11 +187,7 @@ class _comandaListState extends State<comandaList> {
                   'cantidad': 0
                 };
                 globalValues.comanda[widget.letraclase].add(comandaNUEVA);
-                taskService().updateComanda(widget.comanda["id"], globalValues.comanda);
                 aniadiendo = false;
-                setState(() {
-                  
-                });
               });
             },
           ),

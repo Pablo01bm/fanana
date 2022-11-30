@@ -251,4 +251,22 @@ updateAlummnoAssign(String id, String idAlumno) async {
 
 }
 
+updateCompletadaAssign(String id, String feedback) async {
+  List<dynamic> lista = ['tarea'];
+  final client = http.Client();
+ 
+  try {
+    String url = "10.0.2.2:5050";
+    var uri = Uri.http(url, 'agregar_completado/$id/$feedback');
+    print("URL: "+uri.toString());
+    var response = await http.put(uri);
+    
+  }catch (SocketException){
+    print(SocketException);
+    return Future.error("Error no se ha podido conectar");
+
+  }
+
+}
+
 }
