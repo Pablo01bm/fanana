@@ -202,10 +202,17 @@ class _usersPageState extends State<usersPage> {
       child: Text("Continuar"),
       onPressed: () {
         userService().deleteUser(id);
-        Navigator.pop(context);
-        setState(() {
-          loadStorageData();
+        
+        Future.delayed(const Duration(milliseconds: 1000), () {
+          Navigator.of(context).pop(true);
+                        Navigator.of(context).pop(true);
+                        Navigator.of(context).push(
+                        new MaterialPageRoute(builder: (context) => new usersPage()));
+                      
+              
+        
         });
+    
         
       },
     );

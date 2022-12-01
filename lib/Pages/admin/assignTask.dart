@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:fanana/Pages/addUser.dart';
+import 'package:fanana/Pages/admin/tasksPage.dart';
 import 'package:fanana/Pages/admin/userMenu.dart';
 import 'package:fanana/Pages/services/taskService.dart';
 import 'package:fanana/Pages/services/userService.dart';
@@ -154,7 +155,12 @@ class _assignTaskState extends State<assignTask> {
                           image: AssetImage("images/desasignar.png")),
                       onPressed: () async {
                         taskService().deleteAssign(idAssignacion);
-                        Navigator.of(context).pop(true);
+                        Future.delayed(const Duration(milliseconds: 1000), () {
+                          Navigator.of(context).pop(true);
+                          Navigator.of(context).pop(true);
+                          Navigator.of(context).push(
+                          new MaterialPageRoute(builder: (context) => new tasksPage()));
+                        });
                       },
                     ),
                     TextButton(
@@ -225,9 +231,20 @@ class _assignTaskState extends State<assignTask> {
 
                 Future.delayed(const Duration(milliseconds: 1000), () {
                   Navigator.of(context).pop(true);
-                });
+                        Navigator.of(context).pop(true);
+                        Navigator.of(context).push(
+                        new MaterialPageRoute(builder: (context) => new tasksPage()));
+                      
+                 });
             }else{
               await taskService().updateAlummnoAssign(idAssignacion, user["id"]);
+              Future.delayed(const Duration(milliseconds: 1000), () {
+                  Navigator.of(context).pop(true);
+                        Navigator.of(context).pop(true);
+                        Navigator.of(context).push(
+                        new MaterialPageRoute(builder: (context) => new tasksPage()));
+                      
+              });
             }
             
 

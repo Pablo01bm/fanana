@@ -7,6 +7,7 @@ import 'package:fanana/Pages/services/taskService.dart';
 import 'package:fanana/Pages/services/userService.dart';
 import 'package:fanana/Pages/taskAdmin.dart';
 import 'package:fanana/Pages/utils/globalValues.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
@@ -179,13 +180,13 @@ class _assignedTaskListState extends State<assignedTaskList> {
           tileColor: !i.isOdd
               ? Color.fromARGB(255, 255, 247, 160)
               : Color.fromARGB(255, 255, 252, 221),
-          title: Text(user["enunciado"],
+          title: Text(user["enunciado"].toString().toUpperCase(),
               style: GoogleFonts.fredokaOne(
                   textStyle: TextStyle(
                       fontSize: queryData.size.width * 0.03,
                       color: Colors.black,
                       height: 1.5))),
-          subtitle: Text("Nº pasos: " + (user["pasos"].length).toString(),
+          subtitle: Text("Nº PASOS: " + (user["pasos"].length).toString(),
               style: GoogleFonts.fredokaOne(
                   textStyle: TextStyle(
                       fontSize: queryData.size.width * 0.02,
@@ -230,4 +231,6 @@ class _assignedTaskListState extends State<assignedTaskList> {
       this.query = query;
     });
   }
+
+  
 }

@@ -333,6 +333,21 @@ class _userMenuState extends State<userMenu> {
                   ]),
                   onPressed: () async{
                     
+                        resetPassword();
+                        final snackBar = SnackBar(
+                        backgroundColor: Color.fromARGB(255, 0, 0, 0),
+                        
+                        content: const Text('SE HA ENVIADO UN CORREO DE RECUPERACIÓN'),
+                        action: SnackBarAction(
+                          textColor: Colors.white,
+                          label: 'OK',
+                          onPressed: () {
+                            // Some code to undo the change.
+                          },
+                        )
+                    );
+                    
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   },
                 ),
               ),
@@ -396,5 +411,10 @@ class _userMenuState extends State<userMenu> {
         ),
       ),
     ]));
+  }
+
+
+  Future resetPassword() async {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text);
   }
 }

@@ -129,24 +129,24 @@ class _addTaskState extends State<addTask> {
           SizedBox(
             width: queryData.size.width * 0.1,
           ),
-          TextButton(
-            child: Stack(alignment: Alignment.center, children: <Widget>[
-              Image(
-                  fit: BoxFit.fill,
-                  width: queryData.size.width * 0.09,
-                  image: AssetImage("assets/borrar.png")),
-              Text("Borrar",
-                  style: GoogleFonts.fredokaOne(
-                      textStyle: TextStyle(
-                          fontSize: queryData.size.width * 0.02,
-                          color: Color.fromARGB(255, 0, 0, 0)))),
-            ]),
-            onPressed: () {
-              taskService().deleteTask(widget.task!["id"]);
-              Navigator.of(context).pushReplacement(
-                  new MaterialPageRoute(builder: (context) => new tasksPage()));
-            },
-          ),
+          // TextButton(
+          //   child: Stack(alignment: Alignment.center, children: <Widget>[
+          //     Image(
+          //         fit: BoxFit.fill,
+          //         width: queryData.size.width * 0.09,
+          //         image: AssetImage("assets/borrar.png")),
+          //     Text("Borrar",
+          //         style: GoogleFonts.fredokaOne(
+          //             textStyle: TextStyle(
+          //                 fontSize: queryData.size.width * 0.02,
+          //                 color: Color.fromARGB(255, 0, 0, 0)))),
+          //   ]),
+          //   onPressed: () {
+          //     taskService().deleteTask(widget.task!["id"]);
+          //     Navigator.of(context).pushReplacement(
+          //         new MaterialPageRoute(builder: (context) => new tasksPage()));
+          //   },
+          // ),
           TextButton(
             child: Stack(alignment: Alignment.center, children: <Widget>[
               Image(
@@ -182,13 +182,23 @@ class _addTaskState extends State<addTask> {
                 if (!globalValues.esComanda){
                   taskService()
                       .createTask(code.toString(), titulo!, descripcion!, paso!);
-                  Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                      builder: (context) => new tasksPage()));
+                  Future.delayed(const Duration(milliseconds: 1000), () {
+                  Navigator.of(context).pop(true);
+                        Navigator.of(context).pop(true);
+                        Navigator.of(context).push(
+                        new MaterialPageRoute(builder: (context) => new tasksPage()));
+                      
+                 });
                 }else{
                   taskService()
                       .createComanda(code.toString(), titulo!, descripcion!, tipoTarea!);
-                  Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                      builder: (context) => new tasksPage()));
+                 Future.delayed(const Duration(milliseconds: 1000), () {
+                  Navigator.of(context).pop(true);
+                        Navigator.of(context).pop(true);
+                        Navigator.of(context).push(
+                        new MaterialPageRoute(builder: (context) => new tasksPage()));
+                      
+                 });
                 }
               }
             },

@@ -70,7 +70,7 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: Colors.white,
       body: Container(
         alignment: Alignment.center,
-        child: Image.asset("images/sus.png",
+        child: Image.asset("images/fananaLogo.png",
             width: MediaQuery.of(context).size.width / 1.5,
             fit: BoxFit.scaleDown),
       ),
