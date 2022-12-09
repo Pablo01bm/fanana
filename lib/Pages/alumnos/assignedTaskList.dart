@@ -215,14 +215,14 @@ class _assignedTaskListState extends State<assignedTaskList> {
               // bool refresh = await Navigator.of(context).push(MaterialPageRoute(
               //   builder: (context) => pasosAlumno(user, listaAsignacion[i]["id"] ),
               // ));
-              bool refresh = await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => landingPageTarea(),
+              await Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => landingPageTarea(user),
               ));
-              if (refresh) {
-                setState((() {
-                  loadStorageData();
-                }));
-              }
+              // if (refresh) {
+              //   setState((() {
+              //     loadStorageData();
+              //   }));
+              // }
             }
           }));
 

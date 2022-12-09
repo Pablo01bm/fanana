@@ -11,7 +11,10 @@ import 'package:fanana/Pages/utils/globalValues.dart';
 import '../admin/tasksPage.dart';
 
 class landingPageTarea extends StatefulWidget {
-  const landingPageTarea({super.key});
+
+  final task;
+
+  const landingPageTarea(this.task, {super.key});
 
   @override
   State<landingPageTarea> createState() => _landingPageTareaState();
@@ -20,30 +23,30 @@ class landingPageTarea extends StatefulWidget {
 class _landingPageTareaState extends State<landingPageTarea> {
   late MediaQueryData queryData;
   late List<dynamic> listaAsignacion = [];
-  int i = 0;
-  Map<String, dynamic> user = <String, dynamic>{};
+  
+  // Map<String, dynamic> user = <String, dynamic>{};
 
   @override
   Widget build(BuildContext context) {
     queryData = MediaQuery.of(context);
-    return Scaffold(body: mainMenuDefault(user, i, listaAsignacion));
+    return Scaffold(body: mainMenuDefault(widget.task));
   }
 
   Widget mainMenuDefault(
-      Map<String, dynamic> user, int i, List<dynamic> listaAsignacion) {
+      Map<String, dynamic> user) {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Text("NOMBRE TAREA", //Aqui debe mostrar el nombre de la tarea pulsada
+          Text(widget.task["enunciado"].toString().toUpperCase(), //Aqui debe mostrar el nombre de la tarea pulsada
               style: GoogleFonts.fredokaOne(
                   textStyle: TextStyle(fontSize: queryData.size.width * 0.04))),
           SizedBox(
             height: 30,
           ),
           Text(
-              "Descripción de la tarea", //Aqui debe mostrar la descripción de la tarea
+              widget.task["descripcion"].toString().toUpperCase(), //Aqui debe mostrar la descripción de la tarea
               style: GoogleFonts.fredokaOne(
                   textStyle: TextStyle(fontSize: queryData.size.width * 0.04))),
           SizedBox(
@@ -61,7 +64,7 @@ class _landingPageTareaState extends State<landingPageTarea> {
             onPressed: () {
               Navigator.of(context).push(new MaterialPageRoute(
                   builder: (context) =>
-                      pasosAlumno(user, listaAsignacion[i]["id"])));
+                      pasosAlumno(user, user["id"])));
             },
           ),
           SizedBox(

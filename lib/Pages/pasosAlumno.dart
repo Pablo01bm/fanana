@@ -9,7 +9,7 @@ import 'dart:math' as math;
 class Usuario{
   String foto;
   String nombre;
-  
+
   Usuario({required this.foto, required this.nombre});
 }
 
@@ -58,7 +58,7 @@ class _pasosAlumnoState extends State<pasosAlumno> {
               future: _userList,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                 
+
                   return mainMenuPicto();
                 } else if (snapshot.hasError) {
                   print(snapshot.error);
@@ -75,7 +75,7 @@ class _pasosAlumnoState extends State<pasosAlumno> {
   Widget mainMenuPicto (){
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      
+
       children: <Widget>[
         arrow(true),
         users(),
@@ -134,12 +134,12 @@ class _pasosAlumnoState extends State<pasosAlumno> {
                     image: AssetImage("assets/selectablearrow.png")
                   ),
                 ),
-                
+
                 onPressed: () {setState(() {
                                 posicion++;
                               });},
               ),
-            
+
           ]
         );
   }
@@ -183,15 +183,15 @@ class _pasosAlumnoState extends State<pasosAlumno> {
               Navigator.of(context).pop(true);
             },
           ),
-                
+
               ],
             ),
-          
+
           ]
         );
   }
 
-  
+
 
 
 }
