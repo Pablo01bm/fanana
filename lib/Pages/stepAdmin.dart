@@ -242,9 +242,16 @@ final descriptionController = TextEditingController();
           onPressed: () { 
             widget.task!["pasos"][widget.index]["imagen"]  = nombreImagen;
             widget.task!["pasos"][widget.index]["titulo"] = descriptionController.text;
-            taskService().modifySteps(widget.task!["id"], widget.task!["pasos"][widget.index].toString());
-            Navigator.of(context).pushReplacement(
-                new MaterialPageRoute(builder: (context) => new tasksPage()));
+
+            Map<String, dynamic> aux = {"titulo": descriptionController.text, "imagen":nombreImagen};
+            
+            widget.task!["pasos"].add(aux);
+            int i = widget.task!["pasos"].length-2 ;
+            taskService().addSteps(widget.task!["id"], aux, i.toString());
+
+            //taskService().addSteps(widget.task!["id"], widget.task!["pasos"][widget.index].toString());
+            Navigator.of(context).pop(true);
+            Navigator.of(context).pop(true);
           },
         ),
       ]

@@ -1,4 +1,4 @@
-import 'package:fanana/Pages/landingPageDefault.dart';
+import 'package:fanana/Pages/alumnos/landingPageDefault.dart';
 import 'package:fanana/Pages/utils/globalValues.dart';
 import "package:flutter/material.dart";
 import 'dart:async';
@@ -16,6 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
+    globalValues.esComanda = false;
     super.initState();
 
     connect();
@@ -69,7 +70,7 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: Colors.white,
       body: Container(
         alignment: Alignment.center,
-        child: Image.asset("images/sus.png",
+        child: Image.asset("images/fananaLogo.png",
             width: MediaQuery.of(context).size.width / 1.5,
             fit: BoxFit.scaleDown),
       ),

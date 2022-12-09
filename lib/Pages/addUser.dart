@@ -1,7 +1,9 @@
+//import 'dart:html';
 import 'dart:io';
 
 import 'package:fanana/Pages/admin/usersPage.dart';
 import 'package:fanana/Pages/pictoConfig.dart';
+import 'package:fanana/Pages/pictoPasswd.dart';
 import 'package:fanana/Pages/services/userService.dart';
 import 'package:fanana/Pages/utils/globalValues.dart';
 import 'package:file_picker/file_picker.dart';
@@ -13,8 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:fanana/components/searchBar.dart';
-
-
 
 const List<String> lista_clase = <String>["A", "B", "C", "D"];
 const List<String> lista_login = <String>["Pictograma", "Default"];
@@ -77,16 +77,16 @@ class _adduserState extends State<adduser> {
 
   @override
   void initState() {
-
-      nombre = "";
-      apellidos =  "";
-      tipo_login = "Pictograma";
-      tipo = "Alumno";
-      clase = "A";
-      email = "";
-      user = "";
-      dni = "";
-      nombreImagen = "https://firebasestorage.googleapis.com/v0/b/fanana-dev.appspot.com/o/userImages%2Fbanana.jpg?alt=media&token=13b9921d-3699-4bfe-9a4c-88d7db8f66f0";
+    nombre = "";
+    apellidos = "";
+    tipo_login = "Pictograma";
+    tipo = "Alumno";
+    clase = "A";
+    email = "";
+    user = "";
+    dni = "";
+    nombreImagen =
+        "https://firebasestorage.googleapis.com/v0/b/fanana-dev.appspot.com/o/userImages%2Fbanana.jpg?alt=media&token=13b9921d-3699-4bfe-9a4c-88d7db8f66f0";
 
     dniController.addListener(() {
       setState(() {
@@ -100,7 +100,7 @@ class _adduserState extends State<adduser> {
       });
     });
 
-     userController.addListener(() {
+    userController.addListener(() {
       setState(() {
         user = userController.text;
       });
@@ -311,8 +311,8 @@ class _adduserState extends State<adduser> {
                   final snapshot = await uploadTask.whenComplete(() {});
                   final urlDownload = await snapshot.ref.getDownloadURL();
                   setState(() {
-                      nombreImagen = urlDownload.toString();
-                    });
+                    nombreImagen = urlDownload.toString();
+                  });
                 },
               ),
             ),
@@ -328,68 +328,68 @@ class _adduserState extends State<adduser> {
                 ),
               ),
             ),
-            if(tipo_login != "Pictograma")
-            SizedBox(
-              width: queryData.size.width * 0.4,
-              child: TextField(
-                controller: emailController,
-                decoration: InputDecoration(
-                  labelText: "Email:",
-                  labelStyle: GoogleFonts.fredokaOne(
-                      textStyle:
-                          TextStyle(fontSize: queryData.size.width * 0.03)),
+            if (tipo_login != "Pictograma")
+              SizedBox(
+                width: queryData.size.width * 0.4,
+                child: TextField(
+                  controller: emailController,
+                  decoration: InputDecoration(
+                    labelText: "Email:",
+                    labelStyle: GoogleFonts.fredokaOne(
+                        textStyle:
+                            TextStyle(fontSize: queryData.size.width * 0.03)),
+                  ),
                 ),
               ),
-            ),
-            if(tipo_login == "Pictograma")
-            FittedBox(
-              fit: BoxFit.fill,
-              child: InkWell(
-                onTap: () {},
-                child: TextButton(
-                  child: Stack(alignment: Alignment.center, children: <Widget>[
-                    Image(
-                        fit: BoxFit.fill,
-                        width: queryData.size.width * 0.15,
-                        image: AssetImage("assets/aceptar.png")),
-                    Text("Crear contraseña",
-                        style: GoogleFonts.fredokaOne(
-                            textStyle: TextStyle(
-                                fontSize: queryData.size.width * 0.015,
-                                color: Color.fromARGB(255, 0, 0, 0)))),
-                  ]),
-                  onPressed: () async{
-                    
-                    Navigator.of(context).push(new MaterialPageRoute(
-                        builder: (context) => new pictoConfig()));
-                  },
-                ),
-              ),
-            ),
-            if(tipo_login != "Pictograma")
-            SizedBox(
-              width: queryData.size.width * 0.4,
-              child: TextField(
-                controller: contraseniaController,
-                obscureText: visiblePass,
-                decoration: InputDecoration(
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      visiblePass ? Icons.visibility : Icons.visibility_off,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        visiblePass = !visiblePass;
-                      });
+            if (tipo_login == "Pictograma")
+              FittedBox(
+                fit: BoxFit.fill,
+                child: InkWell(
+                  onTap: () {},
+                  child: TextButton(
+                    child:
+                        Stack(alignment: Alignment.center, children: <Widget>[
+                      Image(
+                          fit: BoxFit.fill,
+                          width: queryData.size.width * 0.15,
+                          image: AssetImage("assets/aceptar.png")),
+                      Text("Crear contraseña",
+                          style: GoogleFonts.fredokaOne(
+                              textStyle: TextStyle(
+                                  fontSize: queryData.size.width * 0.015,
+                                  color: Color.fromARGB(255, 0, 0, 0)))),
+                    ]),
+                    onPressed: () async {
+                      Navigator.of(context).push(new MaterialPageRoute(
+                          builder: (context) => new pictoConfig()));
                     },
                   ),
-                  labelText: "Introduzca contraseña:",
-                  labelStyle: GoogleFonts.fredokaOne(
-                      textStyle:
-                          TextStyle(fontSize: queryData.size.width * 0.03)),
                 ),
               ),
-            ),
+            if (tipo_login != "Pictograma")
+              SizedBox(
+                width: queryData.size.width * 0.4,
+                child: TextField(
+                  controller: contraseniaController,
+                  obscureText: visiblePass,
+                  decoration: InputDecoration(
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        visiblePass ? Icons.visibility : Icons.visibility_off,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          visiblePass = !visiblePass;
+                        });
+                      },
+                    ),
+                    labelText: "Introduzca contraseña:",
+                    labelStyle: GoogleFonts.fredokaOne(
+                        textStyle:
+                            TextStyle(fontSize: queryData.size.width * 0.03)),
+                  ),
+                ),
+              ),
             FittedBox(
               fit: BoxFit.fill,
               child: InkWell(
@@ -406,20 +406,76 @@ class _adduserState extends State<adduser> {
                                 fontSize: queryData.size.width * 0.025,
                                 color: Color.fromARGB(255, 0, 0, 0)))),
                   ]),
-                  onPressed: () async{
-                   // FirebaseAuth.instance.createUserWithEmailAndPassword(email: email!, password: contrasenia!);
-                   if(tipo_login != "Pictograma"){
-                      await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email!, password: contrasenia!);
-                      await userService().createUser(nombre!,
-                        apellidos!, user!, tipo_login!, tipo!, email!, clase!, nombreImagen!, "nula");
-                      }else{
-                        await userService().createUser(nombre!,
-                        apellidos!, user!, tipo_login!, tipo!,"nula", clase!, nombreImagen!, globalValues.pictopass);
+                  onPressed: () async {
+                    // FirebaseAuth.instance.createUserWithEmailAndPassword(email: email!, password: contrasenia!);
+                    if (tipo_login != "Pictograma") {
+                      if (nombre?.isEmpty == true ||
+                          apellidos?.isEmpty == true ||
+                          user?.isEmpty == true ||
+                          contrasenia?.isEmpty == true ||
+                          email?.isEmpty == true) {
+                        final snackBar = SnackBar(
+                            backgroundColor: Colors.redAccent,
+                            content:
+                                const Text('Debe rellenar todos los campos'),
+                            duration: Duration(seconds: 3),
+                            action: SnackBarAction(
+                              textColor: Colors.white,
+                              label: 'OK',
+                              onPressed: () {
+                                // Some code to undo the change.
+                              },
+                            ));
+
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      } else {
+                        Navigator.of(context).pop(true);
                       }
-                    
-                    
-                    Navigator.of(context).pop(true);
-                      
+
+                      await FirebaseAuth.instance
+                          .createUserWithEmailAndPassword(
+                              email: email!, password: contrasenia!);
+                      await userService().createUser(
+                          nombre!,
+                          apellidos!,
+                          user!,
+                          tipo_login!,
+                          tipo!,
+                          email!,
+                          clase!,
+                          nombreImagen!,
+                          "nula");
+                    } else if (nombre?.isEmpty == true ||
+                        apellidos?.isEmpty == true ||
+                        user?.isEmpty == true ||
+                        globalValues.pictopass.isEmpty == true) {
+                      final snackBar = SnackBar(
+                          backgroundColor: Colors.redAccent,
+                          content: const Text('Debe rellenar todos los campos'),
+                          duration: Duration(seconds: 3),
+                          action: SnackBarAction(
+                            textColor: Colors.white,
+                            label: 'OK',
+                            onPressed: () {
+                              // Some code to undo the change.
+                            },
+                          ));
+
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    } else {
+                      await userService().createUser(
+                          nombre!,
+                          apellidos!,
+                          user!,
+                          tipo_login!,
+                          tipo!,
+                          "nula",
+                          clase!,
+                          nombreImagen!,
+                          globalValues.pictopass);
+
+                      Navigator.of(context).pop(true);
+                    }
                   },
                 ),
               ),

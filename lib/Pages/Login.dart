@@ -1,4 +1,4 @@
-import 'package:fanana/Pages/landingPageDefault.dart';
+import 'package:fanana/Pages/alumnos/landingPageDefault.dart';
 import 'package:fanana/Pages/landingPagePicto.dart';
 import 'package:fanana/Pages/splash.dart';
 import 'package:fanana/Pages/utils/globalValues.dart';

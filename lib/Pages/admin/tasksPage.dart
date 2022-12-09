@@ -1,4 +1,5 @@
 import 'package:fanana/Pages/addTask.dart';
+import 'package:fanana/Pages/admin/assignTask.dart';
 import 'package:fanana/Pages/admin/userMenu.dart';
 import 'package:fanana/Pages/services/taskService.dart';
 import 'package:fanana/Pages/services/userService.dart';
@@ -27,6 +28,7 @@ class _tasksPageState extends State<tasksPage> {
   late List<dynamic> tasks = [];
   late MediaQueryData queryData;
   String query = '';
+  late bool asigando ;
 
   @override
   void initState() {
@@ -151,21 +153,44 @@ class _tasksPageState extends State<tasksPage> {
                       fontSize: queryData.size.width * 0.03,
                       color: Colors.black,
                       height: 1.5))),
-          subtitle: Text("Nº pasos: " + (user.length - 3).toString(),
+          subtitle: Text("Nº pasos: " + (user["pasos"].length).toString(),
               style: GoogleFonts.fredokaOne(
                   textStyle: TextStyle(
                       fontSize: queryData.size.width * 0.02,
                       color: Color.fromARGB(255, 51, 51, 51),
                       height: 1.5))),
-          trailing: IconButton(
-            icon: Icon(Icons.delete, size: 40),
-            onPressed: () {
-              howAlertDialog(context, user["id"]);
-            },
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                icon: user["asignado"] == "true"
+                  ? Icon(Icons.assignment_ind, size: 40)
+                  : Icon(Icons.assignment_late, size: 40)
+                ,
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => assignTask((user["asignado"] == "true"),  user),));
+                  },
+              ),
+              IconButton(
+                icon: Icon(Icons.delete, size: 40),
+                onPressed: () {
+                  howAlertDialog(context, user["id"]);
+                },
+              ),
+            ]
           ),
-          onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => taskAdmin(user),
-              ))));
+          onTap: () async {
+            bool refresh = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => taskAdmin(user),
+            ));
+
+            if(refresh){
+              setState(((){
+                loadStorageData();
+              }));
+            }
+          }));
 
   howAlertDialog(BuildContext context, String id) {
     // set up the buttons
