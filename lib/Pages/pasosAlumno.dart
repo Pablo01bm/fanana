@@ -4,9 +4,10 @@ import 'package:fanana/Pages/services/taskService.dart';
 import 'package:fanana/Pages/services/userService.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'dart:async';
 import 'dart:math' as math;
 
-class Usuario{
+class Usuario {
   String foto;
   String nombre;
 
@@ -14,7 +15,6 @@ class Usuario{
 }
 
 class pasosAlumno extends StatefulWidget {
-
   final paso;
   final idAsignacion;
   const pasosAlumno(this.paso, this.idAsignacion, {super.key});
@@ -26,12 +26,12 @@ class pasosAlumno extends StatefulWidget {
 class _pasosAlumnoState extends State<pasosAlumno> {
   late MediaQueryData queryData;
   late Future<List<dynamic>> _userList;
-   late List<dynamic> allUsers = [];
+  late List<dynamic> allUsers = [];
   String query = '';
   bool loading = true;
   int posicion = 0;
 
-    @override
+  @override
   void initState() {
     loadStorageData();
     super.initState();
@@ -45,8 +45,6 @@ class _pasosAlumnoState extends State<pasosAlumno> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     queryData = MediaQuery.of(context);
@@ -58,7 +56,6 @@ class _pasosAlumnoState extends State<pasosAlumno> {
               future: _userList,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-
                   return mainMenuPicto();
                 } else if (snapshot.hasError) {
                   print(snapshot.error);
@@ -72,10 +69,9 @@ class _pasosAlumnoState extends State<pasosAlumno> {
     );
   }
 
-  Widget mainMenuPicto (){
+  Widget mainMenuPicto() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
       children: <Widget>[
         arrow(true),
         users(),
@@ -84,115 +80,121 @@ class _pasosAlumnoState extends State<pasosAlumno> {
     );
   }
 
-  Widget arrow(bool left){
+  Widget arrow(bool left) {
     return Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-          children: <Widget>[
-            if(posicion != 0 && left)
-              TextButton(
-                child: Image(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          if (posicion != 0 && left)
+            TextButton(
+              child: Image(
                   fit: BoxFit.fill,
                   width: queryData.size.width * 0.12,
-                  image: AssetImage("assets/selectablearrow.png")
-                  ),
-                onPressed: () {setState(() {
-                                posicion--;
-                              });
-                              },
-              ),
-            if(posicion == 0 && left)
-                TextButton(
-                child: Image(
-                  fit: BoxFit.fill,
-                  width: queryData.size.width * 0.12,
-                  image: AssetImage("assets/volver.png")
-                  ),
-                onPressed: () {Navigator.pop(context);},
-              ),
-            if(posicion == widget.paso["pasos"].length-1 && !left) 
-              Container(
-                padding: const EdgeInsets.all(8.0),
-                child: Transform(
-                  alignment: Alignment.center,
-                  transform: Matrix4.rotationY(math.pi),
-                  child: Image(
-                    fit: BoxFit.fill,
-                    width: queryData.size.width * 0.12,
-                    image: AssetImage("assets/unselectablearrow.png")
-                  ),
-                ),
-              ),
-              if(posicion < widget.paso["pasos"].length-1 && !left) 
-              TextButton(
-                child: Transform(
-                  alignment: Alignment.center,
-                  transform: Matrix4.rotationY(math.pi),
-                  child: Image(
-                    fit: BoxFit.fill,
-                    width: queryData.size.width * 0.12,
-                    image: AssetImage("assets/selectablearrow.png")
-                  ),
-                ),
-
-                onPressed: () {setState(() {
-                                posicion++;
-                              });},
-              ),
-
-          ]
-        );
-  }
-
-  Widget users(){
-    return Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-          children: <Widget>[
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Text("PASO: "+(posicion+1).toString(), style: GoogleFonts.fredokaOne(
-                  textStyle: TextStyle(fontSize: queryData.size.width*0.04)
-                )),     
-                Text(widget.paso["pasos"][posicion]["titulo"].toString().toUpperCase(), style: GoogleFonts.fredokaOne(
-                  textStyle: TextStyle(fontSize: queryData.size.width*0.02)
-                )), 
-                SizedBox(
-                  height: queryData.size.width>queryData.size.height ?queryData.size.height * 0.4 : null,
-                  width: queryData.size.width<queryData.size.height ?queryData.size.width * 0.4 : null,
-                  child: Image(image: NetworkImage(widget.paso["pasos"][posicion]["imagen"])),
-                ),
-                if(posicion == widget.paso["pasos"].length-1)
-                TextButton(
-            child: Stack(alignment: Alignment.center, children: <Widget>[
-              Image(
-                  fit: BoxFit.fill,
-                  width: queryData.size.width * 0.3,
-                  image: AssetImage("assets/aceptar.png")),
-              Text("¡LISTO!",
-                  style: GoogleFonts.fredokaOne(
-                      textStyle: TextStyle(
-                          fontSize: queryData.size.width * 0.04,
-                          color: Color.fromARGB(255, 0, 0, 0)))),
-            ]),
-            onPressed: () {
-
-              taskService().updateCompletadaAssign(widget.idAsignacion, "");
-              Navigator.of(context).pop(true);
-              Navigator.of(context).pop(true);
-            },
-          ),
-
-              ],
+                  image: AssetImage("assets/selectablearrow.png")),
+              onPressed: () {
+                setState(() {
+                  posicion--;
+                });
+              },
             ),
-
-          ]
-        );
+          if (posicion == 0 && left)
+            TextButton(
+              child: Image(
+                  fit: BoxFit.fill,
+                  width: queryData.size.width * 0.12,
+                  image: AssetImage("assets/volver.png")),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          if (posicion == widget.paso["pasos"].length - 1 && !left)
+            Container(
+              padding: const EdgeInsets.all(8.0),
+              child: Transform(
+                alignment: Alignment.center,
+                transform: Matrix4.rotationY(math.pi),
+                child: Image(
+                    fit: BoxFit.fill,
+                    width: queryData.size.width * 0.12,
+                    image: AssetImage("assets/unselectablearrow.png")),
+              ),
+            ),
+          if (posicion < widget.paso["pasos"].length - 1 && !left)
+            TextButton(
+              child: Transform(
+                alignment: Alignment.center,
+                transform: Matrix4.rotationY(math.pi),
+                child: Image(
+                    fit: BoxFit.fill,
+                    width: queryData.size.width * 0.12,
+                    image: AssetImage("assets/selectablearrow.png")),
+              ),
+              onPressed: () {
+                setState(() {
+                  posicion++;
+                });
+              },
+            ),
+        ]);
   }
 
-
-
-
+  Widget users() {
+    return Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <
+        Widget>[
+      Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Text("PASO: " + (posicion + 1).toString(),
+              style: GoogleFonts.fredokaOne(
+                  textStyle: TextStyle(fontSize: queryData.size.width * 0.04))),
+          Text(
+              widget.paso["pasos"][posicion]["titulo"].toString().toUpperCase(),
+              style: GoogleFonts.fredokaOne(
+                  textStyle: TextStyle(fontSize: queryData.size.width * 0.02))),
+          SizedBox(
+            height: queryData.size.width > queryData.size.height
+                ? queryData.size.height * 0.4
+                : null,
+            width: queryData.size.width < queryData.size.height
+                ? queryData.size.width * 0.4
+                : null,
+            child: Image(
+                image: NetworkImage(widget.paso["pasos"][posicion]["imagen"])),
+          ),
+          if (posicion == widget.paso["pasos"].length - 1)
+            TextButton(
+              child: Stack(alignment: Alignment.center, children: <Widget>[
+                Image(
+                    fit: BoxFit.fill,
+                    width: queryData.size.width * 0.3,
+                    image: AssetImage("assets/aceptar.png")),
+                Text("¡LISTO!",
+                    style: GoogleFonts.fredokaOne(
+                        textStyle: TextStyle(
+                            fontSize: queryData.size.width * 0.04,
+                            color: Color.fromARGB(255, 0, 0, 0)))),
+              ]),
+              onPressed: () {
+                //Aquí va el feedback
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return Dialog(
+                      child: Image(
+                          fit: BoxFit.fill,
+                          width: queryData.size.width * 0.4,
+                          image: AssetImage("images/bienpicto.png")),
+                    );
+                  },
+                );
+                taskService().updateCompletadaAssign(widget.idAsignacion, "");
+                Timer(Duration(seconds: 3), () {
+                  Navigator.of(context).pop(true);
+                  Navigator.of(context).pop(true);
+                });
+              },
+            ),
+        ],
+      ),
+    ]);
+  }
 }
-
