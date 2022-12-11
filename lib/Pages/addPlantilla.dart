@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fanana/Pages/addTask.dart';
 import 'package:fanana/Pages/admin/assignTask.dart';
 import 'package:fanana/Pages/admin/userMenu.dart';
@@ -12,23 +14,26 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:fanana/components/searchBar.dart';
 
-class comandaList extends StatefulWidget {
-  String letraclase = "";
+class addPlantilla extends StatefulWidget {
 
-  comandaList(this.letraclase, {super.key});
+  addPlantilla({super.key});
 
   @override
-  State<comandaList> createState() => _comandaListState();
+  State<addPlantilla> createState() => _addPlantillaState();
 }
 
-class _comandaListState extends State<comandaList> {
+class _addPlantillaState extends State<addPlantilla> {
   bool loading = true;
   late Future<List<dynamic>> _userList;
   late List<dynamic> allTasks = [];
   late List<dynamic> tasks = [];
+  late List<String> menus = [];
   late MediaQueryData queryData;
   String query = '';
   late bool aniadiendo = false;
+  DateTime date = DateTime.now();
+  late DateTime dateIni;
+  late DateTime dateFin;
 
   final elementoController = TextEditingController();
   @override
@@ -41,6 +46,8 @@ class _comandaListState extends State<comandaList> {
   void initState() {
     loadStorageData();
     elementoController.text = "";
+    dateIni = DateTime(date.year, date.month, date.day);
+    dateFin = DateTime(date.year, date.month+1, date.day);
     super.initState();
   }
 
@@ -65,11 +72,7 @@ class _comandaListState extends State<comandaList> {
                   allTasks = snapshot.data as List<dynamic>;
                   tasks.clear();
 
-                  for (int i = 0;
-                      i < globalValues.comanda[widget.letraclase].length;
-                      i++) {
-                    tasks.add(globalValues.comanda[widget.letraclase][i]);
-                  }
+                  
                   return getBody();
                 } else if (snapshot.hasError) {
                   print(snapshot.error);
@@ -95,41 +98,88 @@ class _comandaListState extends State<comandaList> {
             SizedBox(
               height: queryData.size.width * 0.04,
             ),
-            Text("¿QUÉ NECESITAN?",
+            Text("Nuevo menú",
                 style: GoogleFonts.fredokaOne(
                     textStyle: TextStyle(
-                        fontSize: queryData.size.width * 0.04,
+                        fontSize: queryData.size.width * 0.03,
                         color: Colors.black,
                         height: 1.5))),
             Expanded(
               child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: tasks.length,
+                  itemCount: menus.length + 1,
                   itemBuilder: (context, index) {
-                    if (index != tasks.length) {
-                      final contact = tasks[index];
+                    if (index != menus.length) {
+                      final contact = menus[index];
                       return buildContact(contact, index);
                     } else {
                       return aniade();
                     }
                   }),
             ),
-            TextButton(
-              child: Stack(alignment: Alignment.center, children: <Widget>[
-                Image(
-                    fit: BoxFit.fill,
-                    width: queryData.size.width * 0.3,
-                    image: AssetImage("assets/aceptar.png")),
-                Text("¡LISTO!",
-                    style: GoogleFonts.fredokaOne(
-                        textStyle: TextStyle(
-                            fontSize: queryData.size.width * 0.04,
-                            color: Color.fromARGB(255, 0, 0, 0)))),
-              ]),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text('${dateIni.day}-${dateIni.month}-${dateIni.year}', style: GoogleFonts.fredokaOne(
+                            textStyle: TextStyle(
+                                fontSize: queryData.size.width * 0.02,
+                                color: Color.fromARGB(255, 0, 0, 0))),),
+                ElevatedButton(
+                  child: Text('Fecha inicio'),
+                  onPressed: () async {
+                    DateTime? newDate = await showDatePicker(
+                      context: context,
+                      initialDate: dateIni,
+                      firstDate: date, lastDate: dateFin,
+                    );
+
+                    if (newDate == null) return;
+
+                    setState(() => dateIni = newDate);
+                  }
+                ),
+                Text('${dateFin.day}-${dateFin.month}-${dateFin.year}', style: GoogleFonts.fredokaOne(
+                            textStyle: TextStyle(
+                                fontSize: queryData.size.width * 0.02,
+                                color: Color.fromARGB(255, 0, 0, 0))),),
+                ElevatedButton(
+                  child: Text('Fecha fin'),
+                  onPressed: () async {
+                    DateTime? newDate = await showDatePicker(
+                      context: context,
+                      initialDate: dateFin,
+                      firstDate: dateIni, lastDate: DateTime(2100),
+                    );
+
+                    if (newDate == null) return;
+
+                    setState(() => dateFin = newDate);
+                  }
+                ),
+                TextButton(
+                  child: Stack(alignment: Alignment.center, children: <Widget>[
+                    Image(
+                        fit: BoxFit.fill,
+                        width: queryData.size.width * 0.3,
+                        image: AssetImage("assets/aceptar.png")),
+                    Text("LISTO",
+                        style: GoogleFonts.fredokaOne(
+                            textStyle: TextStyle(
+                                fontSize: queryData.size.width * 0.04,
+                                color: Color.fromARGB(255, 0, 0, 0)))),
+                  ]),
+                  onPressed: () {
+                    var rng = new Random();
+                    var code = rng.nextInt(90000000) + 10000000;
+                    String fechaIni = '${dateIni.day}-${dateIni.month}-${dateIni.year}';
+                    String fechaFin = '${dateFin.day}-${dateFin.month}-${dateFin.year}';
+                    taskService().createMenu(code.toString(), fechaIni, fechaFin, menus);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            )
           ],
         ));
   }
@@ -161,7 +211,7 @@ class _comandaListState extends State<comandaList> {
             child: TextFormField(
               controller: elementoController,
               decoration: InputDecoration(
-                hintText: "¿QUÉ MÁS HAN PEDIDO?",
+                hintText: "Nuevo elemento",
                 hintStyle: GoogleFonts.fredokaOne(
                     textStyle:
                         TextStyle(fontSize: queryData.size.width * 0.03)),
@@ -182,54 +232,28 @@ class _comandaListState extends State<comandaList> {
             ]),
             onPressed: () {
               setState(() {
-                Map<String, dynamic> comandaNUEVA = {
-                  'nombre': elementoController.text.toString(),
-                  'cantidad': 0
-                };
-                globalValues.comanda[widget.letraclase].add(comandaNUEVA);
+                menus.add(elementoController.text);
+                elementoController.clear();
                 aniadiendo = false;
               });
             },
           ),
         ]);
 
-  Widget buildContact(Map<String, dynamic> user, int i) => Card(
+  Widget buildContact(String user, int i) => Card(
       elevation: 0,
       child: ListTile(
           tileColor: !i.isOdd
               ? Color.fromARGB(255, 255, 247, 160)
               : Color.fromARGB(255, 255, 252, 221),
-          title: Text(user["nombre"],
+          title: Text(user,
               style: GoogleFonts.fredokaOne(
                   textStyle: TextStyle(
                       fontSize: queryData.size.width * 0.03,
                       color: Colors.black,
                       height: 1.5))),
           trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-            user["cantidad"] != 0
-                ? new IconButton(
-                    icon: new Icon(Icons.remove),
-                    iconSize: 40,
-                    onPressed: () => setState(() => user["cantidad"]--))
-                : new Container(),
-            Text(user["cantidad"].toString(),
-                style: GoogleFonts.fredokaOne(
-                    textStyle: TextStyle(
-                        fontSize: queryData.size.width * 0.03,
-                        color: Colors.black,
-                        height: 1.5))),
-            new IconButton(
-              icon: new Icon(Icons.add),
-              iconSize: 40,
-              onPressed: () => setState(() => user["cantidad"]++),
-            ),
-            SizedBox(width: queryData.size.width * 0.1),
-            IconButton(
-              icon: Icon(Icons.delete, size: 40),
-              onPressed: () {
-                howAlertDialog(context, user["nombre"]);
-              },
-            ),
+            
           ]),
           onTap: () async {}));
 
@@ -244,10 +268,7 @@ class _comandaListState extends State<comandaList> {
     Widget continueButton = TextButton(
       child: Text("Continuar"),
       onPressed: () {
-        print(globalValues.comanda[widget.letraclase].length);
-        globalValues.comanda[widget.letraclase]
-            .removeWhere((item) => item["nombre"] == id);
-        print(globalValues.comanda[widget.letraclase].length);
+       
         Navigator.pop(context);
         setState(() {});
       },

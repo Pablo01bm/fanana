@@ -9,7 +9,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:email_validator/email_validator.dart';
 
 class comandaClase extends StatefulWidget {
-
   final comanda;
 
   const comandaClase(this.comanda, {super.key});
@@ -19,12 +18,58 @@ class comandaClase extends StatefulWidget {
 }
 
 class _comandaClaseState extends State<comandaClase> {
+  bool loading = true;
+  late Future<List<dynamic>> _userList;
+  late List<dynamic> allTasks = [];
+  late List<dynamic> tasks = [];
   late MediaQueryData queryData;
+  String query = '';
+  late bool aniadiendo = false;
+
+  void loadStorageData() async {
+    _userList = taskService().getTaskInfo();
+
+    if (_userList != null) {
+      loading = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     queryData = MediaQuery.of(context);
-    return Scaffold(body: mainMenuDefault());
+    return Scaffold(resizeToAvoidBottomInset: false, body: mainMenuDefault());
+  }
+
+  @override
+  void initState() {
+    for (int i = 0; i < widget.comanda["plantilla"][0]["plantilla"].length; i++) {
+      tasks.add(widget.comanda["plantilla"][0]["plantilla"][i]);
+    }
+    Map<String, dynamic> comandaNUEVA;
+    if (globalValues.comanda["A"].length == 0) {
+      for (int i = 0; i < tasks.length; i++) {
+        comandaNUEVA = {'nombre': tasks[i], 'cantidad': 0};
+        globalValues.comanda["A"].add(comandaNUEVA);
+      }
+      for (int i = 0; i < tasks.length; i++) {
+        comandaNUEVA = {'nombre': tasks[i], 'cantidad': 0};
+        globalValues.comanda["B"].add(comandaNUEVA);
+      }
+      for (int i = 0; i < tasks.length; i++) {
+        comandaNUEVA = {'nombre': tasks[i], 'cantidad': 0};
+        globalValues.comanda["C"].add(comandaNUEVA);
+      }
+      for (int i = 0; i < tasks.length; i++) {
+        comandaNUEVA = {'nombre': tasks[i], 'cantidad': 0};
+        globalValues.comanda["D"].add(comandaNUEVA);
+      }
+      for (int i = 0; i < tasks.length; i++) {
+        comandaNUEVA = {'nombre': tasks[i], 'cantidad': 0};
+        globalValues.comanda["E"].add(comandaNUEVA);
+      }
+    }
+
+    super.initState();
   }
 
   Widget mainMenuDefault() {
@@ -166,8 +211,7 @@ class _comandaClaseState extends State<comandaClase> {
                           color: Color.fromARGB(255, 0, 0, 0)))),
             ]),
             onPressed: () {
-
-              taskService().updateComanda(widget.comanda, globalValues.comanda);
+              taskService().updateComanda(widget.comanda["id"], globalValues.comanda);
               Navigator.pop(context);
             },
           ),
