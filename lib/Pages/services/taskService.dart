@@ -107,6 +107,53 @@ modifyTask(String id,String enun, String desc) async {
 }
 
 //method which modify the task given by id in the database 
+addVideo(String id,String urlVideo) async {
+  List<dynamic> lista = ['tarea'];
+  final client = http.Client();
+  
+  Map <String, dynamic> aux = {"video": urlVideo};
+  
+
+  print(aux);
+  try {
+    String url = "10.0.2.2:5050";
+    var uri = Uri.http(url, 'update/tarea_video/$id', aux);
+    print("URL: "+uri.toString());
+    var response = await http.put(uri, headers:  {"Content-Type": "application/json"});
+    
+  }catch (SocketException){
+    print(SocketException);
+    return Future.error("Error no se ha podido conectar");
+
+  }
+
+}
+
+addAudio(String id,String urlAudio) async {
+  List<dynamic> lista = ['tarea'];
+  final client = http.Client();
+  
+  Map <String, dynamic> aux = {"audio": urlAudio};
+  
+
+  print(aux);
+  try {
+    String url = "10.0.2.2:5050";
+    var uri = Uri.http(url, 'update/tarea_audio/$id', aux);
+    print("URL: "+uri.toString());
+    var response = await http.put(uri, headers:  {"Content-Type": "application/json"});
+    
+  }catch (SocketException){
+    print(SocketException);
+    return Future.error("Error no se ha podido conectar");
+
+  }
+
+}
+
+
+
+//method which modify the task given by id in the database 
 modifySteps(String id,String pasos) async {
   List<dynamic> lista = ['tarea'];
   final client = http.Client();
