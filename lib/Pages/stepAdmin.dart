@@ -246,7 +246,7 @@ final descriptionController = TextEditingController();
             Map<String, dynamic> aux = {"titulo": descriptionController.text, "imagen":nombreImagen};
             
             widget.task!["pasos"].add(aux);
-            int i = widget.task!["pasos"].length-2 ;
+            int i = widget.task!["pasos"].length-3 ;
             taskService().addSteps(widget.task!["id"], aux, i.toString());
 
             //taskService().addSteps(widget.task!["id"], widget.task!["pasos"][widget.index].toString());
