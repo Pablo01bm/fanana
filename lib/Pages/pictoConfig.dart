@@ -29,6 +29,9 @@ class _pictoConfigState extends State<pictoConfig> {
   late List<String> fondos;
   late List<String> icons;
   late List<bool> nulos;
+  late List<String> desmontado;
+  late List<int> orden;
+  late List<String> numeros;
   int contador = 0;
 
   String? uid;
@@ -42,9 +45,12 @@ class _pictoConfigState extends State<pictoConfig> {
   void initState() {
     super.initState();
     password = "";
+    desmontado = globalValues.pictopass.split('');
+
     fondos = [];
     icons = [];
     nulos = [];
+    numeros = [];
     fondos.add("assets/verde.png");
     fondos.add("assets/rojo.png");
     fondos.add("assets/azul.png");
@@ -57,6 +63,12 @@ class _pictoConfigState extends State<pictoConfig> {
     icons.add("assets/perro.png");
     icons.add("assets/sol.png");
     icons.add("assets/mochila.png");
+    numeros.add("assets/1.png");
+    numeros.add("assets/2.png");
+    numeros.add("assets/3.png");
+    numeros.add("assets/4.png");
+    numeros.add("assets/5.png");
+    numeros.add("assets/6.png");
     nulos.add(true);
     nulos.add(true);
     nulos.add(true);
@@ -94,6 +106,14 @@ class _pictoConfigState extends State<pictoConfig> {
                                   height: queryData.size.width>queryData.size.height ?queryData.size.height * 0.4 : null,
                                   width: queryData.size.width<queryData.size.height ?queryData.size.width * 0.22 : null,
                                   image: AssetImage(fondos[i])),
+                              for(int j = 0; j < desmontado.length; j++)
+                                if(contador == 0 && desmontado[j] == i.toString())
+                                  Image(
+                                    //  colorBlendMode: !nulos[i] ? BlendMode.saturation : null,
+                                      fit: BoxFit.fill,
+                                      height: queryData.size.width>queryData.size.height ?queryData.size.height * 0.4 : null,
+                                      width: queryData.size.width<queryData.size.height ?queryData.size.width * 0.22 : null,
+                                      image: AssetImage(numeros[j])),
                               Image(
                                   color: !nulos[i] ?Colors.grey : null,
                                   colorBlendMode: !nulos[i] ? BlendMode.saturation : null,
@@ -146,6 +166,14 @@ class _pictoConfigState extends State<pictoConfig> {
                                   height: queryData.size.width>queryData.size.height ?queryData.size.height * 0.4 : null,
                                   width: queryData.size.width<queryData.size.height ?queryData.size.width * 0.22 : null,
                                   image: AssetImage(fondos[i])),
+                              for(int j = 0; j < desmontado.length; j++)
+                                if(contador == 0 && desmontado[j] == i.toString())
+                                  Image(
+                                    //  colorBlendMode: !nulos[i] ? BlendMode.saturation : null,
+                                      fit: BoxFit.fill,
+                                      height: queryData.size.width>queryData.size.height ?queryData.size.height * 0.4 : null,
+                                      width: queryData.size.width<queryData.size.height ?queryData.size.width * 0.22 : null,
+                                      image: AssetImage(numeros[j])),
                               Image(
                                   color: !nulos[i] ?Colors.grey : null,
                                   colorBlendMode: !nulos[i] ? BlendMode.saturation : null,
