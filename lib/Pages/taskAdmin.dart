@@ -1,5 +1,7 @@
 import 'package:fanana/Pages/addStep.dart';
+import 'package:fanana/Pages/admin/addMultimedia.dart';
 import 'package:fanana/Pages/admin/tasksPage.dart';
+import 'package:fanana/Pages/alumnos/landingPageTarea.dart';
 import 'package:fanana/Pages/services/taskService.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -81,13 +83,63 @@ class _taskAdminState extends State<taskAdmin> {
               tituloField(),
               SizedBox(height: queryData.size.width * 0.04,),
               description(),
-              SizedBox(height: queryData.size.width * 0.04,),
+              SizedBox(height: queryData.size.width * 0.02,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  botonMultimedia(),
+                  botonPreview(),
+                ],
+              ),
+              SizedBox(height: queryData.size.width * 0.02,),
               steps()
             ],
           )
         )
       )
     );
+  }
+  Widget botonMultimedia(){
+    return TextButton(
+              child: Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  Image(
+                      fit: BoxFit.fill,
+                      width: queryData.size.width * 0.2,
+                      image: AssetImage("images/botonAniadirMultimedia.png")),
+                  
+                ]
+              ),
+              onPressed: () {  
+                Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) =>  addMultimedia(widget.task, widget.task!["pasos"].length)),
+                    );
+              },
+            );
+  }
+
+    Widget botonPreview(){
+    return TextButton(
+              child: Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  Image(
+                      fit: BoxFit.fill,
+                      width: queryData.size.width * 0.2,
+                      image: AssetImage("images/botonPrevisualizar.png")),
+                  
+                ]
+              ),
+              onPressed: () {  
+                Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) =>  landingPageTarea(widget.task )),
+                    );
+              },
+            );
   }
 
   Widget header(){

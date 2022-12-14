@@ -1,6 +1,7 @@
 import 'package:fanana/Pages/admin/tasksPage.dart';
 import 'package:fanana/Pages/alumnos/assignedTaskList.dart';
-import 'package:fanana/Pages/alumnos/menuMultimedia.dart';
+import 'package:fanana/Pages/alumnos/tareaAudio.dart';
+import 'package:fanana/Pages/alumnos/tareaVideo.dart';
 import 'package:fanana/main.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -11,17 +12,17 @@ import 'package:fanana/Pages/utils/globalValues.dart';
 
 import '../admin/tasksPage.dart';
 
-class landingPageTarea extends StatefulWidget {
+class menuMultimedia extends StatefulWidget {
 
   final task;
 
-  const landingPageTarea(this.task, {super.key});
+  const menuMultimedia(this.task, {super.key});
 
   @override
-  State<landingPageTarea> createState() => _landingPageTareaState();
+  State<menuMultimedia> createState() => _menuMultimediaState();
 }
 
-class _landingPageTareaState extends State<landingPageTarea> {
+class _menuMultimediaState extends State<menuMultimedia> {
   late MediaQueryData queryData;
   late List<dynamic> listaAsignacion = [];
   
@@ -40,16 +41,12 @@ class _landingPageTareaState extends State<landingPageTarea> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Text(widget.task["enunciado"].toString().toUpperCase(), //Aqui debe mostrar el nombre de la tarea pulsada
+          Text("MULTIMEDIA", //Aqui debe mostrar el nombre de la tarea pulsada
               style: GoogleFonts.fredokaOne(
                   textStyle: TextStyle(fontSize: queryData.size.width * 0.04))),
           SizedBox(
             height: 30,
           ),
-          Text(
-              widget.task["descripcion"].toString().toUpperCase(), //Aqui debe mostrar la descripción de la tarea
-              style: GoogleFonts.fredokaOne(
-                  textStyle: TextStyle(fontSize: queryData.size.width * 0.03))),
           SizedBox(
             height: 30,
           ),
@@ -59,34 +56,32 @@ class _landingPageTareaState extends State<landingPageTarea> {
             children: [
               TextButton(
                 onPressed:() {
-                   Navigator.of(context).push(new MaterialPageRoute(
+                  Navigator.of(context).push(new MaterialPageRoute(
                   builder: (context) =>
-                      menuMultimedia(user)));
+                      tareaVideo(user)));
                 },
                 child: Image(
                   fit: BoxFit.fill,
                   //height: queryData.size.height * 0.7,
                   width: queryData.size.width * 0.3,
-                  image: const AssetImage("images/botonMultimedia.png")),
+                  image: const AssetImage("images/botonVideo.png")),
               ),
               SizedBox(width: 50,),
-              Image(
-                fit: BoxFit.fill,
-                //height: queryData.size.height * 0.7,
-                width: queryData.size.width * 0.3,
-                image: const AssetImage("images/pictocasa.png")),
+               TextButton(
+                onPressed:() {
+                  Navigator.of(context).push(new MaterialPageRoute(
+                  builder: (context) =>
+                      tareaAudio(user)));
+                },
+                child: Image(
+                  fit: BoxFit.fill,
+                  //height: queryData.size.height * 0.7,
+                  width: queryData.size.width * 0.3,
+                  image: const AssetImage("images/botonAudio.png")),
+              ),
             ],
           ),
-          TextButton(
-            child: Image(
-                width: queryData.size.width * 0.2,
-                image: const AssetImage("images/empecemosboton.png")),
-            onPressed: () {
-              Navigator.of(context).push(new MaterialPageRoute(
-                  builder: (context) =>
-                      pasosAlumno(user, user["id"])));
-            },
-          ),
+          
           SizedBox(
             height: 30,
           ),

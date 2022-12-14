@@ -1,3 +1,4 @@
+import 'package:fanana/Pages/admin/menuPage.dart';
 import 'package:fanana/Pages/admin/tasksPage.dart';
 import 'package:fanana/Pages/admin/usersPage.dart';
 import 'package:fanana/Pages/utils/globalValues.dart';
@@ -60,6 +61,19 @@ class _landingPageAdminState extends State<landingPageAdmin> {
                   onPressed: () {
                     Navigator.of(context).push(
                     new MaterialPageRoute(builder: (context) => new tasksPage()));
+                  },
+              ),
+              SizedBox(height: 30,),
+              TextButton(
+                  child: Image(
+                      fit: BoxFit.fill,
+                      //height: queryData.size.height * 0.7,
+                      width: queryData.size.width * 0.4,
+                      image: const AssetImage("images/botonPlantillas.png")
+                    ),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                    new MaterialPageRoute(builder: (context) => new menuPage()));
                   },
               ),
             ],

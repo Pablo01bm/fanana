@@ -27,6 +27,29 @@ Future <List<dynamic>> getTaskInfo() async {
 
 }
 
+//method which call the api and get all the users
+Future <List<dynamic>> getMenuInfo() async {
+  List<dynamic> lista = ['alumno'];
+  final client = http.Client();
+
+  try {
+    String url = "10.0.2.2:5050";
+    var uri = Uri.http(url, 'get/plantillas');
+    //print("URL: "+uri.toString());
+    var response = await http.get(uri);
+
+    lista = json.decode(response.body);
+
+    return lista;
+    
+  }catch (SocketException){
+    print(SocketException);
+    return Future.error("Error no se ha podido conectar");
+
+  }
+
+}
+
 //method which delete the task given by id in the database 
 deleteTask(String idTarea) async {
   List<dynamic> lista = ['tarea'];
@@ -35,6 +58,24 @@ deleteTask(String idTarea) async {
   try {
     String url = "10.0.2.2:5050";
     var uri = Uri.http(url, 'delete/tarea/$idTarea');
+    print("URL: "+uri.toString());
+    var response = await http.delete(uri);
+    
+  }catch (SocketException){
+    print(SocketException);
+    return Future.error("Error no se ha podido conectar");
+
+  }
+
+}
+
+deleteMenu(String idTarea) async {
+  List<dynamic> lista = ['tarea'];
+  final client = http.Client();
+
+  try {
+    String url = "10.0.2.2:5050";
+    var uri = Uri.http(url, 'delete/plantilla/$idTarea');
     print("URL: "+uri.toString());
     var response = await http.delete(uri);
     
@@ -64,6 +105,53 @@ modifyTask(String id,String enun, String desc) async {
   }
 
 }
+
+//method which modify the task given by id in the database 
+addVideo(String id,String urlVideo) async {
+  List<dynamic> lista = ['tarea'];
+  final client = http.Client();
+  
+  Map <String, dynamic> aux = {"video": urlVideo};
+  
+
+  print(aux);
+  try {
+    String url = "10.0.2.2:5050";
+    var uri = Uri.http(url, 'update/tarea_video/$id', aux);
+    print("URL: "+uri.toString());
+    var response = await http.put(uri, headers:  {"Content-Type": "application/json"});
+    
+  }catch (SocketException){
+    print(SocketException);
+    return Future.error("Error no se ha podido conectar");
+
+  }
+
+}
+
+addAudio(String id,String urlAudio) async {
+  List<dynamic> lista = ['tarea'];
+  final client = http.Client();
+  
+  Map <String, dynamic> aux = {"audio": urlAudio};
+  
+
+  print(aux);
+  try {
+    String url = "10.0.2.2:5050";
+    var uri = Uri.http(url, 'update/tarea_audio/$id', aux);
+    print("URL: "+uri.toString());
+    var response = await http.put(uri, headers:  {"Content-Type": "application/json"});
+    
+  }catch (SocketException){
+    print(SocketException);
+    return Future.error("Error no se ha podido conectar");
+
+  }
+
+}
+
+
 
 //method which modify the task given by id in the database 
 modifySteps(String id,String pasos) async {
@@ -119,6 +207,26 @@ createTask(String id,String enunciado, String descripcion, String pasos) async {
     var uri = Uri.http(url, 'post/tarea/$id/$enunciado/$descripcion', pasosFinales);
     print("URL: "+uri.toString());
     var response = await http.post(uri);
+    
+  }catch (SocketException){
+    print(SocketException);
+    return Future.error("Error no se ha podido conectar");
+
+  }
+
+}
+
+createMenu(String id,String fechaIni, String fechaFin, List<String> menus) async {
+  List<dynamic> lista = ['tarea'];
+  final client = http.Client();
+
+  var aux = json.encode(menus);
+  print(aux.toString());
+  try {
+    String url = "10.0.2.2:5050";
+    var uri = Uri.http(url, 'post/plantilla/$id/$fechaIni/$fechaFin');
+    print("URL: "+uri.toString());
+    var response = await http.post(uri, headers:  {"Content-Type": "application/json"}, body: aux);
     
   }catch (SocketException){
     print(SocketException);

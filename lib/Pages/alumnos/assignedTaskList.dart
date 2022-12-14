@@ -204,7 +204,7 @@ class _assignedTaskListState extends State<assignedTaskList> {
                 'E': []
               };
               bool refresh = await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => comandaClase(user["id"]),
+                builder: (context) => comandaClase(user),
               ));
               if (refresh) {
                 setState((() {

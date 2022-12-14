@@ -76,6 +76,7 @@ class _userMenuState extends State<userMenu> {
 
   @override
   void initState() {
+    globalValues.pictopass = widget.userData!["pictopass"];
     if (!globalValues.nuevo) {
       nombreController.text = widget.userData!["nombre"];
       apellidosController.text = widget.userData!["apellidos"];
