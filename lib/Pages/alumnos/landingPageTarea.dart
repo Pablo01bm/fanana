@@ -14,8 +14,9 @@ import '../admin/tasksPage.dart';
 class landingPageTarea extends StatefulWidget {
 
   final task;
+  final idAsignacion;
 
-  const landingPageTarea(this.task, {super.key});
+  const landingPageTarea(this.task, this.idAsignacion, {super.key});
 
   @override
   State<landingPageTarea> createState() => _landingPageTareaState();
@@ -84,7 +85,7 @@ class _landingPageTareaState extends State<landingPageTarea> {
             onPressed: () {
               Navigator.of(context).push(new MaterialPageRoute(
                   builder: (context) =>
-                      pasosAlumno(user, user["id"])));
+                      pasosAlumno(user, widget.idAsignacion)));
             },
           ),
           SizedBox(

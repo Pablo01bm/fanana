@@ -1,4 +1,5 @@
 import 'package:fanana/Pages/addTask.dart';
+import 'package:fanana/Pages/admin/addFeedbackAdmin.dart';
 import 'package:fanana/Pages/admin/assignTask.dart';
 import 'package:fanana/Pages/admin/userMenu.dart';
 import 'package:fanana/Pages/alumnos/landingPageTarea.dart';
@@ -18,14 +19,16 @@ import 'package:fanana/components/searchBar.dart';
 
 //import 'landingPageAdmin.dart';
 
-class assignedTaskList extends StatefulWidget {
-  const assignedTaskList({super.key});
+class assignedTaskListAdmin extends StatefulWidget {
+  final userInfo;
+
+  const assignedTaskListAdmin(this.userInfo, {super.key});
 
   @override
-  State<assignedTaskList> createState() => _assignedTaskListState();
+  State<assignedTaskListAdmin> createState() => _assignedTaskListAdminState();
 }
 
-class _assignedTaskListState extends State<assignedTaskList> {
+class _assignedTaskListAdminState extends State<assignedTaskListAdmin> {
   bool loading = true;
   late Future<List<dynamic>> _userList;
   late List<dynamic> allTasks = [];
@@ -100,7 +103,7 @@ class _assignedTaskListState extends State<assignedTaskList> {
                                   listaAsignacion[j]["id_tarea"] ==
                                       idTareaActual &&
                                   listaAsignacion[j]["id_usuario"] ==
-                                      globalValues.infoUser["id"]) {
+                                      widget.userInfo["id"]) {
                                 tasks.add(allTasks[i]);
                               }
                             }
@@ -140,7 +143,7 @@ class _assignedTaskListState extends State<assignedTaskList> {
             SizedBox(
               height: queryData.size.width * 0.04,
             ),
-            Text("MIS TAREAS",
+            Text("Notas de "+widget.userInfo["nombre"],
                 style: GoogleFonts.fredokaOne(
                     textStyle: TextStyle(
                         fontSize: queryData.size.width * 0.04,
@@ -188,43 +191,33 @@ class _assignedTaskListState extends State<assignedTaskList> {
                       fontSize: queryData.size.width * 0.03,
                       color: Colors.black,
                       height: 1.5))),
-          subtitle: Text("Nº PASOS: " + (user["pasos"].length).toString(),
+          subtitle: Text("Valoración " + (listaAsignacion[i]["feedback"]).toString(),
               style: GoogleFonts.fredokaOne(
                   textStyle: TextStyle(
                       fontSize: queryData.size.width * 0.02,
                       color: Color.fromARGB(255, 51, 51, 51),
                       height: 1.5))),
+          trailing: FittedBox(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text((listaAsignacion[i]["calificacion"]).toString()+"/3",
+                  style: GoogleFonts.fredokaOne(
+                  textStyle: TextStyle(
+                      fontSize: queryData.size.width * 0.03,
+                      color: Colors.black,
+                      height: 1.5))
+                    ),
+              ],
+            ),
+          ),
           onTap: () async {
-            if (user["tipo"] != null) {
-              globalValues.comanda = {
-                'A': [],
-                'B': [],
-                'C': [],
-                'D': [],
-                'E': []
-              };
-              bool refresh = await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => comandaClase(user),
-              ));
-              if (refresh) {
-                setState((() {
-                  loadStorageData();
-                }));
-              }
-            } else {
-              // bool refresh = await Navigator.of(context).push(MaterialPageRoute(
-              //   builder: (context) => pasosAlumno(user, listaAsignacion[i]["id"] ),
-              // ));
-              print(listaAsignacion);
+           
+              
               await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => landingPageTarea(user, listaAsignacion[i]["id"]),
+                builder: (context) => addFeedbackAdmin(listaAsignacion[i]),
               ));
-              // if (refresh) {
-              //   setState((() {
-              //     loadStorageData();
-              //   }));
-              // }
-            }
+             
           }));
 
   Widget buildSearch() => SearchWidget(

@@ -186,7 +186,7 @@ class _pasosAlumnoState extends State<pasosAlumno> {
                     );
                   },
                 );
-                taskService().updateCompletadaAssign(widget.idAsignacion, "");
+                taskService().updateCompletadaAssign(widget.idAsignacion, "true");
                 Timer(Duration(seconds: 3), () {
                   Navigator.of(context).pop(true);
                   Navigator.of(context).pop(true);

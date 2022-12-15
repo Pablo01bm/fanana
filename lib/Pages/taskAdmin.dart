@@ -136,7 +136,7 @@ class _taskAdminState extends State<taskAdmin> {
               onPressed: () {  
                 Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) =>  landingPageTarea(widget.task )),
+                      MaterialPageRoute(builder: (context) =>  landingPageTarea(widget.task, "" )),
                     );
               },
             );
