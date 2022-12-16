@@ -36,20 +36,14 @@ class _logrosListState extends State<logrosList> {
   late List<dynamic> listaAsignacion;
   late Future<List<dynamic>> listaPrimera;
   int cont_logros = 0;
-  String estrella = "1";
-  String dos_estrellas = "2";
-  String tres_estrellas = "3";
+
+  int numero = 0;
+  String imagenEstrella = "";
 
   @override
   void initState() {
     loadStorageData();
     super.initState();
-  }
-
-  void logicaEstrellas() {
-    // if(){
-
-    // }
   }
 
   Future<List<dynamic>> loadData1() async {
@@ -106,12 +100,26 @@ class _logrosListState extends State<logrosList> {
                             final input = query.toLowerCase();
 
                             for (int j = 0; j < listaAsignacion.length; j++) {
+                              //cont_logros = 0;
                               if (userName.contains(input) &&
                                   listaAsignacion[j]["id_tarea"] ==
                                       idTareaActual &&
                                   listaAsignacion[j]["id_usuario"] ==
                                       globalValues.infoUser["id"]) {
                                 tasks.add(allTasks[i]);
+                              }
+
+                              if (listaAsignacion[j]['calificacion'] == "1") {
+                                imagenEstrella = "images/estrellita.png";
+                                cont_logros++;
+                              } else if (listaAsignacion[j]['calificacion'] ==
+                                  "2") {
+                                imagenEstrella = "images/dosEstrellitas.png";
+                                cont_logros += 2;
+                              } else if (listaAsignacion[j]['calificacion'] ==
+                                  "3") {
+                                imagenEstrella = "images/tresEstrellitas.png";
+                                cont_logros += 3;
                               }
                             }
                           }
@@ -218,7 +226,7 @@ class _logrosListState extends State<logrosList> {
             Text(
                 "Nº PASOS: " +
                     (user["pasos"].length).toString() +
-                    "                                                                                            ",
+                    "                                                                    ",
                 style: GoogleFonts.fredokaOne(
                     textStyle: TextStyle(
                         fontSize: queryData.size.width * 0.02,
@@ -227,7 +235,7 @@ class _logrosListState extends State<logrosList> {
             Row(mainAxisAlignment: MainAxisAlignment.end, children: [
               Image(
                 width: queryData.size.width * 0.1,
-                image: AssetImage("images/dosEstrellitas.png"),
+                image: AssetImage(imagenEstrella),
               )
             ])
           ]),
