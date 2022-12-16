@@ -18,14 +18,14 @@ import 'package:fanana/components/searchBar.dart';
 
 //import 'landingPageAdmin.dart';
 
-class assignedTaskList extends StatefulWidget {
-  const assignedTaskList({super.key});
+class logrosList extends StatefulWidget {
+  const logrosList({super.key});
 
   @override
-  State<assignedTaskList> createState() => _assignedTaskListState();
+  State<logrosList> createState() => _logrosListState();
 }
 
-class _assignedTaskListState extends State<assignedTaskList> {
+class _logrosListState extends State<logrosList> {
   bool loading = true;
   late Future<List<dynamic>> _userList;
   late List<dynamic> allTasks = [];
@@ -35,11 +35,21 @@ class _assignedTaskListState extends State<assignedTaskList> {
   late bool asigando;
   late List<dynamic> listaAsignacion;
   late Future<List<dynamic>> listaPrimera;
+  int cont_logros = 0;
+  String estrella = "1";
+  String dos_estrellas = "2";
+  String tres_estrellas = "3";
 
   @override
   void initState() {
     loadStorageData();
     super.initState();
+  }
+
+  void logicaEstrellas() {
+    // if(){
+
+    // }
   }
 
   Future<List<dynamic>> loadData1() async {
@@ -140,7 +150,7 @@ class _assignedTaskListState extends State<assignedTaskList> {
             SizedBox(
               height: queryData.size.width * 0.04,
             ),
-            Text("MIS TAREAS",
+            Text("LOGROS",
                 style: GoogleFonts.fredokaOne(
                     textStyle: TextStyle(
                         fontSize: queryData.size.width * 0.04,
@@ -148,6 +158,22 @@ class _assignedTaskListState extends State<assignedTaskList> {
                         height: 1.5))),
             SizedBox(
               height: queryData.size.width * 0.04,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image(
+                  width: queryData.size.width * 0.1,
+                  image: AssetImage("images/estrellita.png"),
+                ),
+                Text("  x " + cont_logros.toString(),
+                    style: GoogleFonts.fredokaOne(
+                        textStyle: TextStyle(
+                            fontSize: queryData.size.width * 0.04,
+                            color: Colors.black,
+                            height: 1.5)))
+              ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -188,12 +214,23 @@ class _assignedTaskListState extends State<assignedTaskList> {
                       fontSize: queryData.size.width * 0.03,
                       color: Colors.black,
                       height: 1.5))),
-          subtitle: Text("Nº PASOS: " + (user["pasos"].length).toString(),
-              style: GoogleFonts.fredokaOne(
-                  textStyle: TextStyle(
-                      fontSize: queryData.size.width * 0.02,
-                      color: Color.fromARGB(255, 51, 51, 51),
-                      height: 1.5))),
+          subtitle: Row(children: [
+            Text(
+                "Nº PASOS: " +
+                    (user["pasos"].length).toString() +
+                    "                                                                                            ",
+                style: GoogleFonts.fredokaOne(
+                    textStyle: TextStyle(
+                        fontSize: queryData.size.width * 0.02,
+                        color: Color.fromARGB(255, 51, 51, 51),
+                        height: 1.5))),
+            Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+              Image(
+                width: queryData.size.width * 0.1,
+                image: AssetImage("images/dosEstrellitas.png"),
+              )
+            ])
+          ]),
           onTap: () async {
             if (user["tipo"] != null) {
               globalValues.comanda = {
