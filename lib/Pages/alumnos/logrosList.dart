@@ -34,6 +34,7 @@ class _logrosListState extends State<logrosList> {
   String query = '';
   late bool asigando;
   late List<dynamic> listaAsignacion;
+  late List<dynamic> listaFinal = [];
   late Future<List<dynamic>> listaPrimera;
   int cont_logros = 0;
 
@@ -81,6 +82,13 @@ class _logrosListState extends State<logrosList> {
 
                   listaPrimera.then((value) {
                     listaAsignacion = value;
+                    for (int i = 0; i < listaAsignacion.length; i++) {
+                      if (listaAsignacion[i]['id_usuario'] ==
+                              globalValues.infoUser["id"] &&
+                          listaAsignacion[i]['completada'] == "true") {
+                        listaFinal.add(listaAsignacion[i]);
+                      }
+                    }
                   });
 
                   return FutureBuilder(
@@ -108,18 +116,27 @@ class _logrosListState extends State<logrosList> {
                                       globalValues.infoUser["id"]) {
                                 tasks.add(allTasks[i]);
                               }
+                            }
+                          }
 
-                              if (listaAsignacion[j]['calificacion'] == "1") {
-                                imagenEstrella = "images/estrellita.png";
+                          for (int k = 0; k < listaFinal.length; k++) {
+                            if (listaFinal[k]['id_usuario'] ==
+                                globalValues.infoUser["id"]) {
+                              if (listaFinal[k]['calificacion'] == "1") {
+                                //imagenEstrella = "images/estrellita.png";
                                 cont_logros++;
-                              } else if (listaAsignacion[j]['calificacion'] ==
-                                  "2") {
-                                imagenEstrella = "images/dosEstrellitas.png";
+                                print(cont_logros);
+                                print(listaFinal[k]['calificacion']);
+                              } else if (listaFinal[k]['calificacion'] == "2") {
+                                // imagenEstrella = "images/dosEstrellitas.png";
                                 cont_logros += 2;
-                              } else if (listaAsignacion[j]['calificacion'] ==
-                                  "3") {
-                                imagenEstrella = "images/tresEstrellitas.png";
+                                print(cont_logros);
+                                print(listaFinal[k]['calificacion']);
+                              } else if (listaFinal[k]['calificacion'] == "3") {
+                                //imagenEstrella = "images/tresEstrellitas.png";
                                 cont_logros += 3;
+                                print(cont_logros);
+                                print(listaFinal[k]['calificacion']);
                               }
                             }
                           }
@@ -168,19 +185,40 @@ class _logrosListState extends State<logrosList> {
               height: queryData.size.width * 0.04,
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image(
-                  width: queryData.size.width * 0.1,
-                  image: AssetImage("images/estrellita.png"),
-                ),
-                Text("  x " + cont_logros.toString(),
-                    style: GoogleFonts.fredokaOne(
-                        textStyle: TextStyle(
-                            fontSize: queryData.size.width * 0.04,
-                            color: Colors.black,
-                            height: 1.5)))
+                Row(children: [
+                  TextButton(
+                    child: Image(
+                        fit: BoxFit.fitHeight,
+                        width: queryData.size.width * 0.07,
+                        image: AssetImage("assets/volver.png")),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  SizedBox(
+                    height: queryData.size.width * 0.04,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text("                                          "),
+                      Image(
+                        width: queryData.size.width * 0.1,
+                        image: AssetImage("images/estrellita.png"),
+                      ),
+                      Text("  x " + cont_logros.toString(),
+                          style: GoogleFonts.fredokaOne(
+                              textStyle: TextStyle(
+                                  fontSize: queryData.size.width * 0.04,
+                                  color: Colors.black,
+                                  height: 1.5)))
+                    ],
+                  ),
+                ])
               ],
             ),
             Row(
@@ -210,66 +248,92 @@ class _logrosListState extends State<logrosList> {
         ));
   }
 
-  Widget buildContact(Map<String, dynamic> user, int i) => Card(
-      elevation: 0,
-      child: ListTile(
-          tileColor: !i.isOdd
-              ? Color.fromARGB(255, 255, 247, 160)
-              : Color.fromARGB(255, 255, 252, 221),
-          title: Text(user["enunciado"].toString().toUpperCase(),
-              style: GoogleFonts.fredokaOne(
-                  textStyle: TextStyle(
-                      fontSize: queryData.size.width * 0.03,
-                      color: Colors.black,
-                      height: 1.5))),
-          subtitle: Row(children: [
-            Text(
-                "Nº PASOS: " +
-                    (user["pasos"].length).toString() +
-                    "                                                                    ",
+  Widget buildContact(Map<String, dynamic> user, int i) {
+    print(listaFinal.toString() + "AAAAAAAAAAAAAAAAAAAAAAAA");
+
+    if (listaFinal[i]['calificacion'] == "1") {
+      imagenEstrella = "images/estrellita.png";
+      // cont_logros++;
+      //print(cont_logros);
+
+      print("a" + i.toString());
+      print(listaFinal[i]['calificacion']);
+    } else if (listaFinal[i]['calificacion'] == "2") {
+      imagenEstrella = "images/dosEstrellitas.png";
+      // cont_logros += 2;
+      print(cont_logros);
+      print("b" + i.toString());
+      print(listaFinal[i]['calificacion']);
+    } else if (listaFinal[i]['calificacion'] == "3") {
+      imagenEstrella = "images/tresEstrellitas.png";
+      // cont_logros += 3;
+      // print(cont_logros);
+      print("c" + i.toString());
+      print(listaFinal[i]['calificacion']);
+    }
+
+    return Card(
+        elevation: 0,
+        child: ListTile(
+            tileColor: !i.isOdd
+                ? Color.fromARGB(255, 255, 247, 160)
+                : Color.fromARGB(255, 255, 252, 221),
+            title: Text(user["enunciado"].toString().toUpperCase(),
                 style: GoogleFonts.fredokaOne(
                     textStyle: TextStyle(
-                        fontSize: queryData.size.width * 0.02,
-                        color: Color.fromARGB(255, 51, 51, 51),
+                        fontSize: queryData.size.width * 0.03,
+                        color: Colors.black,
                         height: 1.5))),
-            Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-              Image(
-                width: queryData.size.width * 0.1,
-                image: AssetImage(imagenEstrella),
-              )
-            ])
-          ]),
-          onTap: () async {
-            if (user["tipo"] != null) {
-              globalValues.comanda = {
-                'A': [],
-                'B': [],
-                'C': [],
-                'D': [],
-                'E': []
-              };
-              bool refresh = await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => comandaClase(user["id"]),
-              ));
-              if (refresh) {
-                setState((() {
-                  loadStorageData();
-                }));
+            subtitle: Row(children: [
+              Text(
+                  "Nº PASOS: " +
+                      (user["pasos"].length).toString() +
+                      "                                                                    ",
+                  style: GoogleFonts.fredokaOne(
+                      textStyle: TextStyle(
+                          fontSize: queryData.size.width * 0.02,
+                          color: Color.fromARGB(255, 51, 51, 51),
+                          height: 1.5))),
+              Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                Image(
+                  width: queryData.size.width * 0.1,
+                  image: AssetImage(imagenEstrella),
+                )
+              ])
+            ]),
+            onTap: () async {
+              if (user["tipo"] != null) {
+                globalValues.comanda = {
+                  'A': [],
+                  'B': [],
+                  'C': [],
+                  'D': [],
+                  'E': []
+                };
+                bool refresh =
+                    await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => comandaClase(user["id"]),
+                ));
+                if (refresh) {
+                  setState((() {
+                    loadStorageData();
+                  }));
+                }
+              } else {
+                // bool refresh = await Navigator.of(context).push(MaterialPageRoute(
+                //   builder: (context) => pasosAlumno(user, listaAsignacion[i]["id"] ),
+                // ));
+                await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => landingPageTarea(user),
+                ));
+                // if (refresh) {
+                //   setState((() {
+                //     loadStorageData();
+                //   }));
+                // }
               }
-            } else {
-              // bool refresh = await Navigator.of(context).push(MaterialPageRoute(
-              //   builder: (context) => pasosAlumno(user, listaAsignacion[i]["id"] ),
-              // ));
-              await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => landingPageTarea(user),
-              ));
-              // if (refresh) {
-              //   setState((() {
-              //     loadStorageData();
-              //   }));
-              // }
-            }
-          }));
+            }));
+  }
 
   Widget buildSearch() => SearchWidget(
       text: query, hintText: 'Buscar tarea', onChanged: searchContact);
