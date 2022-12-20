@@ -5,14 +5,17 @@ import 'package:web_socket_channel/io.dart';
 import 'package:http/http.dart' as http;
 class userService {
 
+ // String url = "10.0.2.2:5050";
+
+
 //method which call the api and get all the users
 Future <List<dynamic>> getUserInfo() async {
   List<dynamic> lista = ['alumno'];
   final client = http.Client();
 
   try {
-    String url = "10.0.2.2:5050";
-    var uri = Uri.http(url, 'get/usuarios');
+    String url = "fanana-cloud.onrender.com";
+    var uri = Uri.https(url, 'get/usuarios');
     //print("URL: "+uri.toString());
     var response = await http.get(uri);
 
@@ -41,8 +44,8 @@ modifyUser(String id, String nombre, String apellidos, String user, String tipo_
 
   //var body = json.encode(img);
   try {
-    String url = "10.0.2.2:5050";
-    var uri = Uri.http(url, 'update/usuario/$id/$nombre/$apellidos/$user/$tipo_login/$tipo/$email/$clase/$pictopass', img);
+    String url = "fanana-cloud.onrender.com";
+    var uri = Uri.https(url, 'update/usuario/$id/$nombre/$apellidos/$user/$tipo_login/$tipo/$email/$clase/$pictopass', img);
     print("URL: "+uri.toString());
     var response = await http.put(uri );
     
@@ -64,8 +67,8 @@ createUser(String nombre, String apellidos, String user, String tipo_login, Stri
   var img = { "imagen": "${imagen}" };
 
   try {
-    String url = "10.0.2.2:5050";
-    var uri = Uri.http(url, 'post/usuario/$id/$nombre/$apellidos/$user/$tipo_login/$tipo/$email/$clase/$pictopass', img);
+    String url = "fanana-cloud.onrender.com";
+    var uri = Uri.https(url, 'post/usuario/$id/$nombre/$apellidos/$user/$tipo_login/$tipo/$email/$clase/$pictopass', img);
     print("URL: "+uri.toString());
     var response = await http.post(uri);
     
@@ -83,8 +86,8 @@ deleteUser(String idUser) async {
   final client = http.Client();
 
   try {
-    String url = "10.0.2.2:5050";
-    var uri = Uri.http(url, 'delete/usuario/$idUser');
+    String url = "fanana-cloud.onrender.com";
+    var uri = Uri.https(url, 'delete/usuario/$idUser');
     print("URL: "+uri.toString());
     var response = await http.delete(uri);
     
