@@ -37,6 +37,7 @@ class _assignedTaskListAdminState extends State<assignedTaskListAdmin> {
   String query = '';
   late bool asigando;
   late List<dynamic> listaAsignacion;
+  late List<dynamic> listaAsignacion2;
   late Future<List<dynamic>> listaPrimera;
 
   @override
@@ -89,7 +90,7 @@ class _assignedTaskListAdminState extends State<assignedTaskListAdmin> {
                         if (snapshot.hasData) {
                           allTasks = snapshot.data as List<dynamic>;
                           tasks.clear();
-
+                          listaAsignacion2 = [];
                           for (int i = 0; i < allTasks.length; i++) {
                             final userName =
                                 allTasks[i]["enunciado"].toLowerCase();
@@ -105,6 +106,7 @@ class _assignedTaskListAdminState extends State<assignedTaskListAdmin> {
                                   listaAsignacion[j]["id_usuario"] ==
                                       widget.userInfo["id"]) {
                                 tasks.add(allTasks[i]);
+                                listaAsignacion2.add(listaAsignacion[j]);
                               }
                             }
                           }
@@ -191,7 +193,7 @@ class _assignedTaskListAdminState extends State<assignedTaskListAdmin> {
                       fontSize: queryData.size.width * 0.03,
                       color: Colors.black,
                       height: 1.5))),
-          subtitle: Text("Valoración " + (listaAsignacion[i]["feedback"]).toString(),
+          subtitle: Text("Valoración " + (listaAsignacion2[i]["feedback"]).toString(),
               style: GoogleFonts.fredokaOne(
                   textStyle: TextStyle(
                       fontSize: queryData.size.width * 0.02,
@@ -201,7 +203,7 @@ class _assignedTaskListAdminState extends State<assignedTaskListAdmin> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text((listaAsignacion[i]["calificacion"]).toString()+"/3",
+                Text((listaAsignacion2[i]["calificacion"]).toString()+"/3",
                   style: GoogleFonts.fredokaOne(
                   textStyle: TextStyle(
                       fontSize: queryData.size.width * 0.03,
@@ -215,7 +217,7 @@ class _assignedTaskListAdminState extends State<assignedTaskListAdmin> {
            
               
               await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => addFeedbackAdmin(listaAsignacion[i]),
+                builder: (context) => addFeedbackAdmin(listaAsignacion2[i]),
               ));
              
           }));

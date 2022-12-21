@@ -475,6 +475,9 @@ class _adduserState extends State<adduser> {
                           globalValues.pictopass);
 
                       Navigator.of(context).pop(true);
+                      Navigator.of(context).pop(true);
+                      Navigator.of(context).push(
+                        new MaterialPageRoute(builder: (context) => new usersPage()));
                     }
                   },
                 ),

@@ -88,13 +88,14 @@ deleteMenu(String idTarea) async {
 }
 
 //method which modify the task given by id in the database 
-modifyTask(String id,String enun, String desc) async {
+modifyTask(String id,String enun, String desc, String pasos) async {
   List<dynamic> lista = ['tarea'];
   final client = http.Client();
+  Map<String,dynamic> pasosMap = {"pasos": pasos};
 
   try {
     String url = "fanana-cloud.onrender.com";
-    var uri = Uri.https(url, 'update/tarea/$id/$enun/$desc');
+    var uri = Uri.https(url, 'update/tarea/$id/$enun/$desc', pasosMap);
     print("URL: "+uri.toString());
     var response = await http.put(uri);
     

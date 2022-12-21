@@ -1,6 +1,7 @@
 // ignore_for_file: sort_child_properties_last
 
 import 'package:fanana/Pages/alumnos/landingPageDefault.dart';
+import 'package:fanana/Pages/splash.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -124,10 +125,10 @@ class _pictoPasswdState extends State<pictoPasswd> {
                             var globalValues;
                             //globalValues.user = widget.task!["email"]!.substring(0, widget.task!["email"]!.indexOf('@'));
                             // print("Usuario"+ user!.toString());
-                            Navigator.pushReplacement(
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => landingPageDefault()),
+                                  builder: (context) => SplashScreen()),
                             );
                           }
                         }
@@ -177,11 +178,11 @@ class _pictoPasswdState extends State<pictoPasswd> {
                             print("Login correcto");
                             var globalValues;
                             //globalValues.user = widget.task!["email"]!.substring(0, widget.task!["email"]!.indexOf('@'));
-                            // print("Usuario"+ user!.toString());
-                            Navigator.pushReplacement(
+                            // print("Usuario"+ user!.toStrings());
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => landingPageDefault()),
+                                  builder: (context) => SplashScreen()),
                             );
                           }
                         }

@@ -93,7 +93,7 @@ class _menuPageState extends State<menuPage> {
             SizedBox(
               height: queryData.size.width * 0.04,
             ),
-            Text("Plantillas comanadas",
+            Text("Plantillas comandas",
                 style: GoogleFonts.fredokaOne(
                     textStyle: TextStyle(
                         fontSize: queryData.size.width * 0.04,
@@ -193,7 +193,7 @@ class _menuPageState extends State<menuPage> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Atención!"),
-      content: Text("Seguro que quieres eliminar el usuario: ${id}"),
+      content: Text("Seguro que quieres eliminar la plantilla: ${id}"),
       actions: [
         cancelButton,
         continueButton,

@@ -23,6 +23,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
     Future.delayed(const Duration(milliseconds: 1000), () {
       checkUser();
+      if (globalValues.infoUser["tipo"] == "Alumno" && globalValues.infoUser["pictopass"] != "nula" ){
+        checkUserPP();
+      }
+      
     });
 
     Future.delayed(const Duration(milliseconds: 2000), () {
@@ -44,6 +48,15 @@ class _SplashScreenState extends State<SplashScreen> {
   void checkUser(){
     for (int i = 0; i < listaGeneral.length && !encontrado; i++){
       if (listaGeneral[i]["user"] == globalValues.user){
+        globalValues.infoUser = listaGeneral[i];
+        encontrado = true;
+        //if (listaGeneral[i])
+      }
+    }
+  }
+  void checkUserPP(){
+    for (int i = 0; i < listaGeneral.length && !encontrado; i++){
+      if (listaGeneral[i]["nombre"] == globalValues.user){
         globalValues.infoUser = listaGeneral[i];
         encontrado = true;
         //if (listaGeneral[i])

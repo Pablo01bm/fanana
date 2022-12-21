@@ -96,11 +96,11 @@ class _comandaListState extends State<comandaList> {
               height: queryData.size.width * 0.04,
             ),
             Text("¿QUÉ NECESITAN?",
-                style: GoogleFonts.fredokaOne(
-                    textStyle: TextStyle(
-                        fontSize: queryData.size.width * 0.04,
-                        color: Colors.black,
-                        height: 1.5))),
+                style: TextStyle(
+                  fontFamily: "Escolar_G",
+                  fontSize: queryData.size.width*0.05,
+                  fontWeight: FontWeight.w200
+                ), ),
             Expanded(
               child: ListView.builder(
                   shrinkWrap: true,
@@ -121,10 +121,12 @@ class _comandaListState extends State<comandaList> {
                     width: queryData.size.width * 0.3,
                     image: AssetImage("assets/aceptar.png")),
                 Text("¡LISTO!",
-                    style: GoogleFonts.fredokaOne(
-                        textStyle: TextStyle(
-                            fontSize: queryData.size.width * 0.04,
-                            color: Color.fromARGB(255, 0, 0, 0)))),
+                    style: TextStyle(
+                  fontFamily: "Escolar_G",
+                  fontSize: queryData.size.width*0.05,
+                  fontWeight: FontWeight.w200,
+                  color: Colors.black
+                ), ),
               ]),
               onPressed: () {
                 Navigator.pop(context);
@@ -143,10 +145,12 @@ class _comandaListState extends State<comandaList> {
                   width: queryData.size.width * 0.2,
                   image: AssetImage("assets/aceptar.png")),
               Text("NUEVO ELEMENTO",
-                  style: GoogleFonts.fredokaOne(
-                      textStyle: TextStyle(
-                          fontSize: queryData.size.width * 0.017,
-                          color: Color.fromARGB(255, 0, 0, 0)))),
+                  style: TextStyle(
+                  fontFamily: "Escolar_G",
+                  fontSize: queryData.size.width*0.02,
+                  fontWeight: FontWeight.w200,
+                  color: Colors.black
+                ), ),
             ]),
             onPressed: () {
               setState(() {
@@ -162,9 +166,12 @@ class _comandaListState extends State<comandaList> {
               controller: elementoController,
               decoration: InputDecoration(
                 hintText: "¿QUÉ MÁS HAN PEDIDO?",
-                hintStyle: GoogleFonts.fredokaOne(
-                    textStyle:
-                        TextStyle(fontSize: queryData.size.width * 0.03)),
+                hintStyle: TextStyle(
+                  fontFamily: "Escolar_G",
+                  fontSize: queryData.size.width*0.04,
+                  fontWeight: FontWeight.w200,
+                  color: Colors.black
+                ), 
               ),
             ),
           ),
@@ -175,10 +182,12 @@ class _comandaListState extends State<comandaList> {
                   width: queryData.size.width * 0.2,
                   image: AssetImage("assets/aceptar.png")),
               Text("AÑADIR",
-                  style: GoogleFonts.fredokaOne(
-                      textStyle: TextStyle(
-                          fontSize: queryData.size.width * 0.017,
-                          color: Color.fromARGB(255, 0, 0, 0)))),
+                  style:TextStyle(
+                  fontFamily: "Escolar_G",
+                  fontSize: queryData.size.width*0.02,
+                  fontWeight: FontWeight.w200,
+                  color: Colors.black
+                ), ),
             ]),
             onPressed: () {
               setState(() {
@@ -200,11 +209,12 @@ class _comandaListState extends State<comandaList> {
               ? Color.fromARGB(255, 255, 247, 160)
               : Color.fromARGB(255, 255, 252, 221),
           title: Text(user["nombre"],
-              style: GoogleFonts.fredokaOne(
-                  textStyle: TextStyle(
-                      fontSize: queryData.size.width * 0.03,
-                      color: Colors.black,
-                      height: 1.5))),
+              style: TextStyle(
+                  fontFamily: "Escolar_G",
+                  fontSize: queryData.size.width*0.05,
+                  fontWeight: FontWeight.w200,
+                  color: Colors.black
+                ), ),
           trailing: Row(mainAxisSize: MainAxisSize.min, children: [
             user["cantidad"] != 0
                 ? new IconButton(
@@ -213,11 +223,12 @@ class _comandaListState extends State<comandaList> {
                     onPressed: () => setState(() => user["cantidad"]--))
                 : new Container(),
             Text(user["cantidad"].toString(),
-                style: GoogleFonts.fredokaOne(
-                    textStyle: TextStyle(
-                        fontSize: queryData.size.width * 0.03,
-                        color: Colors.black,
-                        height: 1.5))),
+                style: TextStyle(
+                  fontFamily: "Escolar_G",
+                  fontSize: queryData.size.width*0.04,
+                  fontWeight: FontWeight.w200,
+                  color: Colors.black
+                ), ),
             new IconButton(
               icon: new Icon(Icons.add),
               iconSize: 40,
@@ -256,7 +267,7 @@ class _comandaListState extends State<comandaList> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Atención!"),
-      content: Text("Seguro que quieres eliminar el usuario: ${id}"),
+      content: Text("Seguro que quieres eliminar la comanda: ${id}"),
       actions: [
         cancelButton,
         continueButton,

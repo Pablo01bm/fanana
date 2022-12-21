@@ -285,7 +285,7 @@ class _assignTaskState extends State<assignTask> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Atención!"),
-      content: Text("Seguro que quieres eliminar el usuario: ${id}"),
+      content: Text("Seguro que quieres eliminar la tarea: ${id}"),
       actions: [
         cancelButton,
         continueButton,

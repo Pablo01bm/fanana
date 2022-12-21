@@ -141,13 +141,13 @@ class _assignedTaskListState extends State<assignedTaskList> {
               height: queryData.size.width * 0.04,
             ),
             Text("MIS TAREAS",
-                style: GoogleFonts.fredokaOne(
-                    textStyle: TextStyle(
-                        fontSize: queryData.size.width * 0.04,
-                        color: Colors.black,
-                        height: 1.5))),
+                style: TextStyle(
+                  fontFamily: "Escolar_G",
+                  fontSize: queryData.size.width*0.07,
+                  fontWeight: FontWeight.w200
+                ), ),
             SizedBox(
-              height: queryData.size.width * 0.04,
+              height: queryData.size.width * 0.02,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -183,17 +183,17 @@ class _assignedTaskListState extends State<assignedTaskList> {
               ? Color.fromARGB(255, 255, 247, 160)
               : Color.fromARGB(255, 255, 252, 221),
           title: Text(user["enunciado"].toString().toUpperCase(),
-              style: GoogleFonts.fredokaOne(
-                  textStyle: TextStyle(
-                      fontSize: queryData.size.width * 0.03,
-                      color: Colors.black,
-                      height: 1.5))),
+              style: TextStyle(
+                  fontFamily: "Escolar_G",
+                  fontSize: queryData.size.width*0.04,
+                  fontWeight: FontWeight.bold
+                ), ),
           subtitle: Text("Nº PASOS: " + (user["pasos"].length).toString(),
-              style: GoogleFonts.fredokaOne(
-                  textStyle: TextStyle(
-                      fontSize: queryData.size.width * 0.02,
-                      color: Color.fromARGB(255, 51, 51, 51),
-                      height: 1.5))),
+              style: TextStyle(
+                  fontFamily: "Escolar_G",
+                  fontSize: queryData.size.width*0.03,
+                  fontWeight: FontWeight.w200
+                ), ),
           onTap: () async {
             if (user["tipo"] != null) {
               globalValues.comanda = {

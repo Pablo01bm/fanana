@@ -33,8 +33,11 @@ class _landingPageDefaultState extends State<landingPageDefault> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Text("HOLA, ${globalValues.user.toUpperCase()}!",
-              style: GoogleFonts.fredokaOne(
-                  textStyle: TextStyle(fontSize: queryData.size.width * 0.04))),
+              style: TextStyle(
+                  fontFamily: "Escolar_G",
+                  fontSize: queryData.size.width*0.06,
+                  fontWeight: FontWeight.w200
+                ), ),
           SizedBox(
             height: 30,
           ),

@@ -429,6 +429,9 @@ class _userMenuState extends State<userMenu> {
                     userService().modifyUser(widget.userData!["id"], nombre!,
                         apellidos!, user!, tipo_login!, tipo!, email!, clase!, pictogrampassword, nombreImagen!);
                     Navigator.of(context).pop(true);
+                    Navigator.of(context).pop(true);
+                    Navigator.of(context).push(
+                        new MaterialPageRoute(builder: (context) => new usersPage()));
                   },
                 ),
               ),
