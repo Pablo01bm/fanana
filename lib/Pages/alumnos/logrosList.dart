@@ -132,7 +132,7 @@ class _logrosListState extends State<logrosList> {
                                 "3") {
                               
                               imagenEstrella =
-                                  "images/tresEstrellitas_low.v1.png";
+                                  "images/tresEstrellas.png";
                               cont_logros += 3;
                               
                             }
@@ -246,7 +246,7 @@ class _logrosListState extends State<logrosList> {
         //cont_logros += 2;
       } else if (listaAsignacion2[i]['calificacion'] == "3") {
         
-        imagenEstrella = "images/tresEstrellitas_low.v1.png";
+        imagenEstrella = "images/tresEstrellas.png";
         //cont_logros += 3;
       }
   return Card(
