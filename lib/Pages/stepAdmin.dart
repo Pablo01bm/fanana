@@ -163,7 +163,8 @@ final descriptionController = TextEditingController();
         SizedBox(
           width: 100,
           height: 100,
-          child: Image(image: NetworkImage(nombreImagen)),
+          child: nombreImagen.characters.length > 4? Image(image: NetworkImage(nombreImagen))
+                                      : SizedBox.shrink()
           ),
         TextButton(
               child: Stack(
@@ -246,12 +247,19 @@ final descriptionController = TextEditingController();
             Map<String, dynamic> aux = {"titulo": descriptionController.text, "imagen":nombreImagen};
             
             widget.task!["pasos"].add(aux);
-            int i = widget.task!["pasos"].length-3 ;
-            taskService().addSteps(widget.task!["id"], aux, i.toString());
+            int i = widget.task!["pasos"].length ;
+            taskService().addSteps(widget.task!["id"], aux, widget.index.toString());
 
             //taskService().addSteps(widget.task!["id"], widget.task!["pasos"][widget.index].toString());
-            Navigator.of(context).pop(true);
-            Navigator.of(context).pop(true);
+            Future.delayed(const Duration(milliseconds: 1000), () {
+              Navigator.of(context).pop(true);
+              Navigator.of(context).pop(true);
+              Navigator.of(context).pop(true);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>  tasksPage()),
+              );
+            });
           },
         ),
       ]

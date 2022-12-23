@@ -1,4 +1,5 @@
 
+import 'package:fanana/Pages/admin/assignedTaskListAdmin.dart';
 import 'package:fanana/Pages/admin/usersPage.dart';
 import 'package:fanana/Pages/pictoPasswd.dart';
 import 'package:fanana/Pages/services/userService.dart';
@@ -386,6 +387,30 @@ class _userMenuState extends State<userMenu> {
                   child: Stack(alignment: Alignment.center, children: <Widget>[
                     Image(
                         fit: BoxFit.fill,
+                        width: queryData.size.width * 0.15,
+                        image: AssetImage("assets/aceptar.png")),
+                    Text("Ver notas",
+                        style: GoogleFonts.fredokaOne(
+                            textStyle: TextStyle(
+                                fontSize: queryData.size.width * 0.015,
+                                color: Color.fromARGB(255, 0, 0, 0)))),
+                  ]),
+                  onPressed: () async{
+                    
+                    Navigator.of(context).push(new MaterialPageRoute(
+                        builder: (context) => new assignedTaskListAdmin(widget.userData)));
+                  },
+                ),
+              ),
+            ),
+            FittedBox(
+              fit: BoxFit.fill,
+              child: InkWell(
+                onTap: () {},
+                child: TextButton(
+                  child: Stack(alignment: Alignment.center, children: <Widget>[
+                    Image(
+                        fit: BoxFit.fill,
                         width: queryData.size.width * 0.20,
                         image: AssetImage("assets/aceptar.png")),
                     Text("Modificar",
@@ -404,6 +429,9 @@ class _userMenuState extends State<userMenu> {
                     userService().modifyUser(widget.userData!["id"], nombre!,
                         apellidos!, user!, tipo_login!, tipo!, email!, clase!, pictogrampassword, nombreImagen!);
                     Navigator.of(context).pop(true);
+                    Navigator.of(context).pop(true);
+                    Navigator.of(context).push(
+                        new MaterialPageRoute(builder: (context) => new usersPage()));
                   },
                 ),
               ),

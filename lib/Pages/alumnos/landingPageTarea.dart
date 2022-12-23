@@ -14,8 +14,9 @@ import '../admin/tasksPage.dart';
 class landingPageTarea extends StatefulWidget {
 
   final task;
+  final idAsignacion;
 
-  const landingPageTarea(this.task, {super.key});
+  const landingPageTarea(this.task, this.idAsignacion, {super.key});
 
   @override
   State<landingPageTarea> createState() => _landingPageTareaState();
@@ -70,23 +71,19 @@ class _landingPageTareaState extends State<landingPageTarea> {
                   image: const AssetImage("images/botonMultimedia.png")),
               ),
               SizedBox(width: 50,),
-              Image(
-                fit: BoxFit.fill,
-                //height: queryData.size.height * 0.7,
-                width: queryData.size.width * 0.3,
-                image: const AssetImage("images/pictocasa.png")),
-            ],
-          ),
-          TextButton(
-            child: Image(
-                width: queryData.size.width * 0.2,
-                image: const AssetImage("images/empecemosboton.png")),
-            onPressed: () {
-              Navigator.of(context).push(new MaterialPageRoute(
-                  builder: (context) =>
-                      pasosAlumno(user, user["id"])));
+              TextButton(
+                  child: Image(
+                      width: queryData.size.width * 0.3,
+                      image:  NetworkImage(widget.task["pasos"][0]["imagen"])),
+                  onPressed: () {
+                    Navigator.of(context).push(new MaterialPageRoute(
+                        builder: (context) =>
+                            pasosAlumno(user, widget.idAsignacion)));
             },
           ),
+            ],
+          ),
+          
           SizedBox(
             height: 30,
           ),

@@ -18,14 +18,14 @@ import 'package:fanana/components/searchBar.dart';
 
 //import 'landingPageAdmin.dart';
 
-class assignedTaskList extends StatefulWidget {
-  const assignedTaskList({super.key});
+class logrosList extends StatefulWidget {
+  const logrosList({super.key});
 
   @override
-  State<assignedTaskList> createState() => _assignedTaskListState();
+  State<logrosList> createState() => _logrosListState();
 }
 
-class _assignedTaskListState extends State<assignedTaskList> {
+class _logrosListState extends State<logrosList> {
   bool loading = true;
   late Future<List<dynamic>> _userList;
   late List<dynamic> allTasks = [];
@@ -34,7 +34,12 @@ class _assignedTaskListState extends State<assignedTaskList> {
   String query = '';
   late bool asigando;
   late List<dynamic> listaAsignacion;
+  late List<dynamic> listaAsignacion2;
   late Future<List<dynamic>> listaPrimera;
+  int cont_logros = 0;
+
+  int numero = 0;
+  String imagenEstrella = "";
 
   @override
   void initState() {
@@ -79,6 +84,8 @@ class _assignedTaskListState extends State<assignedTaskList> {
                     listaAsignacion = value;
                   });
 
+                  listaAsignacion2 = [];
+
                   return FutureBuilder(
                       //AQUI EMPIEZA
                       future: _userList,
@@ -94,17 +101,43 @@ class _assignedTaskListState extends State<assignedTaskList> {
                             //final userSurname = allTasks[i]["apellidos"].toLowerCase();
                             // final userEmail = allUsers[i].mail.toLowerCase(); //aqui poner la condicion de buscar por clase
                             final input = query.toLowerCase();
-
+                         
                             for (int j = 0; j < listaAsignacion.length; j++) {
+                              //cont_logros = 0;
                               if (userName.contains(input) &&
                                   listaAsignacion[j]["id_tarea"] ==
                                       idTareaActual &&
                                   listaAsignacion[j]["id_usuario"] ==
                                       globalValues.infoUser["id"]) {
+                                
                                 tasks.add(allTasks[i]);
+                                listaAsignacion2.add(listaAsignacion[j]);
                               }
+
+                              
                             }
                           }
+                          for (int i = 0; i < listaAsignacion2.length; i++){
+
+                            if (listaAsignacion2[i]['calificacion'] == "1") {
+                              imagenEstrella = "images/estrellita.png";
+                              
+                              cont_logros++;
+                            } else if (listaAsignacion2[i]['calificacion'] ==
+                                "2") {
+                              
+                              imagenEstrella = "images/dosEstrellitas.png";
+                              cont_logros += 2;
+                            } else if (listaAsignacion2[i]['calificacion'] ==
+                                "3") {
+                              
+                              imagenEstrella =
+                                  "images/tresEstrellas.png";
+                              cont_logros += 3;
+                              
+                            }
+                          }
+
                           return getBody();
                         } else if (snapshot.hasError) {
                           print(snapshot.error);
@@ -131,23 +164,49 @@ class _assignedTaskListState extends State<assignedTaskList> {
   }
 
   Widget getBody() {
+    
     return Container(
         margin: EdgeInsets.only(
             left: queryData.size.width * 0.1,
             right: queryData.size.width * 0.1),
         child: Column(
           children: <Widget>[
-            SizedBox(
-              height: queryData.size.width * 0.04,
-            ),
-            Text("MIS TAREAS",
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                child: Image(
+                  fit: BoxFit.fill,
+                  width: queryData.size.width * 0.12,
+                  image: AssetImage("images/haciaAtras.png")
+                  ),
+                onPressed: () {Navigator.pop(context);},
+              ),
+                Text("LOGROS",
                 style: TextStyle(
                   fontFamily: "Escolar_G",
-                  fontSize: queryData.size.width*0.07,
+                  fontSize: queryData.size.width*0.08,
                   fontWeight: FontWeight.w200
                 ), ),
-            SizedBox(
-              height: queryData.size.width * 0.02,
+                SizedBox(width: queryData.size.width * 0.12 ,)
+                
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image(
+                  width: queryData.size.width * 0.09,
+                  image: AssetImage("images/estrellita.png"),
+                ),
+                Text("  x " + cont_logros.toString(),
+                    style: GoogleFonts.fredokaOne(
+                        textStyle: TextStyle(
+                            fontSize: queryData.size.width * 0.04,
+                            color: Colors.black,
+                            height: 1.5)))
+              ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -176,57 +235,63 @@ class _assignedTaskListState extends State<assignedTaskList> {
         ));
   }
 
-  Widget buildContact(Map<String, dynamic> user, int i) => Card(
+  Widget buildContact(Map<String, dynamic> user, int i) {
+    if (listaAsignacion2[i]['calificacion'] == "1") {
+        imagenEstrella = "images/estrellita.png";
+        
+        //cont_logros++;
+      } else if (listaAsignacion2[i]['calificacion'] == "2") {
+        
+        imagenEstrella = "images/dosEstrellitas.png";
+        //cont_logros += 2;
+      } else if (listaAsignacion2[i]['calificacion'] == "3") {
+        
+        imagenEstrella = "images/tresEstrellas.png";
+        //cont_logros += 3;
+      }
+  return Card(
       elevation: 0,
       child: ListTile(
           tileColor: !i.isOdd
               ? Color.fromARGB(255, 255, 247, 160)
               : Color.fromARGB(255, 255, 252, 221),
           title: Text(user["enunciado"].toString().toUpperCase(),
-              style: TextStyle(
+              style:TextStyle(
                   fontFamily: "Escolar_G",
-                  fontSize: queryData.size.width*0.04,
+                  fontSize: queryData.size.width*0.06,
                   fontWeight: FontWeight.bold
-                ), ),
-          subtitle: Text("Nº PASOS: " + (user["pasos"].length).toString(),
-              style: TextStyle(
-                  fontFamily: "Escolar_G",
-                  fontSize: queryData.size.width*0.03,
-                  fontWeight: FontWeight.w200
-                ), ),
-          onTap: () async {
-            if (user["tipo"] != null) {
-              globalValues.comanda = {
-                'A': [],
-                'B': [],
-                'C': [],
-                'D': [],
-                'E': []
-              };
-              bool refresh = await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => comandaClase(user),
-              ));
-              if (refresh) {
-                setState((() {
-                  loadStorageData();
-                }));
-              }
-            } else {
-              // bool refresh = await Navigator.of(context).push(MaterialPageRoute(
-              //   builder: (context) => pasosAlumno(user, listaAsignacion[i]["id"] ),
-              // ));
-              print(listaAsignacion);
-              await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => landingPageTarea(user, listaAsignacion[i]["id"]),
-              ));
-              // if (refresh) {
-              //   setState((() {
-              //     loadStorageData();
-              //   }));
-              // }
-            }
-          }));
-
+                ),),
+          subtitle: Row(children: [
+            FittedBox(
+              fit: BoxFit.fill,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                
+                  children: [
+                    Text(
+                      (listaAsignacion2[i]["feedback"]).toString()+"      ",
+                         
+                      style: TextStyle(
+                        fontFamily: "Escolar_G",
+                        fontSize: queryData.size.width*0.05,
+                        fontWeight: FontWeight.w200
+                      ),
+                    ),
+                    SizedBox(width: queryData.size.width * 0.01,),
+                    Image(
+                      width: queryData.size.width * 0.1,
+                      image: AssetImage(imagenEstrella),
+                    )
+                      ]
+                ),
+              )
+            
+            
+          ]),
+          onTap: () async {}
+        )
+      );
+  }
   Widget buildSearch() => SearchWidget(
       text: query, hintText: 'Buscar tarea', onChanged: searchContact);
 

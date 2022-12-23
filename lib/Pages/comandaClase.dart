@@ -79,11 +79,17 @@ class _comandaClaseState extends State<comandaClase> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Text("¿A QUÉ CLASE VAMOS A PREGUNTAR",
-              style: GoogleFonts.fredokaOne(
-                  textStyle: TextStyle(fontSize: queryData.size.width * 0.04))),
+              style: TextStyle(
+                  fontFamily: "Escolar_G",
+                  fontSize: queryData.size.width*0.05,
+                  fontWeight: FontWeight.w200
+                ), ),
           Text("LO QUE NECESITAN?",
-              style: GoogleFonts.fredokaOne(
-                  textStyle: TextStyle(fontSize: queryData.size.width * 0.04))),
+              style: TextStyle(
+                  fontFamily: "Escolar_G",
+                  fontSize: queryData.size.width*0.04,
+                  fontWeight: FontWeight.w200
+                ), ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -205,10 +211,12 @@ class _comandaClaseState extends State<comandaClase> {
                   width: queryData.size.width * 0.3,
                   image: AssetImage("assets/aceptar.png")),
               Text("¡LISTO!",
-                  style: GoogleFonts.fredokaOne(
-                      textStyle: TextStyle(
-                          fontSize: queryData.size.width * 0.04,
-                          color: Color.fromARGB(255, 0, 0, 0)))),
+                  style: TextStyle(
+                  fontFamily: "Escolar_G",
+                  fontSize: queryData.size.width*0.05,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold
+                ), ),
             ]),
             onPressed: () {
               taskService().updateComanda(widget.comanda["id"], globalValues.comanda);

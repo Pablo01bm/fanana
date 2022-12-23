@@ -1,6 +1,7 @@
 // ignore_for_file: camel_case_types
 import 'package:fanana/Pages/pictoPasswd.dart';
 import 'package:fanana/Pages/services/userService.dart';
+import 'package:fanana/Pages/utils/globalValues.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:math' as math;
@@ -194,14 +195,19 @@ class _landingPagePictoState extends State<landingPagePicto> {
                 width: queryData.size.width<queryData.size.height ?queryData.size.width * 0.2 : null,
                 image: NetworkImage(usuarios[alumno]["imagen"])
               ),
-              Text(usuarios[alumno]["nombre"], style: GoogleFonts.fredokaOne(
-                textStyle: TextStyle(fontSize: queryData.size.width<queryData.size.height ? queryData.size.width*0.04: queryData.size.height*0.04, color: Colors.black, height: 1.5))
+              Text(usuarios[alumno]["nombre"], style: TextStyle(
+                  fontFamily: "Escolar_G",
+                  fontSize: queryData.size.width<queryData.size.height ? queryData.size.width*0.08: queryData.size.height*0.08, color: Colors.black, height: 1.5,
+                  fontWeight: FontWeight.bold
+                ), 
               ),
             ],)
           
         ]
       ),
       onPressed: () {
+        globalValues.user = usuarios[alumno]["nombre"];
+        globalValues.infoUser = usuarios[alumno];
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) =>  pictoPasswd(usuarios[alumno])),

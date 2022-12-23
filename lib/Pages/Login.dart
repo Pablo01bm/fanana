@@ -105,17 +105,28 @@ class _LoginState extends State<Login> {
         children: <Widget>[
           FittedBox(
             fit: BoxFit.fill,
-            child: Text("Login", style: GoogleFonts.fredokaOne(
-              textStyle: TextStyle(fontSize: queryData.size.width*0.04)
-            )),      
+            child: Text("Login", style: TextStyle(
+            fontFamily: "Escolar_G",
+            fontSize: queryData.size.width*0.06,
+            fontWeight: FontWeight.bold
+          )),  
           ),
           SizedBox(        
             width: queryData.size.width * 0.4,
             child: TextFormField(
+              style:TextStyle(
+                  fontFamily: "Escolar_G",
+                  fontSize: queryData.size.width*0.04,
+                  fontWeight: FontWeight.w200
+                ), 
               controller: emailController,
               decoration: InputDecoration(
                 labelText: "Introduzca email:",
-                labelStyle: GoogleFonts.fredokaOne(textStyle: TextStyle(fontSize: queryData.size.width*0.03)), 
+                labelStyle:TextStyle(
+                  fontFamily: "Escolar_G",
+                  fontSize: queryData.size.width*0.04,
+                  
+                ),   
               ),
               autovalidateMode: AutovalidateMode.always,
               validator: (value) => EmailValidator.validate(value!) ? null:"Introduzca email válido"
@@ -128,6 +139,11 @@ class _LoginState extends State<Login> {
               
               controller: passwordController,
               obscureText: visiblePass,
+              style:TextStyle(
+                  fontFamily: "Escolar_G",
+                  fontSize: queryData.size.width*0.04,
+                  fontWeight: FontWeight.w200
+                ),   
               decoration: InputDecoration(
                 suffixIcon: IconButton(
                     icon: Icon(
@@ -142,7 +158,12 @@ class _LoginState extends State<Login> {
                     },
                   ),
                 labelText: "Introduzca contraseña:",
-                labelStyle: GoogleFonts.fredokaOne(textStyle: TextStyle(fontSize: queryData.size.width*0.03)), 
+                
+                labelStyle: TextStyle(
+                  fontFamily: "Escolar_G",
+                  fontSize: queryData.size.width*0.04,
+                  fontWeight: FontWeight.w200
+                ),   
               ),
             ), 
           ),
@@ -192,8 +213,10 @@ class _LoginState extends State<Login> {
         FittedBox(
           
           fit: BoxFit.fill,
-          child: Text("Login pictograma", style: GoogleFonts.fredokaOne(
-            textStyle:  TextStyle(fontSize: queryData.size.width*0.04)
+          child: Text("Login pictograma", style: TextStyle(
+            fontFamily: "Escolar_G",
+            fontSize: queryData.size.width*0.06,
+            fontWeight: FontWeight.bold
           )),      
         ),
         FittedBox(

@@ -10,8 +10,8 @@ Future <List<dynamic>> getTaskInfo() async {
   final client = http.Client();
 
   try {
-    String url = "10.0.2.2:5050";
-    var uri = Uri.http(url, 'get/tareas');
+    String url = "fanana-cloud.onrender.com";
+    var uri = Uri.https(url, 'get/tareas');
     //print("URL: "+uri.toString());
     var response = await http.get(uri);
 
@@ -33,8 +33,8 @@ Future <List<dynamic>> getMenuInfo() async {
   final client = http.Client();
 
   try {
-    String url = "10.0.2.2:5050";
-    var uri = Uri.http(url, 'get/plantillas');
+    String url = "fanana-cloud.onrender.com";
+    var uri = Uri.https(url, 'get/plantillas');
     //print("URL: "+uri.toString());
     var response = await http.get(uri);
 
@@ -56,8 +56,8 @@ deleteTask(String idTarea) async {
   final client = http.Client();
 
   try {
-    String url = "10.0.2.2:5050";
-    var uri = Uri.http(url, 'delete/tarea/$idTarea');
+    String url = "fanana-cloud.onrender.com";
+    var uri = Uri.https(url, 'delete/tarea/$idTarea');
     print("URL: "+uri.toString());
     var response = await http.delete(uri);
     
@@ -74,8 +74,8 @@ deleteMenu(String idTarea) async {
   final client = http.Client();
 
   try {
-    String url = "10.0.2.2:5050";
-    var uri = Uri.http(url, 'delete/plantilla/$idTarea');
+    String url = "fanana-cloud.onrender.com";
+    var uri = Uri.https(url, 'delete/plantilla/$idTarea');
     print("URL: "+uri.toString());
     var response = await http.delete(uri);
     
@@ -88,13 +88,14 @@ deleteMenu(String idTarea) async {
 }
 
 //method which modify the task given by id in the database 
-modifyTask(String id,String enun, String desc) async {
+modifyTask(String id,String enun, String desc, String pasos) async {
   List<dynamic> lista = ['tarea'];
   final client = http.Client();
+  Map<String,dynamic> pasosMap = {"pasos": pasos};
 
   try {
-    String url = "10.0.2.2:5050";
-    var uri = Uri.http(url, 'update/tarea/$id/$enun/$desc');
+    String url = "fanana-cloud.onrender.com";
+    var uri = Uri.https(url, 'update/tarea/$id/$enun/$desc', pasosMap);
     print("URL: "+uri.toString());
     var response = await http.put(uri);
     
@@ -116,8 +117,8 @@ addVideo(String id,String urlVideo) async {
 
   print(aux);
   try {
-    String url = "10.0.2.2:5050";
-    var uri = Uri.http(url, 'update/tarea_video/$id', aux);
+    String url = "fanana-cloud.onrender.com";
+    var uri = Uri.https(url, 'update/tarea_video/$id', aux);
     print("URL: "+uri.toString());
     var response = await http.put(uri, headers:  {"Content-Type": "application/json"});
     
@@ -138,8 +139,8 @@ addAudio(String id,String urlAudio) async {
 
   print(aux);
   try {
-    String url = "10.0.2.2:5050";
-    var uri = Uri.http(url, 'update/tarea_audio/$id', aux);
+    String url = "fanana-cloud.onrender.com";
+    var uri = Uri.https(url, 'update/tarea_audio/$id', aux);
     print("URL: "+uri.toString());
     var response = await http.put(uri, headers:  {"Content-Type": "application/json"});
     
@@ -160,8 +161,8 @@ modifySteps(String id,String pasos) async {
 
   Map<String,dynamic> pasosMap = {"pasos": pasos};
   try {
-    String url = "10.0.2.2:5050";
-    var uri = Uri.http(url, 'update/tarea/$id', pasosMap);
+    String url = "fanana-cloud.onrender.com";
+    var uri = Uri.https(url, 'update/tarea/$id', pasosMap);
     print("URL: "+uri.toString());
     var response = await http.put(uri);
     
@@ -183,8 +184,8 @@ addSteps(String id,Map pasos, String index) async {
 
   print(aux);
   try {
-    String url = "10.0.2.2:5050";
-    var uri = Uri.http(url, 'update/tarea/$id', indice);
+    String url = "fanana-cloud.onrender.com";
+    var uri = Uri.https(url, 'update/tarea/$id', indice);
     print("URL: "+uri.toString());
     var response = await http.put(uri, headers:  {"Content-Type": "application/json"}, body: aux);
     
@@ -203,8 +204,8 @@ createTask(String id,String enunciado, String descripcion, String pasos) async {
   Map <String, dynamic> pasosInfo = {"titulo": pasos, "imagen": ""};
   Map <String, dynamic> pasosFinales = {"pasos": pasosInfo.toString()};
   try {
-    String url = "10.0.2.2:5050";
-    var uri = Uri.http(url, 'post/tarea/$id/$enunciado/$descripcion', pasosFinales);
+    String url = "fanana-cloud.onrender.com";
+    var uri = Uri.https(url, 'post/tarea/$id/$enunciado/$descripcion', pasosFinales);
     print("URL: "+uri.toString());
     var response = await http.post(uri);
     
@@ -223,8 +224,8 @@ createMenu(String id,String fechaIni, String fechaFin, List<String> menus) async
   var aux = json.encode(menus);
   print(aux.toString());
   try {
-    String url = "10.0.2.2:5050";
-    var uri = Uri.http(url, 'post/plantilla/$id/$fechaIni/$fechaFin');
+    String url = "fanana-cloud.onrender.com";
+    var uri = Uri.https(url, 'post/plantilla/$id/$fechaIni/$fechaFin');
     print("URL: "+uri.toString());
     var response = await http.post(uri, headers:  {"Content-Type": "application/json"}, body: aux);
     
@@ -242,8 +243,8 @@ createComanda(String id,String enunciado, String descripcion, String tipo) async
   final client = http.Client();
 
   try {
-    String url = "10.0.2.2:5050";
-    var uri = Uri.http(url, 'post/comanda/$id/$enunciado/$descripcion/$tipo');
+    String url = "fanana-cloud.onrender.com";
+    var uri = Uri.https(url, 'post/comanda/$id/$enunciado/$descripcion/$tipo');
     print("URL: "+uri.toString());
     var response = await http.post(uri);
     
@@ -265,8 +266,8 @@ updateComanda(String id, Map comanda) async {
   print("LA COMANDA: "+aux);
 
   try {
-    String url = "10.0.2.2:5050";
-    var uri = Uri.http(url, 'update/comanda/$id');
+    String url = "fanana-cloud.onrender.com";
+    var uri = Uri.https(url, 'update/comanda/$id');
     print("URL: "+uri.toString());
     var response = await http.put(uri, headers:  {"Content-Type": "application/json"}, body: aux);
     
@@ -286,8 +287,8 @@ createAssign(String id,String idUser, String idTask, String fechaInicio, String 
   final client = http.Client();
  
   try {
-    String url = "10.0.2.2:5050";
-    var uri = Uri.http(url, 'post/asignar/$id/$idUser/$idTask/$fechaInicio/$fechaFin');
+    String url = "fanana-cloud.onrender.com";
+    var uri = Uri.https(url, 'post/asignar/$id/$idUser/$idTask/$fechaInicio/$fechaFin');
     print("URL: "+uri.toString());
     var response = await http.post(uri);
     
@@ -305,8 +306,8 @@ deleteAssign(String id) async {
   final client = http.Client();
  
   try {
-    String url = "10.0.2.2:5050";
-    var uri = Uri.http(url, 'delete/asignar/$id');
+    String url = "fanana-cloud.onrender.com";
+    var uri = Uri.https(url, 'delete/asignar/$id');
     print("URL: "+uri.toString());
     var response = await http.delete(uri);
     
@@ -323,8 +324,8 @@ Future <List<dynamic>> getAssign() async {
   final client = http.Client();
  
   try {
-    String url = "10.0.2.2:5050";
-    var uri = Uri.http(url, 'get/asignar');
+    String url = "fanana-cloud.onrender.com";
+    var uri = Uri.https(url, 'get/asignar');
     print("URL: "+uri.toString());
     var response = await http.get(uri);
 
@@ -346,8 +347,8 @@ updateAlummnoAssign(String id, String idAlumno) async {
   final client = http.Client();
  
   try {
-    String url = "10.0.2.2:5050";
-    var uri = Uri.http(url, 'update_alumno/$id/$idAlumno');
+    String url = "fanana-cloud.onrender.com";
+    var uri = Uri.https(url, 'update_alumno/$id/$idAlumno');
     print("URL: "+uri.toString());
     var response = await http.put(uri);
     
@@ -364,8 +365,44 @@ updateCompletadaAssign(String id, String feedback) async {
   final client = http.Client();
  
   try {
-    String url = "10.0.2.2:5050";
-    var uri = Uri.http(url, 'agregar_completado/$id/$feedback');
+    String url = "fanana-cloud.onrender.com";
+    var uri = Uri.https(url, 'agregar_completado/$id/$feedback');
+    print("URL: "+uri.toString());
+    var response = await http.put(uri);
+    
+  }catch (SocketException){
+    print(SocketException);
+    return Future.error("Error no se ha podido conectar");
+
+  }
+
+}
+
+updateFeebackAssign(String id, String feedback) async {
+  List<dynamic> lista = ['tarea'];
+  final client = http.Client();
+ 
+  try {
+    String url = "fanana-cloud.onrender.com";
+    var uri = Uri.https(url, 'agregar_feedback/$id/$feedback');
+    print("URL: "+uri.toString());
+    var response = await http.put(uri);
+    
+  }catch (SocketException){
+    print(SocketException);
+    return Future.error("Error no se ha podido conectar");
+
+  }
+
+}
+
+updateCalificacionAssign(String id, String calificacion) async {
+  List<dynamic> lista = ['tarea'];
+  final client = http.Client();
+ 
+  try {
+    String url = "fanana-cloud.onrender.com";
+    var uri = Uri.https(url, 'calificar/$id/$calificacion');
     print("URL: "+uri.toString());
     var response = await http.put(uri);
     

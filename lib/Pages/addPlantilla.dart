@@ -117,8 +117,10 @@ class _addPlantillaState extends State<addPlantilla> {
                     }
                   }),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            FittedBox(
+              fit: BoxFit.fill,
+              child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Text('${dateIni.day}-${dateIni.month}-${dateIni.year}', style: GoogleFonts.fredokaOne(
                             textStyle: TextStyle(
@@ -179,7 +181,9 @@ class _addPlantillaState extends State<addPlantilla> {
                   },
                 ),
               ],
+            ),
             )
+            
           ],
         ));
   }
@@ -277,7 +281,7 @@ class _addPlantillaState extends State<addPlantilla> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Atención!"),
-      content: Text("Seguro que quieres eliminar el usuario: ${id}"),
+      content: Text("Seguro que quieres eliminar el item: ${id}"),
       actions: [
         cancelButton,
         continueButton,

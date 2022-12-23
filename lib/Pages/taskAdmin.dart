@@ -44,6 +44,8 @@ class _taskAdminState extends State<taskAdmin> {
   void initState() {
     titleController.text = widget.task!["enunciado"];
     descriptionController.text = widget.task!["descripcion"];
+    titulo = titleController.text;
+    descripcion = descriptionController.text;
     super.initState();
 
     titleController.addListener(() {
@@ -136,7 +138,7 @@ class _taskAdminState extends State<taskAdmin> {
               onPressed: () {  
                 Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) =>  landingPageTarea(widget.task )),
+                      MaterialPageRoute(builder: (context) =>  landingPageTarea(widget.task, "" )),
                     );
               },
             );
@@ -190,8 +192,10 @@ class _taskAdminState extends State<taskAdmin> {
             ]
           ),
           onPressed: () { 
-              taskService().modifyTask(widget.task!["id"], titulo!, descripcion!);
-              Navigator.of(context).pushReplacement(
+              taskService().modifyTask(widget.task!["id"], titulo!, descripcion!, widget.task!["pasos"].toString());
+              Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.of(context).push(
                 new MaterialPageRoute(builder: (context) => new tasksPage()));
             },
         ),
