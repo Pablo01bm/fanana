@@ -29,6 +29,16 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  #flutter_secure_storage: ^5.1.2
+  google_fonts: ^3.0.1
+  email_validator: ^2.1.17
+  shared_preferences: ^2.0.15
+  file_picker: ^5.2.2
+  web_socket_channel: ^2.2.0
+  http: ^0.13.5
+  intl: ^0.17.0
+  video_player: ^2.4.9
+  audioplayers: ^1.1.1
   flutter:
     sdk: flutter
 
@@ -36,6 +46,9 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  firebase_core: ^2.1.0
+  firebase_auth: ^4.0.2
+  firebase_storage: ^11.0.5
 
 dev_dependencies:
   flutter_test:
@@ -53,11 +66,19 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  assets:
+    - images/
+    - assets/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  fonts:
+    - family: Escolar_G
+      fonts:
+        - asset: assets/Escolar_G.TTF
 
   # To add assets to your application, add an assets section, like this:
   # assets:

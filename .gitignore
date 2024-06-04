@@ -42,3 +42,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# DO NOT PUSH(security reasons)
+pubspec.lock

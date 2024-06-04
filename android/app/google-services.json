@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "508441591692",
+    "firebase_url": "https://fanana-dev-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "fanana-dev",
+    "storage_bucket": "fanana-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:508441591692:android:39296fa7b3b32a84a0a0a9",
+        "android_client_info": {
+          "package_name": "com.example.fanana"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "508441591692-bv9555ahjk4e27cqg4tgv9e2ivjsiqf8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCr0oxSoB2UrHmvmWOAiXRN_y-1mx3oukM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "508441591692-bv9555ahjk4e27cqg4tgv9e2ivjsiqf8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:508441591692:android:b1e6ae0e9c732d2ca0a0a9",
+        "android_client_info": {
+          "package_name": "com.fanana.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "508441591692-bv9555ahjk4e27cqg4tgv9e2ivjsiqf8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCr0oxSoB2UrHmvmWOAiXRN_y-1mx3oukM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "508441591692-bv9555ahjk4e27cqg4tgv9e2ivjsiqf8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
